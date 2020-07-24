@@ -1,0 +1,91 @@
+@using static Models.Constants.ApplicationConstants;
+@using Api.Extensions
+@using Api.Interfaces
+@using Microsoft.Extensions.Hosting
+@using Models.Enums
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Env
+@inject IHttpRequestUtilityBuilder RequestUtilityBuilder;
+
+@{
+    var utility = RequestUtilityBuilder.For(Context);
+    var userInfo = await utility.GetUserInfo();
+    var dateTimeNow = DateTime.UtcNow;
+    var cacheBustingSuffix = dateTimeNow.Day;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title> @ApplicationName </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    @* jQuery*@
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script src="https://gitcdn.xyz/repo/PrestaShop/jquery.live-polyfill/master/dist/jquery.live-polyfill.min.js"></script>
+
+    @* angular *@
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+    @* bootstrap *@
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    @* customs *@
+    @if (Env.IsDevelopment())
+    {
+        <script src="~/scripts/script.js?@cacheBustingSuffix"></script>
+        <link rel="stylesheet" href="~/styles/style.css?@cacheBustingSuffix"> 
+    }
+    else
+    {
+        <script src="~/scripts/script.min.js?@cacheBustingSuffix"></script>
+        <link rel="stylesheet" href="~/styles/style.min.css?@cacheBustingSuffix">
+    }
+</head>
+<body>
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>                        
+            </button>
+            <a class="navbar-brand" href="~/"> @ApplicationName </a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                @if (utility.IsAuthenticated())
+                {
+                  
+                }
+            </ul>
+            
+            <ul class="nav navbar-nav navbar-right">
+                @if (!utility.IsAuthenticated())
+                {
+                    <li><a href="~/Account/Register"><span class="glyphicon glyphicon-user"></span> Register </a></li>
+                    <li><a href="~/Account/login"><span class="glyphicon glyphicon-log-in"></span> Login </a></li>
+                }
+                else
+                {
+                    <li><a href="~/Profile"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
+                    <li><a href="~/Account/Logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid" ng-app="ideaBoardApp" ng-cloak>
+    @RenderBody()
+</div>
+
+<mini-profiler position="RenderPosition.Right"/>
+
+</body>
+</html>

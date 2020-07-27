@@ -27,7 +27,7 @@ namespace Logic.Crud
             var ideas = await _projectLogic.GetAll();
             
             return ideas
-                .Skip(PageSize * pageNumber)
+                .Skip(PageSize * pageNumber - 1)
                 .Take(PageSize)
                 .ToList();
         }

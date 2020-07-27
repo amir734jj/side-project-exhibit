@@ -293,7 +293,11 @@ namespace Api
             
             app.UseReact(config =>
             {
-                config.SetBabelConfig(new BabelConfig {Presets = new HashSet<string> {"es2015"}})
+                config.SetBabelConfig(new BabelConfig
+                    {
+                        Plugins = new HashSet<string> { "transform-regenerator", "transform-runtime"},
+                        Presets = new HashSet<string> {"es2015", "es2016", "es2017"}
+                    })
                     .AddScript("~/scripts/script.jsx")
                     .SetLoadBabel(true);
             });

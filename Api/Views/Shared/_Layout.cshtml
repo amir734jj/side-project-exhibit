@@ -26,23 +26,11 @@
     <script src="https://gitcdn.xyz/repo/PrestaShop/jquery.live-polyfill/master/dist/jquery.live-polyfill.min.js"></script>
 
     @* angular *@
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.0/angular.min.js"></script>
 
     @* bootstrap *@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    
-    @* customs *@
-    @if (Env.IsDevelopment())
-    {
-        <script src="~/scripts/script.js?@cacheBustingSuffix"></script>
-        <link rel="stylesheet" href="~/styles/style.css?@cacheBustingSuffix"> 
-    }
-    else
-    {
-        <script src="~/scripts/script.min.js?@cacheBustingSuffix"></script>
-        <link rel="stylesheet" href="~/styles/style.min.css?@cacheBustingSuffix">
-    }
 </head>
 <body>
 
@@ -86,6 +74,8 @@
 </div>
 
 <mini-profiler position="RenderPosition.Right"/>
+
+<script src="@Url.Content("~/scripts/script.jsx")"></script>
 
 </body>
 </html>

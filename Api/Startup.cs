@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Amazon;
@@ -13,6 +14,8 @@ using Dal.Interfaces;
 using Dal.ServiceApi;
 using EFCache;
 using EfCoreRepository.Extensions;
+using JavaScriptEngineSwitcher.ChakraCore;
+using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Lamar;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -32,6 +35,9 @@ using Models;
 using Models.Constants;
 using Models.Entities;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using React;
+using React.AspNet;
 using StackExchange.Redis;
 using WebMarkupMin.AspNetCore2;
 using static Dal.Utilities.ConnectionStringUtility;
@@ -109,6 +115,12 @@ namespace Api
                 options.Cookie.Name = ApiConstants.AuthenticationSessionCookieName;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.None;
             });
+            
+            services.AddReact();
+
+            // Make sure a JS engine is registered, or you will get an error!
+            services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName)
+                .AddChakraCore();
 
             services.AddSwaggerGen(c =>
             {
@@ -150,6 +162,7 @@ namespace Api
                 }).AddNewtonsoftJson(x =>
                     {
                         x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                        x.SerializerSettings.Converters.Add(new StringEnumConverter());
                     })
                 .AddRazorPagesOptions(x => x.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute()));
 
@@ -276,6 +289,13 @@ namespace Api
                 // This is particularly important so that HttpContent.Request.Scheme will be correct behind a SSL terminating proxy
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor |
                                    ForwardedHeaders.XForwardedProto
+            });
+            
+            app.UseReact(config =>
+            {
+                config.SetBabelConfig(new BabelConfig {Presets = new HashSet<string> {"es2015"}})
+                    .AddScript("~/scripts/script.jsx")
+                    .SetLoadBabel(true);
             });
 
             // Use wwwroot folder as default static path

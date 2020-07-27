@@ -10,6 +10,6 @@ namespace Logic.Interfaces
     {
         Task<List<Project>> Collect(int page, Sort sort, Order order);
 
-        Task Vote(int ideaId, int userId, Vote vote);
+        Task<Project> Vote(int ideaId, int userId, Vote vote);
     }
 }

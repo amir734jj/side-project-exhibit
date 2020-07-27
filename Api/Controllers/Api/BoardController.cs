@@ -39,9 +39,9 @@ namespace Api.Controllers.Api
         {
             var user = await _userManager.FindByEmailAsync(User.Identity.Name);
             
-            await _boardLogic.Vote(id, user.Id, vote);
+            var project = await _boardLogic.Vote(id, user.Id, vote);
 
-            return Ok("Updated the vote");
+            return Ok(project);
         }
     }
 }

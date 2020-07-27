@@ -32,7 +32,7 @@ namespace Logic.Crud
                 .ToList();
         }
 
-        public async Task Vote(int projectId, int userId, Vote vote)
+        public async Task<Project> Vote(int projectId, int userId, Vote vote)
         {
             await _userLogic.Update(userId, user =>
             {
@@ -47,6 +47,8 @@ namespace Logic.Crud
                     previousVote.Value = vote;
                 }
             });
+
+            return await _projectLogic.Get(projectId);
         }
     }
 }

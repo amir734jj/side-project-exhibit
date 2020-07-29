@@ -1,8 +1,7 @@
 @using static Models.Constants.ApplicationConstants;
-@using Api.Extensions
 @using Api.Interfaces
-@using Microsoft.Extensions.Hosting
-@using Models.Enums
+@using Dal.Extensions
+@using Logic.Extensions
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Env
 @inject IHttpRequestUtilityBuilder RequestUtilityBuilder;
 
@@ -40,7 +39,7 @@
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
-                <span class="icon-bar"></span>                        
+                <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="~/"> @ApplicationName </a>
         </div>
@@ -48,25 +47,56 @@
             <ul class="nav navbar-nav">
                 @if (utility.IsAuthenticated())
                 {
-                  
                 }
             </ul>
-            
+
             <ul class="nav navbar-nav navbar-right">
                 @if (!utility.IsAuthenticated())
                 {
-                    <li><a href="~/Account/Register"><span class="glyphicon glyphicon-user"></span> Register </a></li>
-                    <li><a href="~/Account/login"><span class="glyphicon glyphicon-log-in"></span> Login </a></li>
+                    <li>
+                        <a href="~/Account/Register"><span class="glyphicon glyphicon-user"></span> Register </a>
+                    </li>
+                    <li>
+                        <a href="~/Account/login"><span class="glyphicon glyphicon-log-in"></span> Login </a>
+                    </li>
                 }
                 else
                 {
-                    <li><a href="~/Profile"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
-                    <li><a href="~/Account/Logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                    <li>
+                        <a href="~/Profile"><span class="glyphicon glyphicon-user"></span> Profile</a>
+                    </li>
+                    <li>
+                        <a href="~/Account/Logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+                    </li>
                 }
             </ul>
         </div>
     </div>
 </nav>
+
+@if (!ViewData.GetOrElse("ErrorKey", null).IsNull())
+{
+    <div class="container">
+
+        <div class="alert alert-danger">
+            <p>
+                <strong> @(ViewData["ErrorKey"])</strong> @(ViewData["ErrorValues"])
+            </p>
+        </div>
+    </div>
+}
+
+@if (!ViewData.GetOrElse("Message", null).IsNull())
+{
+    <div class="container">
+
+        <div class="alert alert-success">
+            <p>
+                @(ViewData["Message"])
+            </p>
+        </div>
+    </div>
+}
 
 
 <div class="container-fluid" ng-app="ideaBoardApp" ng-cloak>

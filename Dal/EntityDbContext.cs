@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using Models;
 using Models.Entities;
 using Models.Relationships;
 using static Dal.Utilities.ConnectionStringUtility;

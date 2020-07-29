@@ -3,7 +3,6 @@ using Logic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Models;
 using Models.Entities;
 using Models.Enums;
 
@@ -37,7 +36,7 @@ namespace Api.Controllers.Api
         [HttpGet]
         public async Task<IActionResult> Vote([FromRoute] int id, [FromRoute] Vote vote)
         {
-            var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
             
             var project = await _boardLogic.Vote(id, user.Id, vote);
 

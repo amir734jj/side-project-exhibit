@@ -1,6 +1,5 @@
 using System.Linq;
 using EfCoreRepository.Interfaces;
-using Models;
 using Models.Entities;
 
 namespace Dal.Profiles

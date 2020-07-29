@@ -1,5 +1,4 @@
-﻿using Models;
-using Models.Entities;
+﻿using Models.Entities;
 
 namespace Logic.Interfaces
 {

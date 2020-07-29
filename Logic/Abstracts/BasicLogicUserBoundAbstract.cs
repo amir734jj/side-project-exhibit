@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using EfCoreRepository.Interfaces;
 using Logic.Interfaces;
-using Models;
 using Models.Entities;
 using Models.Interfaces;
 

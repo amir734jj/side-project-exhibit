@@ -31,11 +31,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Models;
 using Models.Constants;
 using Models.Entities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 using React;
 using React.AspNet;
 using StackExchange.Redis;
@@ -115,7 +115,7 @@ namespace Api
                 options.Cookie.Name = ApiConstants.AuthenticationSessionCookieName;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.None;
             });
-            
+
             services.AddReact();
 
             // Make sure a JS engine is registered, or you will get an error!
@@ -160,10 +160,12 @@ namespace Api
                     // Exception filter attribute
                     x.Filters.Add<ExceptionFilterAttribute>();
                 }).AddNewtonsoftJson(x =>
-                    {
-                        x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                        x.SerializerSettings.Converters.Add(new StringEnumConverter());
-                    })
+                {
+                    x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    x.SerializerSettings.Converters.Add(new StringEnumConverter());
+                    x.SerializerSettings.ContractResolver =
+                        new CamelCasePropertyNamesContractResolver();
+                })
                 .AddRazorPagesOptions(x => x.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute()));
 
             services.AddWebMarkupMin(opt =>
@@ -272,7 +274,8 @@ namespace Api
 
             if (_env.IsDevelopment())
             {
-                app.UseDatabaseErrorPage();
+                app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
 
                 // Enable middleware to serve generated Swagger as a JSON endpoint.
                 app.UseSwagger();
@@ -295,11 +298,15 @@ namespace Api
             {
                 config.SetBabelConfig(new BabelConfig
                     {
-                        Plugins = new HashSet<string> { "transform-regenerator", "transform-runtime"},
-                        Presets = new HashSet<string> {"es2015", "es2016", "es2017"}
+                        Presets = new HashSet<string> {"es2015"}
                     })
                     .AddScript("~/scripts/script.jsx")
-                    .SetLoadBabel(true);
+                    .SetLoadBabel(true)
+                    .SetJsonSerializerSettings(new JsonSerializerSettings
+                    {
+                        StringEscapeHandling = StringEscapeHandling.EscapeHtml,
+                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    });
             });
 
             // Use wwwroot folder as default static path

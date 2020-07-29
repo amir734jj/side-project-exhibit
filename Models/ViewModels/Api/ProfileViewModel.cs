@@ -1,5 +1,6 @@
 
 using Models.Entities;
+using Models.Enums;
 using Newtonsoft.Json;
 
 namespace Models.ViewModels.Api
@@ -13,9 +14,8 @@ namespace Models.ViewModels.Api
         public string Username { get; set; }
 
         public string Description { get; set; }
-
-        [JsonIgnore]
-        public User User { get; set; }
+        
+        public UserRoleEnum Role { get; set; }
 
         public ProfileViewModel()
         {
@@ -29,7 +29,6 @@ namespace Models.ViewModels.Api
             Email = user.Email;
             Description = user.Description;
             Username = user.UserName;
-            User = user;
         }
     }
 }

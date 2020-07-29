@@ -1,7 +1,6 @@
 using System.Linq;
 using EfCoreRepository.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Models;
 using Models.Entities;
 using Models.Relationships;
 

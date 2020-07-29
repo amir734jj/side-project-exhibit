@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Api.Abstracts;
+using Logic.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Models.Entities;
@@ -49,15 +50,8 @@ namespace Api.Controllers
         [SwaggerOperation("Login")]
         public async Task<IActionResult> Login()
         {
-            if (TempData.ContainsKey("Error"))
-            {
-                var prevError = (string) TempData["Error"];
+            TempData.CopyTo(ViewData, "ErrorKey", "ErrorValues", "Message");
 
-                ModelState.AddModelError("", prevError);
-                
-                TempData.Clear();
-            }
-            
             return View();
         }
         
@@ -72,12 +66,15 @@ namespace Api.Controllers
         {
             var result = await base.Login(loginViewModel);
 
-            if (result)
+            if (result.ReturnValue)
             {
                 return Redirect(Url.Content("~/"));
             }
 
-            return RedirectToAction("NotAuthenticated");
+            TempData["ErrorKey"] = "Failed to login";
+            TempData["ErrorValues"] = string.Join("\n", result.Errors);
+
+            return RedirectToAction("Login");
         }
         
         /// <summary>
@@ -89,14 +86,7 @@ namespace Api.Controllers
         [SwaggerOperation("Register")]
         public async Task<IActionResult> Register()
         {
-            if (TempData.ContainsKey("Error"))
-            {
-                var prevError = (string) TempData["Error"];
-
-                ModelState.AddModelError("", prevError);
-                
-                TempData.Clear();
-            }
+            TempData.CopyTo(ViewData, "ErrorKey", "ErrorValues", "Message");
             
             return View();
         }
@@ -113,10 +103,15 @@ namespace Api.Controllers
             // Save the user
             var result = await Register(registerViewModel);
 
-            if (result)
+            if (result.ReturnValue)
             {
-                return RedirectToAction("Login");
+                TempData["Message"] = "Successfully registered";
+
+                return RedirectToAction("Register");
             }
+
+            TempData["ErrorKey"] = "Failed to register";
+            TempData["ErrorValues"] = string.Join("\n", result.Errors);
 
             return RedirectToAction("Register");
         }

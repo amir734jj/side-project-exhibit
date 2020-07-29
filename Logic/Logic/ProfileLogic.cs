@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Logic.Interfaces;
-using Models;
 using Models.Entities;
 using Models.ViewModels.Api;
 
@@ -20,6 +19,7 @@ namespace Logic.Logic
             return new ProfileViewModel(await _userLogic.Update(user.Id, entity =>
             {
                 entity.Name = profileViewModel.Name;
+                entity.Email = profileViewModel.Email;
                 entity.Description = profileViewModel.Description;
             }));
         }

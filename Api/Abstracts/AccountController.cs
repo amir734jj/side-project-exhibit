@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Models.Basics;
 using Models.Entities;
 using Models.Enums;
 using Models.ViewModels.Identities;
@@ -20,7 +22,7 @@ namespace Api.Abstracts
 
         public abstract RoleManager<IdentityRole<int>> ResolveRoleManager();
 
-        public async Task<bool> Register(RegisterViewModel registerViewModel)
+        public async Task<ReturnWithErrors<bool>> Register(RegisterViewModel registerViewModel)
         {
             var role = ResolveUserManager().Users.Any() ? UserRoleEnum.Basic : UserRoleEnum.Admin;
 
@@ -33,36 +35,38 @@ namespace Api.Abstracts
                 UserRole = role
             };
 
-            var result1 = (await ResolveUserManager().CreateAsync(user, registerViewModel.Password)).Succeeded;
+            var result1 = await ResolveUserManager().CreateAsync(user, registerViewModel.Password);
 
-            if (!result1)
+            if (!result1.Succeeded)
             {
-                return false;
+                return new ReturnWithErrors<bool>(false,result1.Errors.Select(err => err.Description).ToList());
             }
 
-            var result2 = true;
-            
+            var result2 = new List<IdentityResult>();
+
             foreach (var subRole in role.SubRoles())
             {
                 if (!await ResolveRoleManager().RoleExistsAsync(subRole.ToString()))
                 {
                     await ResolveRoleManager().CreateAsync(new IdentityRole<int>(subRole.ToString()));
                     
-                    result2 &= (await ResolveUserManager().AddToRoleAsync(user, subRole.ToString())).Succeeded;
+                    result2.Add(await ResolveUserManager().AddToRoleAsync(user, subRole.ToString()));
                 }
             }
 
-            return result2;
+            return new ReturnWithErrors<bool>(result2.All(x => x.Succeeded),
+                result2.SelectMany(errs => errs.Errors.Select(err => err.Description)).ToList());
         }
 
-        public async Task<bool> Login(LoginViewModel loginViewModel)
+        public async Task<ReturnWithErrors<bool>> Login(LoginViewModel loginViewModel)
         {
             // Ensure the username and password is valid.
             var result = await ResolveUserManager().FindByNameAsync(loginViewModel.Username);
 
             if (result == null || !await ResolveUserManager().CheckPasswordAsync(result, loginViewModel.Password))
             {
-                return false;
+                return new ReturnWithErrors<bool>(false,
+                    new List<string> {"Username/Password combination is not valid"});
             }
 
             await ResolveSignInManager().SignInAsync(result, true);
@@ -90,7 +94,7 @@ namespace Api.Abstracts
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(principal), authProperties);
 
-            return true;
+            return new ReturnWithErrors<bool>(true);
         }
 
         public async Task Logout()

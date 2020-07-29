@@ -3,7 +3,6 @@ using Logic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Models;
 using Api.Abstracts;
 using Models.Entities;
 
@@ -30,7 +29,7 @@ namespace Api.Controllers.Api
 
         protected override async Task<IBasicLogic<Project>> BasicLogic()
         {
-            var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
 
             return _projectLogic.For(user);
         }

@@ -1,0 +1,14 @@
+@model Models.ViewModels.Api.ProfileViewModel
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container">
+    @using (Html.BeginForm("Update", "Profile", FormMethod.Post, new {}))
+    {
+        @Html.Partial("UserContent", Model, new ViewDataDictionary(ViewData) {{"Type", "Edit"}})
+
+        <input class="btn btn-primary" type="submit" value="Update"/>
+    }
+</div>

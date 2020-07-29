@@ -1,0 +1,23 @@
+@model Models.ViewModels.Api.ProfileViewModel
+
+<div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.Username)
+        @Html.TextBoxFor(x => x.Username, new {@class = "form-control", type = "text", placeholder = "Enter username", required = "required", value = $"{Model.Name}", disabled = "true"})
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.Name)
+        @Html.TextBoxFor(x => x.Name, new {@class = "form-control", type = "text", placeholder = "Enter name", required = "required", value = $"{Model.Name}"})
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.Email)
+        @Html.TextBoxFor(x => x.Email, new {@class = "form-control", type = "email", placeholder = "Enter email", required = "required", value = $"{Model.Email}"})
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.Role)
+        @Html.TextBoxFor(x => x.Role, new {@class = "form-control", type = "text", placeholder = "Enter role", required = "required", value = $"{Model.Role.ToString()}", disabled = "true"})
+    </div>
+</div>

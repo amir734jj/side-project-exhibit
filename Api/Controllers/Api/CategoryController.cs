@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Logic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Models;
 using Api.Abstracts;
 using Models.Entities;
 using Swashbuckle.AspNetCore.Annotations;

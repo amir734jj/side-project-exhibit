@@ -26,9 +26,9 @@ namespace Api.Controllers.Api
         [HttpGet]
         public async Task<IActionResult> Index([FromRoute] int page = 1, [FromQuery] Sort sort = Sort.Vote, [FromQuery] Order order = Order.Descending)
         {
-            var ideas = await _boardLogic.Collect(page, sort, order);
+            var board = await _boardLogic.Collect(page, sort, order);
 
-            return Ok(ideas);
+            return Ok(board);
         }
         
         [Authorize]

@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Logic.Interfaces;
 using Models.Entities;
 using Models.Enums;
+using Models.ViewModels.Api;
 
 namespace Logic.Crud
 {
@@ -21,14 +23,18 @@ namespace Logic.Crud
             _userLogic = userLogic;
         }
         
-        public async Task<List<Project>> Collect(int pageNumber, Sort sort, Order order)
+        public async Task<BoardViewModels> Collect(int pageNumber, Sort sort, Order order)
         {
-            var ideas = await _projectLogic.GetAll();
-            
-            return ideas
-                .Skip(PageSize * pageNumber - 1)
-                .Take(PageSize)
-                .ToList();
+            var ideas = (await _projectLogic.GetAll()).ToList();
+
+            return new BoardViewModels
+            {
+                Projects = ideas
+                    .Skip(PageSize * pageNumber - 1)
+                    .Take(PageSize)
+                    .ToList(),
+                Pages = (int) Math.Ceiling(1.0 * ideas.Count / pageNumber)
+            };
         }
 
         public async Task<Project> Vote(int projectId, int userId, Vote vote)

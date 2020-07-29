@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Amazon;
 using Amazon.Runtime;
 using Amazon.S3;
 using Api.Attributes;
 using Api.Extensions;
+using AutoFixture;
 using AutoMapper;
 using Dal;
 using Dal.Configs;
@@ -17,6 +20,7 @@ using EfCoreRepository.Extensions;
 using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Lamar;
+using Logic.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -268,8 +272,14 @@ namespace Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IProjectLogic projectLogic, IUserLogic userLogic)
         {
+            var fixture = new Fixture();
+            var l = projectLogic.For(userLogic.GetAll().Result.First());
+
+           // Task.WaitAll(fixture.Build<Project>().Without(x => x.User).Without(x => x.ProjectCategoryRelationships).Without(x => x.Comments).Without(x=> x.Votes).CreateMany<Project>(100).Select(x => l.Save(x)).ToArray());
+            
+            
             app.UseResponseCompression();
 
             if (_env.IsDevelopment())

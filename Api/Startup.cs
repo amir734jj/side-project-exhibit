@@ -37,6 +37,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Models.Constants;
 using Models.Entities;
+using Models.Enums;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -166,7 +167,7 @@ namespace Api
                 }).AddNewtonsoftJson(x =>
                 {
                     x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                    x.SerializerSettings.Converters.Add(new StringEnumConverter());
+                    x.SerializerSettings.Converters.Add(new StringEnumConverter { NamingStrategy =  new CamelCaseNamingStrategy()});
                     x.SerializerSettings.ContractResolver =
                         new CamelCasePropertyNamesContractResolver();
                 })
@@ -283,7 +284,18 @@ namespace Api
             var l = projectLogic.For(userLogic.GetAll().Result.First());
 
            // Task.WaitAll(fixture.Build<Project>().Without(x => x.User).Without(x => x.ProjectCategoryRelationships).Without(x => x.Comments).Without(x=> x.Votes).CreateMany<Project>(100).Select(x => l.Save(x)).ToArray());
-            
+
+           // var u = userLogic.GetAll().Result.First();
+           //
+           // Task.WaitAll(l.GetAll().Result.Select((project, index) =>
+           // {
+           //     return userLogic.Update(u.Id, x => x.Votes.Add(new UserVote
+           //     {
+           //         UserId = x.Id,
+           //         ProjectId = project.Id,
+           //         Value = index % 2 == 0 ? Vote.Up : Vote.Down
+           //     }));
+           // }).ToArray());
             
             app.UseResponseCompression();
 

@@ -9,6 +9,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Api.Controllers.Api
 {
+    // [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize]
     [Route("api/[controller]")]
     public class CategoryController : BasicCrudController<Category>
@@ -24,6 +25,7 @@ namespace Api.Controllers.Api
             _categoryLogic = categoryLogic;
         }
 
+        [NonAction]
         protected override async Task<IBasicLogic<Category>> BasicLogic()
         {
             return _categoryLogic;

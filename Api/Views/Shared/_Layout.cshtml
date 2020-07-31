@@ -2,6 +2,7 @@
 @using Api.Interfaces
 @using Dal.Extensions
 @using Logic.Extensions
+@using Api.Extensions
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Env
 @inject IHttpRequestUtilityBuilder RequestUtilityBuilder;
 
@@ -42,6 +43,7 @@
     
     <script>
         window.isAuthenticated = @(utility.IsAuthenticated().ToString().ToLower());
+        window.user = @Html.Raw((await utility.GetUserInfo()).ToJson());
     </script>
 </head>
 <body>

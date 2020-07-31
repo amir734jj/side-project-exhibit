@@ -23,14 +23,22 @@ function availablePages(x, y, z) {
     return _.range(Math.ceil(x - z / 2), Math.floor(x + z / 2 +1));
 }
 
-function voteIntegerValue(votes) {
-    return votes.reduce((acc, x) => x + acc, 0);
+function voteIntegerValue(vote) {
+    return vote.value === 'up'? 1 : -1;
 }
 
+function votesIntegerValue(votes) {
+    return votes.reduce((acc, vote) => voteIntegerValue(vote) + acc, 0);
+}
+
+function hasVoted(user, project, type) {
+    return !!project.votes.find(x => x.userId === user.id && x.value === type);
+}
 
 angular.module('ideaBoardApp', ['ngSanitize'])
     .constant('isAuthenticated', window.isAuthenticated)
-    .controller('boardCtrl', ['$scope', '$http', 'isAuthenticated', async ($scope, $http, isAuthenticated) => {
+    .constant('user', window.user)
+    .controller('boardCtrl', ['$scope', '$http', 'isAuthenticated', 'user', async ($scope, $http, isAuthenticated, user) => {
 
         let self = {
             paginationSize: 5,
@@ -40,7 +48,9 @@ angular.module('ideaBoardApp', ['ngSanitize'])
         $scope.page = 0;
         $scope.query = new BoardQuery();
         $scope.isAuthenticated = isAuthenticated;
-        $scope.voteIntegerValue = voteIntegerValue;
+        $scope.user = user;
+        $scope.votesIntegerValue = votesIntegerValue;
+        $scope.hasVoted = hasVoted;
 
         self.getBoard = async () => {
             const {data: {projects, pages}} = await $http.get("/api/board", {params: $scope.query});
@@ -50,13 +60,10 @@ angular.module('ideaBoardApp', ['ngSanitize'])
             $scope.$apply();
         };
 
-        $scope.upVote = async (id) => {
-            const {data} = await $http.post(`/api/board/${id}/up`);
+        $scope.vote = async (id, type) => {
+            const {data} = await $http.post(`/api/board/vote/${id}/${type}`);
             $scope.projects[$scope.projects.findIndex(({id: x}) => x === id)] = data;
-        };
-
-        $scope.downVote = async (id) => {
-            $scope.projects = await $http.post(`/api/board/${id}/down`);
+            $scope.$apply();
         };
 
         $scope.goToPage = async (page) => {

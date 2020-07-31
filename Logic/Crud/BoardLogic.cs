@@ -48,7 +48,14 @@ namespace Logic.Crud
                 }
                 else
                 {
-                    previousVote.Value = vote;
+                    if (previousVote.Value == vote)
+                    {
+                        user.Votes.Remove(previousVote);
+                    }
+                    else
+                    {
+                        previousVote.Value = vote;
+                    }
                 }
             });
 

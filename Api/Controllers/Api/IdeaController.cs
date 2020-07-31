@@ -8,6 +8,7 @@ using Models.Entities;
 
 namespace Api.Controllers.Api
 {
+    // [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize]
     [Route("api/[controller]")]
     public class IdeaController : BasicCrudController<Project>
@@ -27,6 +28,7 @@ namespace Api.Controllers.Api
             _userManager = userManager;
         }
 
+        [NonAction]
         protected override async Task<IBasicLogic<Project>> BasicLogic()
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);

@@ -8,6 +8,7 @@ using Models.Enums;
 
 namespace Api.Controllers.Api
 {
+    // [ApiExplorerSettings(IgnoreApi = true)]
     [AllowAnonymous]
     [Route("api/[controller]")]
     public class BoardController : Controller
@@ -24,7 +25,7 @@ namespace Api.Controllers.Api
 
         [Route("{page?}")]
         [HttpGet]
-        public async Task<IActionResult> Index([FromRoute] int index = 0, [FromQuery] Sort sort = Sort.Vote, [FromQuery] Order order = Order.Descending, int pageSize = 10)
+        public async Task<IActionResult> Index([FromRoute] int index = 0, [FromQuery] Sort sort = Sort.Vote, [FromQuery] Order order = Order.Descending,  [FromQuery]int pageSize = 10)
         {
             var board = await _boardLogic.Collect(index, sort, order, pageSize);
 
@@ -33,7 +34,7 @@ namespace Api.Controllers.Api
         
         [Authorize]
         [Route("vote/{id}/{vote}")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> Vote([FromRoute] int id, [FromRoute] Vote vote)
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);

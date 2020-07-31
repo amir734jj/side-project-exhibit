@@ -15,9 +15,10 @@ namespace Api.Utilities
     {
         public string Username { get; set; }
         
-        public string Password { get; set; }
+        public string Email { get; set; }
         
         public UserRoleEnum UserRoleEnum { get; set; }
+        public int Id { get; set; }
     }
     
     public class HttpRequestUtility {
@@ -45,20 +46,16 @@ namespace Api.Utilities
 
             if (user == null)
             {
-                return new UserInfo
-                {
-                    Username = null,
-                    Password = null,
-                    UserRoleEnum = UserRoleEnum.Basic
-                };
+                return new UserInfo();
             }
 
             var role = MostComprehensive(ParseRoles(await _userManager.GetRolesAsync(user)));
 
             return new UserInfo
             {
+                Id = user.Id,
                 Username = user.UserName,
-                Password = user.PasswordHash,
+                Email = user.Email,
                 UserRoleEnum = role
             };
         }

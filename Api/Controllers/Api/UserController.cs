@@ -10,6 +10,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Api.Controllers.Api
 {
+    // [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize]
     [Route("api/[controller]")]
     public class UserController : Controller
@@ -32,7 +33,6 @@ namespace Api.Controllers.Api
         [HttpGet]
         [Route("")]
         [SwaggerOperation("GetAll")]
-        [ProducesResponseType(typeof(IEnumerable<>), 200)]
         public async Task<IActionResult> GetAll()
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);

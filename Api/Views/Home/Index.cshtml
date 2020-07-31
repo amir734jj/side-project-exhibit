@@ -4,29 +4,30 @@
     Layout = "_Layout";
 }
 
-<h3>
-    @ApplicationName
-    <sub></sub>
-</h3>
 
-<div ng-controller="boardCtrl">
+<div ng-controller="boardCtrl" class="container">
+
+    <h3>
+        @ApplicationName
+        <sub></sub>
+    </h3>
+
 
     <p>
         Idea foundry for the future.
     </p>
-
     <div class="margin-bottom">
         <form class="form-inline">
-                <div class="form-group">
-                    <label for="sort">SortBy:</label>
-                    <select id="sort" class="form-control" ng-change="refresh()" ng-model="query.sort" ng-options="item for item in ['Date', 'Vote']"></select>
-                </div>
-        
-                <div class="form-group">
-                    <label for="order">Order:</label>
-                    <select id="order" class="form-control" ng-change="refresh()" ng-model="query.order" ng-options="item for item in ['Descending', 'Ascending']"></select>
-                </div>
-            </form>
+            <div class="form-group">
+                <label for="sort">SortBy:</label>
+                <select id="sort" class="form-control" ng-change="refresh()" ng-model="query.sort" ng-options="item for item in ['Date', 'Vote']"></select>
+            </div>
+
+            <div class="form-group">
+                <label for="order">Order:</label>
+                <select id="order" class="form-control" ng-change="refresh()" ng-model="query.order" ng-options="item for item in ['Descending', 'Ascending']"></select>
+            </div>
+        </form>
     </div>
 
     <div class="panel panel-default" ng-repeat="project in projects">
@@ -38,11 +39,21 @@
                 <div class="col-sm-2">
                     <div class="input-group">
                         <span class="input-group-btn">
-                            <button type="button" class="btn btn-success" ng-click="upVote(project.id)" ng-disabled="!isAuthenticated">+</button>
+                            <button type="button"
+                                    ng-class="['btn', 'btn-success', { 'active': hasVoted(user, project, 'up'), 'disabled': hasVoted(user, project, 'up')}]"
+                                    ng-click="vote(project.id, 'up')"
+                                    ng-disabled="!isAuthenticated">
+                                +
+                            </button>
                         </span>
-                        <input type="text" class="form-control text-center" placeholder="Vote" ng-value="voteIntegerValue(project.votes)"/>
+                        <input type="text" class="form-control text-center" placeholder="Vote" ng-value="votesIntegerValue(project.votes)"/>
                         <span class="input-group-btn">
-                            <button type="button" class="btn btn-danger" ng-click="downVote(project.id)" ng-disabled="!isAuthenticated">-</button>
+                            <button type="button"
+                                    ng-class="['btn', 'btn-danger', { 'active': hasVoted(user, project, 'down'), 'disabled': hasVoted(user, project, 'down')}]"
+                                    ng-click="vote(project.id, 'down')"
+                                    ng-disabled="!isAuthenticated">
+                                -
+                            </button>
                         </span>
                     </div>
                 </div>
@@ -53,9 +64,9 @@
 
     <div class="text-center">
         <ul class="pagination">
-                <li ng-class="{ active: query.page === page }" ng-repeat="page in availablePages">
-                    <a href="#" ng-click="goToPage(page)">{{page}}</a>
-                </li>
-            </ul>
+            <li ng-class="{ active: query.page === page }" ng-repeat="page in availablePages">
+                <a href="#" ng-click="goToPage(page)">{{page}}</a>
+            </li>
+        </ul>
     </div>
 </div>

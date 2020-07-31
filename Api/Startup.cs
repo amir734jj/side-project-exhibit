@@ -179,6 +179,11 @@ namespace Api
                 })
                 .AddHtmlMinification()
                 .AddHttpCompression();
+            
+            services.AddWebOptimizer(x =>
+            {
+                x.MinifyJsFiles("*.jsx");
+            });
 
             services.AddDbContext<EntityDbContext>(opt =>
             {
@@ -303,9 +308,11 @@ namespace Api
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor |
                                    ForwardedHeaders.XForwardedProto
             });
+            app.UseWebOptimizer();
             
             app.UseReact(config =>
             {
+                
                 config.SetBabelConfig(new BabelConfig
                     {
                         Presets = new HashSet<string> {"es2015"}
@@ -318,6 +325,8 @@ namespace Api
                         ContractResolver = new CamelCasePropertyNamesContractResolver()
                     });
             });
+            
+           
 
             // Use wwwroot folder as default static path
             app.UseDefaultFiles()

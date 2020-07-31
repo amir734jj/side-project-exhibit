@@ -8,5 +8,7 @@ namespace Models.ViewModels.Api
         public List<Project> Projects { get; set; }
         
         public int Pages { get; set; }
+        
+        public int CurrentPage { get; set; }
     }
 }

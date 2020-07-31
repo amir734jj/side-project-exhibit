@@ -11,8 +11,6 @@ namespace Logic.Crud
 {
     public class BoardLogic : IBoardLogic
     {
-        private const int PageSize = 10;
-        
         private readonly IProjectLogic _projectLogic;
         
         private readonly IUserLogic _userLogic;
@@ -23,17 +21,18 @@ namespace Logic.Crud
             _userLogic = userLogic;
         }
         
-        public async Task<BoardViewModels> Collect(int pageNumber, Sort sort, Order order)
+        public async Task<BoardViewModels> Collect(int index, Sort sort, Order order, int pageSize)
         {
             var ideas = (await _projectLogic.GetAll()).ToList();
 
             return new BoardViewModels
             {
                 Projects = ideas
-                    .Skip(PageSize * pageNumber - 1)
-                    .Take(PageSize)
+                    .Skip(pageSize * index)
+                    .Take(pageSize)
                     .ToList(),
-                Pages = (int) Math.Ceiling(1.0 * ideas.Count / pageNumber)
+                CurrentPage = 1,
+                Pages = (int) Math.Ceiling(1.0 * ideas.Count / pageSize)
             };
         }
 

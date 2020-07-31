@@ -15,28 +15,47 @@
         Idea foundry for the future.
     </p>
 
-    <form class="form-inline">
-        <div class="form-group">
-            <label for="sort">SortBy:</label>
-            <select id="sort" class="form-control" ng-model="$scope.query.sort" ng-options="item for item in ['Date', 'Vote']"></select>
-        </div>
-
-        <div class="form-group">
-            <label for="sort">Order:</label>
-            <select id="order" class="form-control" ng-model="$scope.query.order" ng-options="item for item in ['Descending', 'Ascending']"></select>
-        </div>
-    </form>
-    
-    <div class="panel panel-default" ng-repeat="project in projects">
-      <div class="panel-heading">{{project.title}}</div>
-      <div class="panel-body">{{project.description}}</div>
+    <div class="margin-bottom">
+        <form class="form-inline">
+                <div class="form-group">
+                    <label for="sort">SortBy:</label>
+                    <select id="sort" class="form-control" ng-change="refresh()" ng-model="query.sort" ng-options="item for item in ['Date', 'Vote']"></select>
+                </div>
+        
+                <div class="form-group">
+                    <label for="order">Order:</label>
+                    <select id="order" class="form-control" ng-change="refresh()" ng-model="query.order" ng-options="item for item in ['Descending', 'Ascending']"></select>
+                </div>
+            </form>
     </div>
 
-    <ul class="pagination">
-        <li ng-repeat="page in availablePages">
-            <a href="#">{{page}}</a>
-        </li>
-    </ul>
-    
-    {{ board.projects.length }}
+    <div class="panel panel-default" ng-repeat="project in projects">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-sm-10">
+                    {{project.title}}
+                </div>
+                <div class="col-sm-2">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-success" ng-click="upVote(project.id)" ng-disabled="!isAuthenticated">+</button>
+                        </span>
+                        <input type="text" class="form-control text-center" placeholder="Vote" ng-value="voteIntegerValue(project.votes)"/>
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-danger" ng-click="downVote(project.id)" ng-disabled="!isAuthenticated">-</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">{{project.description}}</div>
+    </div>
+
+    <div class="text-center">
+        <ul class="pagination">
+                <li ng-class="{ active: query.page === page }" ng-repeat="page in availablePages">
+                    <a href="#" ng-click="goToPage(page)">{{page}}</a>
+                </li>
+            </ul>
+    </div>
 </div>

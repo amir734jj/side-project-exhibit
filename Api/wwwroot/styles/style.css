@@ -12,3 +12,7 @@ span.pre {
     unicode-bidi: embed;
     font-family: monospace;
 }
+
+.margin-bottom{
+    margin-bottom: 1rem;
+}

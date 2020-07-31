@@ -33,6 +33,16 @@
 
     @* sanitize *@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-sanitize.js"></script>
+    
+    @* underscore *@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.10.2/underscore-min.js"></script>
+    
+    @* styles *@
+    <link rel="stylesheet" href="~/styles/style.css">
+    
+    <script>
+        window.isAuthenticated = @(utility.IsAuthenticated().ToString().ToLower());
+    </script>
 </head>
 <body>
 

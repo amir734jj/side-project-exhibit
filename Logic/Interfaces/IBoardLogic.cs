@@ -8,7 +8,7 @@ namespace Logic.Interfaces
 {
     public interface IBoardLogic
     {
-        Task<BoardViewModels> Collect(int page, Sort sort, Order order);
+        Task<BoardViewModels> Collect(int page, Sort sort, Order order, int pageSize);
 
         Task<Project> Vote(int ideaId, int userId, Vote vote);
     }

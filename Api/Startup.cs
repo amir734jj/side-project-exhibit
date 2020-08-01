@@ -38,6 +38,7 @@ using Microsoft.OpenApi.Models;
 using Models.Constants;
 using Models.Entities;
 using Models.Enums;
+using Models.Relationships;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -278,25 +279,8 @@ namespace Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IProjectLogic projectLogic, IUserLogic userLogic)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            var fixture = new Fixture();
-            var l = projectLogic.For(userLogic.GetAll().Result.First());
-
-           // Task.WaitAll(fixture.Build<Project>().Without(x => x.User).Without(x => x.ProjectCategoryRelationships).Without(x => x.Comments).Without(x=> x.Votes).CreateMany<Project>(100).Select(x => l.Save(x)).ToArray());
-
-           // var u = userLogic.GetAll().Result.First();
-           //
-           // Task.WaitAll(l.GetAll().Result.Select((project, index) =>
-           // {
-           //     return userLogic.Update(u.Id, x => x.Votes.Add(new UserVote
-           //     {
-           //         UserId = x.Id,
-           //         ProjectId = project.Id,
-           //         Value = index % 2 == 0 ? Vote.Up : Vote.Down
-           //     }));
-           // }).ToArray());
-            
             app.UseResponseCompression();
 
             if (_env.IsDevelopment())

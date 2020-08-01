@@ -10,5 +10,7 @@ namespace Models.ViewModels.Api
         public int Pages { get; set; }
         
         public int CurrentPage { get; set; }
+
+        public List<Category> Categories { get; set; }
     }
 }

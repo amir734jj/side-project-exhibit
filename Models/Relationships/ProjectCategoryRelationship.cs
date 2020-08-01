@@ -7,7 +7,7 @@ namespace Models.Relationships
     {
         public int Id { get; set; }
         
-        public int ProjectID { get; set; }
+        public int ProjectId { get; set; }
         
         public int CategoryId { get; set; }
         

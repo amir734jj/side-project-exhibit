@@ -25,13 +25,15 @@ namespace Api.Controllers.Api
 
         [Route("{page?}")]
         [HttpGet]
-        public async Task<IActionResult> Index([FromRoute] int index = 0, [FromQuery] Sort sort = Sort.Vote, [FromQuery] Order order = Order.Descending,  [FromQuery]int pageSize = 10)
+        public async Task<IActionResult> Index([FromRoute] int index = 0, [FromQuery] Sort sort = Sort.Vote,
+            [FromQuery] Order order = Order.Descending,  [FromQuery]int pageSize = 10,
+            [FromQuery] string category = "", [FromQuery] string keyword = "")
         {
-            var board = await _boardLogic.Collect(index, sort, order, pageSize);
+            var board = await _boardLogic.Collect(index, sort, order, pageSize, category, keyword);
 
             return Ok(board);
         }
-        
+
         [Authorize]
         [Route("vote/{id}/{vote}")]
         [HttpPost]

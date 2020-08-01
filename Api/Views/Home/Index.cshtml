@@ -7,25 +7,34 @@
 
 <div ng-controller="boardCtrl" class="container">
 
-    <h3>
-        @ApplicationName
-        <sub></sub>
-    </h3>
+    <h3> @ApplicationName </h3>
+    <p> Idea foundry for the future. </p>
 
-
-    <p>
-        Idea foundry for the future.
-    </p>
     <div class="margin-bottom">
         <form class="form-inline">
             <div class="form-group">
                 <label for="sort">SortBy:</label>
-                <select id="sort" class="form-control" ng-change="refresh()" ng-model="query.sort" ng-options="item for item in ['Date', 'Vote']"></select>
+                <select id="sort" class="form-control"
+                        ng-change="refresh()"
+                        ng-model="query.sort"
+                        ng-options="item for item in ['Date', 'Vote']">
+                </select>
             </div>
-
             <div class="form-group">
                 <label for="order">Order:</label>
-                <select id="order" class="form-control" ng-change="refresh()" ng-model="query.order" ng-options="item for item in ['Descending', 'Ascending']"></select>
+                <select id="order" class="form-control"
+                        ng-change="refresh()"
+                        ng-model="query.order"
+                        ng-options="item for item in ['Descending', 'Ascending']">
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="order">Categories:</label>
+                <select id="category" class="form-control"
+                        ng-change="refresh()"
+                        ng-model="query.category"
+                        ng-options="item.name for item in categories">
+                </select>
             </div>
         </form>
     </div>

@@ -11,7 +11,7 @@ namespace Api.Controllers.Api
     // [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize]
     [Route("api/[controller]")]
-    public class IdeaController : BasicCrudController<Project>
+    public class ProjectController : BasicCrudController<Project>
     {
         private readonly IProjectLogic _projectLogic;
 
@@ -22,7 +22,7 @@ namespace Api.Controllers.Api
         /// </summary>
         /// <param name="projectLogic"></param>
         /// <param name="userManager"></param>
-        public IdeaController(IProjectLogic projectLogic, UserManager<User> userManager)
+        public ProjectController(IProjectLogic projectLogic, UserManager<User> userManager)
         {
             _projectLogic = projectLogic;
             _userManager = userManager;

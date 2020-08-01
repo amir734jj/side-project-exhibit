@@ -21,7 +21,7 @@ namespace Logic.Crud
             _userLogic = userLogic;
         }
         
-        public async Task<BoardViewModels> Collect(int index, Sort sort, Order order, int pageSize)
+        public async Task<BoardViewModels> Collect(int index, Sort sort, Order order, int pageSize, string category, string keywords)
         {
             var ideas = (await _projectLogic.GetAll()).ToList();
 
@@ -32,6 +32,7 @@ namespace Logic.Crud
                     .Take(pageSize)
                     .ToList(),
                 CurrentPage = 1,
+                Categories = ideas.SelectMany(x => x.ProjectCategoryRelationships.Select(y => y.Category)).ToList(),
                 Pages = (int) Math.Ceiling(1.0 * ideas.Count / pageSize)
             };
         }

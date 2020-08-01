@@ -27,6 +27,10 @@ namespace Dal
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Category>()
+                .HasIndex(x => x.Name)
+                .IsUnique();
+            
             modelBuilder.Entity<UserVote>()
                 .HasOne(x => x.User)
                 .WithMany(x => x.Votes);
@@ -46,7 +50,7 @@ namespace Dal
                 .WithOne(x => x.Idea);
             
             modelBuilder.Entity<ProjectCategoryRelationship>()
-                .HasKey(x => new {x.ProjectID, x.CategoryId});
+                .HasKey(x => new {x.ProjectId, x.CategoryId});
 
             modelBuilder.Entity<ProjectCategoryRelationship>()
                 .HasOne(x => x.Project)

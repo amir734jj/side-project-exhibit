@@ -25,8 +25,5 @@ namespace Models.Entities
         public List<Comment> Comments { get; set; }
         
         public List<ProjectCategoryRelationship> ProjectCategoryRelationships { get; set; }
-        
-        [Column(TypeName = "varchar(256)")]
-        public string Link { get; set; }
     }
 }

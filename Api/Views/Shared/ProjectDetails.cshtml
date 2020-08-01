@@ -1,26 +1,4 @@
-@model Models.ViewModels.Identities.LoginViewModel
-
-@{
-    ViewBag.Title = "Add Project";
-    Layout = "_Layout";
-}
-
-<div class="container">
-    <div class="page-header">
-        <h3>Introduce your Project</h3>
-        <p>
-            In the synopsis make sure to talk about:
-        </p>
-        <ul>
-            <li> Why you deciced to work on this project </li>
-            <li> What problem it is resolving </li>
-            <li> Is this part of a larger effort </li>
-            <li> Are you looking for a collaborators as well </li>
-            <li> It it ready to use or its still in development phase </li>
-        </ul>
-    </div>
-
-    <form ng-submit="" ng-controller="markdownEditorController">
+    <form ng-submit="saveChanges()">
         <div class="form-group">
             <label for="title">Title:</label>
             <input type="text" class="form-control" id="title">
@@ -84,7 +62,10 @@
                 <div id="parsed-content" ng-bind-html="editor.parsed" class="markdown-preview"></div>
             </div>
         </div>
+        
+        <tags-input ng-model="categories" use-strings="true" placeholder="Enter project categories">
+            <auto-complete source="loadTags($query)"></auto-complete>
+        </tags-input>
 
         <button type="submit" class="btn btn-default">Submit</button>
     </form>
-</div>

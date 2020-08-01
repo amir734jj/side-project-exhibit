@@ -1,0 +1,14 @@
+@model Models.ViewModels.Identities.LoginViewModel
+
+@{
+    ViewBag.Title = "Add Project";
+    Layout = "_Layout";
+}
+
+<div class="container">
+    @await Html.PartialAsync("ProjectInfoGuide")
+
+    <div ng-controller="addProjectCtrl">
+        @await Html.PartialAsync("ProjectDetails")
+    </div>
+</div>

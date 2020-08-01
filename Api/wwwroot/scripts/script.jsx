@@ -15,6 +15,153 @@ class BoardQuery {
     }
 }
 
+function Markdown(self) {
+    self.editor = {
+        src: '',
+        parsed: ''
+    };
+    self.preview = true;
+
+    self.textChange = () => {
+        self.editor.parsed = marked(self.editor.src);
+    };
+
+    self.onEditor = (param) => {
+        const sel = self.getSelection();
+        let aUrl;
+        switch (param) {
+            case "bold":
+                if (self.hasSelection()) {
+                    // enhance
+                    self.insertText("**" + sel.text + "**", sel.start, sel.end);
+                } else {
+                    // add new
+                    self.insertPlacehodler("**bold**", 2, 2);
+                }
+                break;
+            case "italic":
+                if (self.hasSelection()) {
+                    // enhance
+                    self.insertText("_" + sel.text + "_", sel.start, sel.end);
+                } else {
+                    // add new
+                    self.insertPlacehodler("_italic_", 1, 1);
+                }
+                break;
+            case "underline":
+                if (self.hasSelection()) {
+                    // enhance
+                    self.insertText("<u>" + sel.text + "</u>", sel.start, sel.end);
+                } else {
+                    // add new
+                    self.insertPlacehodler("<u>underline</u>", 3, 4);
+                }
+                break;
+            case "list":
+                sel.target.value += "\n";
+                self.insertPlacehodler("- First item", 2, 0);
+                break;
+            case "list-2":
+                sel.target.value += "\n";
+                self.insertPlacehodler("1. First numbered item", 3, 0);
+                break;
+            case "header":
+                sel.target.value += "\n";
+                self.insertPlacehodler("# Header", 2, 0);
+                break;
+            case "url":
+
+                let iUrl = prompt("Enter URL here:");
+                if (iUrl === "") {
+                    iUrl = "http://codedaily.vn";
+                }
+                sel.target.value += "\n";
+                // insert new
+                aUrl = "[text](" + iUrl + ")";
+                self.insertPlacehodler(aUrl, 1, iUrl.length + 3);
+
+                break;
+            case "img":
+
+                iUrl = prompt("Enter image URL here:");
+                if (iUrl === "") {
+                    iUrl = "http://codedaily.vn";
+                }
+                sel.target.value += "\n";
+                // insert new
+                aUrl = "![image text](" + iUrl + ")";
+                self.insertPlacehodler(aUrl, 2, iUrl.length + 3);
+
+                break;
+            case "code":
+                if (self.hasSelection()) {
+                    // enhance
+                    self.insertText("`" + sel.text + "`", sel.start, sel.end);
+                } else {
+                    // add new
+                    sel.target.value += "\n";
+                    self.insertPlacehodler("<pre class='brush: language'>code here</pre>", 19, 17);
+                }
+                break;
+            case "horline":
+                sel.target.value += "\n---";
+                sel.target.focus();
+                break;
+            case "quote":
+                if (self.hasSelection()) {
+                    // enhance
+                    self.insertText("> " + sel.text, sel.start, sel.end);
+                } else {
+                    // add new
+                    self.insertPlacehodler("> quote", 2, 0);
+                }
+                break;
+            case "strikethrough":
+                if (self.hasSelection()) {
+                    // enhance
+                    self.insertText("~~" + sel.text + "~~", sel.start, sel.end);
+                } else {
+                    // add new
+                    self.insertPlacehodler("~~strikethrough~~", 2, 2);
+                }
+                break;
+        }
+    };
+
+    self.hasSelection = () => {
+        const ta = angular.element("#mark-editor")[0];
+        return ta.selectionStart !== ta.textLength;
+    };
+
+    self.getSelection = () => {
+        const ta = angular.element("#mark-editor")[0];
+
+        return {
+            target: ta,
+            start: ta.selectionStart,
+            end: ta.selectionEnd,
+            text: ta.value.substring(ta.selectionStart, ta.selectionEnd)
+        };
+    };
+
+    self.insertPlacehodler = (text, padLeft, padRight) => {
+        const ta = angular.element("#mark-editor")[0];
+        ta.focus();
+        ta.value += text;
+        ta.selectionStart = ta.textLength - text.length + padLeft;
+        ta.selectionEnd = ta.textLength - padRight;
+    };
+
+    self.insertText = (text, start, end) => {
+        const ta = angular.element("#mark-editor")[0];
+        ta.focus();
+        const leftText = ta.value.substring(0, start);
+        const rightText = ta.value.substring(end);
+        ta.value = leftText + text + rightText;
+    };
+}
+
+
 function availablePages(currentPage, pages, window) {
     if (pages <= window) {
         return _.range(1, pages + 1);
@@ -41,7 +188,7 @@ function hasVoted(user, project, type) {
     return !!project.votes.find(x => x.userId === user.id && x.value === type);
 }
 
-angular.module('ideaBoardApp', ['ngSanitize'])
+angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
     .constant('isAuthenticated', window.isAuthenticated)
     .constant('user', window.user)
     .controller('boardCtrl', ['$scope', '$http', 'isAuthenticated', 'user', async ($scope, $http, isAuthenticated, user) => {
@@ -86,156 +233,45 @@ angular.module('ideaBoardApp', ['ngSanitize'])
 
         self.init().then();
     }])
-    .controller("markdownEditorController", ["$scope", function ($scope) {
-        $scope.editor = {
-            src: '',
-            parsed: ''
+    .controller("addProjectCtrl", ["$scope", "$window", "$http", function ($scope, $window, $http) {
+
+        $scope.categories = [];
+        $scope.loadTags = async (query) => {
+            const { data } = await $http.get("/api/category");
+            const categories = data.map(x => x.name).filter(x => x.toLowerCase().includes(query))
+            return { data: categories };
+        };
+
+        Markdown($scope);
+        
+        $scope.saveChanges = () => { };
+
+    }])
+    .controller("updateProjectCtrl", ["$scope", "$window", "$http", function ($scope, $window, $http) {
+
+        $scope.categories = [];
+        $scope.loadTags = async (query) => {
+            const { data } = await $http.get("/api/category");
+            const categories = data.map(x => x.name).filter(x => x.toLowerCase().includes(query))
+            return { data: categories };
+        };
+
+        const self = {};
+        
+        const projectId = _.chain($window.location.href.split('/'))
+            .filter(x => x)
+            .last()
+            .value();
+        
+        Markdown($scope);
+
+        $scope.saveChanges = () => {
+            
         };
         
-        $scope.preview = true;
-
-        $scope.textChange = function () {
-            $scope.editor.parsed = marked($scope.editor.src);
+        self.init = async () => {
+            const { data } = await $http.get(`/api/project/${projectId}`);
         };
 
-        $scope.onPublish = function () {
-            alert("Write your own publish script here!");
-        };
-
-        $scope.onEditor = function (param) {
-            const sel = $scope.getSelection();
-            let aUrl;
-            switch (param) {
-                case "bold":
-                    if ($scope.hasSelection()) {
-                        // enhance
-                        $scope.insertText("**" + sel.text + "**", sel.start, sel.end);
-                    } else {
-                        // add new
-                        $scope.insertPlacehodler("**bold**", 2, 2);
-                    }
-                    break;
-                case "italic":
-                    if ($scope.hasSelection()) {
-                        // enhance
-                        $scope.insertText("_" + sel.text + "_", sel.start, sel.end);
-                    } else {
-                        // add new
-                        $scope.insertPlacehodler("_italic_", 1, 1);
-                    }
-                    break;
-                case "underline":
-                    if ($scope.hasSelection()) {
-                        // enhance
-                        $scope.insertText("<u>" + sel.text + "</u>", sel.start, sel.end);
-                    } else {
-                        // add new
-                        $scope.insertPlacehodler("<u>underline</u>", 3, 4);
-                    }
-                    break;
-                case "list":
-                    sel.target.value += "\n";
-                    $scope.insertPlacehodler("- First item", 2, 0);
-                    break;
-                case "list-2":
-                    sel.target.value += "\n";
-                    $scope.insertPlacehodler("1. First numbered item", 3, 0);
-                    break;
-                case "header":
-                    sel.target.value += "\n";
-                    $scope.insertPlacehodler("# Header", 2, 0);
-                    break;
-                case "url":
-
-                    let iUrl = prompt("Enter URL here:");
-                    if (iUrl === "") {
-                        iUrl = "http://codedaily.vn";
-                    }
-                    sel.target.value += "\n";
-                    // insert new
-                    aUrl = "[text](" + iUrl + ")";
-                    $scope.insertPlacehodler(aUrl, 1, iUrl.length + 3);
-
-                    break;
-                case "img":
-
-                    iUrl = prompt("Enter image URL here:");
-                    if (iUrl === "") {
-                        iUrl = "http://codedaily.vn";
-                    }
-                    sel.target.value += "\n";
-                    // insert new
-                    aUrl = "![image text](" + iUrl + ")";
-                    $scope.insertPlacehodler(aUrl, 2, iUrl.length + 3);
-
-                    break;
-                case "code":
-                    if ($scope.hasSelection()) {
-                        // enhance
-                        $scope.insertText("`" + sel.text + "`", sel.start, sel.end);
-                    } else {
-                        // add new
-                        sel.target.value += "\n";
-                        $scope.insertPlacehodler("<pre class='brush: language'>code here</pre>", 19, 17);
-                    }
-                    break;
-                case "horline":
-                    sel.target.value += "\n---";
-                    sel.target.focus();
-                    break;
-                case "quote":
-                    if ($scope.hasSelection()) {
-                        // enhance
-                        $scope.insertText("> " + sel.text, sel.start, sel.end);
-                    } else {
-                        // add new
-                        $scope.insertPlacehodler("> quote", 2, 0);
-                    }
-                    break;
-                case "strikethrough":
-                    if ($scope.hasSelection()) {
-                        // enhance
-                        $scope.insertText("~~" + sel.text + "~~", sel.start, sel.end);
-                    } else {
-                        // add new
-                        $scope.insertPlacehodler("~~strikethrough~~", 2, 2);
-                    }
-                    break;
-            }
-        };
-
-        $scope.hasSelection = function () {
-            const ta = document.getElementById("mark-editor");
-            return ta.selectionStart !== ta.textLength;
-
-        };
-
-        $scope.getSelection = function () {
-            const ta = document.getElementById("mark-editor");
-
-            return {
-                target: ta,
-                start: ta.selectionStart,
-                end: ta.selectionEnd,
-                text: ta.value.substring(ta.selectionStart, ta.selectionEnd)
-            };
-        };
-
-        $scope.insertPlacehodler = function (text, padLeft, padRight) {
-            const ta = document.getElementById("mark-editor");
-            ta.focus();
-            ta.value += text;
-            ta.selectionStart = ta.textLength - text.length + padLeft;
-            ta.selectionEnd = ta.textLength - padRight;
-
-        };
-
-        $scope.insertText = function (text, start, end) {
-            const ta = document.getElementById("mark-editor");
-            ta.focus();
-            const leftText = ta.value.substring(0, start);
-            const rightText = ta.value.substring(end);
-            ta.value = leftText + text + rightText;
-        };
-
+        self.init().then();
     }]);

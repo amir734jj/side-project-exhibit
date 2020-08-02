@@ -21,7 +21,7 @@ namespace Dal.Profiles
             entity.Description = dto.Description;
             entity.CreatedOn = dto.CreatedOn;
             entity.Votes = dto.Votes;
-            entity.ProjectCategoryRelationships = _entityProfileAuxiliary.ModifyList<ProjectCategoryRelationship, int>(entity.ProjectCategoryRelationships, dto.ProjectCategoryRelationships);
+            entity.ProjectCategoryRelationships = _entityProfileAuxiliary.ModifyList(entity.ProjectCategoryRelationships, dto.ProjectCategoryRelationships, x => new { x.ProjectId, x.CategoryId});
             entity.Comments = _entityProfileAuxiliary.ModifyList<Comment, int>(entity.Comments, dto.Comments);
 
             return entity;
@@ -33,6 +33,7 @@ namespace Dal.Profiles
                 .Include(x => x.Votes)
                 .Include(x => x.ProjectCategoryRelationships)
                 .ThenInclude(x => x.Category)
+                .ThenInclude(x => x.ProjectCategoryRelationships)
                 .Include(x => x.ProjectCategoryRelationships)
                 .ThenInclude(x => x.Project)
                 .Include(x => x.Comments);

@@ -1,4 +1,7 @@
-﻿using EfCoreRepository.Interfaces;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using EfCoreRepository.Interfaces;
 using Logic.Abstracts;
 using Logic.Interfaces;
 using Models.Entities;
@@ -25,6 +28,24 @@ namespace Logic.Crud
         protected override IBasicCrudType<Category, int> GetBasicCrudDal()
         {
             return _categoryDal;
+        }
+
+        public async Task<List<Category>> GetOrCreate(List<string> items)
+        {
+            var categories = await GetAll();
+
+            var joinedResult = items
+                .GroupJoin(categories, c => c.ToLower(), p => p.Name, (c, ps) => new {c, ps})
+                .SelectMany(t => t.ps.DefaultIfEmpty(), (t, p) => (t.c, p)).ToList();
+
+            await Task.WhenAll(
+                joinedResult.Where(x => x.p == null)
+                    .Select(x => x.c)
+                    .Select(x => Save(new Category {Name = x.ToLower()})));
+
+            categories = await GetAll();
+
+            return categories.Join(items, x => x.Name.ToLower(), x => x, (category, s) => category).ToList();
         }
     }
 }

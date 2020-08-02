@@ -243,8 +243,16 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
         };
 
         Markdown($scope);
-        
-        $scope.saveChanges = () => { };
+
+        $scope.saveChanges = async () => {
+            await $http.post('/projects/add', {
+                title: $scope.title,
+                description: $scope.editor.src,
+                categories: $scope.categories
+            });
+            
+            $window.location.href = '/projects';
+        };
 
     }])
     .controller("updateProjectCtrl", ["$scope", "$window", "$http", function ($scope, $window, $http) {
@@ -265,12 +273,23 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
         
         Markdown($scope);
 
-        $scope.saveChanges = () => {
-            
+        $scope.saveChanges = async () => {
+            await $http.put(`/projects/update/${projectId}`, { 
+                id: projectId,
+                title: $scope.title,
+                description: $scope.editor.src,
+                categories: $scope.categories
+            });
+
+            $window.location.href = '/projects';
         };
         
         self.init = async () => {
-            const { data } = await $http.get(`/api/project/${projectId}`);
+            const { data: { title, description, categories } } = await $http.get(`/projects/${projectId}/json`);
+            $scope.title = title;
+            $scope.editor.src = description;
+            $scope.categories = categories;
+            $scope.$apply();
         };
 
         self.init().then();

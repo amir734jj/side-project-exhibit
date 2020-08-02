@@ -55,11 +55,11 @@ namespace Dal
             modelBuilder.Entity<ProjectCategoryRelationship>()
                 .HasOne(x => x.Project)
                 .WithMany(x => x.ProjectCategoryRelationships)
-                .HasForeignKey(x => x.CategoryId);
+                .HasForeignKey(x => x.ProjectId);
             
             modelBuilder.Entity<ProjectCategoryRelationship>()
                 .HasOne(x => x.Category)
-                .WithMany(x => x.IdeaCategoryRelationships)
+                .WithMany(x => x.ProjectCategoryRelationships)
                 .HasForeignKey(x => x.CategoryId);
         }
 

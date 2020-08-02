@@ -10,12 +10,6 @@
         "regenerator": true
       }
     ]
-  ],
-  "env": {
-    "production": {
-      "presets": [
-        "minify"
-      ]
-    }
-  }
+  ]
 }
+

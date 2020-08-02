@@ -3,8 +3,8 @@ class BoardQuery {
     order = 'Descending'; // or Ascending
     index = 0;            // first page
     pageSize = 10;        // page size
-    category = '';        // category
     keyword = '';         // keyword
+    category = '';        // no category
 
     get page() {
         return this.index + 1;
@@ -20,7 +20,7 @@ function Markdown(self) {
         src: '',
         parsed: ''
     };
-    self.preview = true;
+    self.preview = false;
 
     self.textChange = () => {
         self.editor.parsed = marked(self.editor.src);
@@ -196,9 +196,10 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
         let self = {
             paginationSize: 5,
         };
+        $scope.initialized = false;
         $scope.availablePages = [];
         $scope.projects = [];
-        $scope.page = 0;
+        $scope.page = 1;
         $scope.query = new BoardQuery();
         $scope.isAuthenticated = isAuthenticated;
         $scope.user = user;
@@ -210,7 +211,7 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
             $scope.projects = projects;
             $scope.pages = pages;
             $scope.availablePages = availablePages($scope.query.page, pages, self.paginationSize);
-            $scope.categories = categories;
+            $scope.categories = categories.map(({name}) => name);
             $scope.$apply();
         };
 
@@ -227,6 +228,7 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
 
         self.init = async () => {
             await self.getBoard();
+            $scope.initialized = true;
         };
 
         $scope.refresh = self.init;
@@ -237,9 +239,9 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
 
         $scope.categories = [];
         $scope.loadTags = async (query) => {
-            const { data } = await $http.get("/api/category");
+            const {data} = await $http.get("/api/category");
             const categories = data.map(x => x.name).filter(x => x.toLowerCase().includes(query))
-            return { data: categories };
+            return {data: categories};
         };
 
         Markdown($scope);
@@ -250,7 +252,7 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
                 description: $scope.editor.src,
                 categories: $scope.categories
             });
-            
+
             $window.location.href = '/projects';
         };
 
@@ -259,22 +261,22 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
 
         $scope.categories = [];
         $scope.loadTags = async (query) => {
-            const { data } = await $http.get("/api/category");
+            const {data} = await $http.get("/api/category");
             const categories = data.map(x => x.name).filter(x => x.toLowerCase().includes(query))
-            return { data: categories };
+            return {data: categories};
         };
 
         const self = {};
-        
+
         const projectId = _.chain($window.location.href.split('/'))
             .filter(x => x)
             .last()
             .value();
-        
+
         Markdown($scope);
 
         $scope.saveChanges = async () => {
-            await $http.put(`/projects/update/${projectId}`, { 
+            await $http.put(`/projects/update/${projectId}`, {
                 id: projectId,
                 title: $scope.title,
                 description: $scope.editor.src,
@@ -283,9 +285,9 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
 
             $window.location.href = '/projects';
         };
-        
+
         self.init = async () => {
-            const { data: { title, description, categories } } = await $http.get(`/projects/${projectId}/json`);
+            const {data: {title, description, categories}} = await $http.get(`/projects/${projectId}/json`);
             $scope.title = title;
             $scope.editor.src = description;
             $scope.categories = categories;

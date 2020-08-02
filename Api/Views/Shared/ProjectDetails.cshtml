@@ -43,7 +43,7 @@
                     <button type="button" class="btn btn-default" ng-click="onEditor('strikethrough')">
                         <i class="fa fa-strikethrough" aria-hidden="true"></i>
                     </button>
-                    <button type="button" class="btn btn-default" ng-click="preview = !preview">
+                    <button type="button" ng-class="['btn', 'btn-default', { 'active': preview }]" ng-click="preview = !preview">
                         Toggle Preview
                     </button>
                 </div>

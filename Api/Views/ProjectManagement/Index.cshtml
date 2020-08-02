@@ -8,7 +8,14 @@
 
 <div class="container">
     <div class="page-header">
-        <h3> Your projects </h3>
+        <div class="row">
+            <div class="col-sm-10">
+                <h3> Your projects </h3>
+            </div>
+            <div class="col-sm-2">
+                <a href="~/Projects/Add" class="btn btn-primary pull-right"> Add Project </a>
+            </div>
+        </div>
     </div>
 
     @foreach (var project in Model)
@@ -17,12 +24,18 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-sm-10">
-                        <a href="~/Projects/Update/@(project.Id)"> @(project.Title) </a>
+                        <a href="~/Projects/Update/@(project.Id)">
+                            <strong> @(project.Title) </strong>
+                        </a>
                     </div>
                     <div class="col-sm-2">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-success" disabled>  <span class="badge"> @project.Votes.Count(x => x.Value == Vote.Up) </span></button>
-                            <button type="button" class="btn btn-danger" disabled>  <span class="badge"> @project.Votes.Count(x => x.Value == Vote.Down) </span></button>
+                        <div class="btn-group pull-right">
+                            <label class="btn btn-success">
+                                @project.Votes.Count(x => x.Value == Vote.Up)
+                            </label>
+                            <label class="btn btn-danger">
+                                @project.Votes.Count(x => x.Value == Vote.Down)
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -30,4 +43,14 @@
             <div class="panel-body">@(project.Description)</div>
         </div>
     }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning">
+            <p>
+                You do not have any projects. Please add one so you can manage it in this page.
+            </p>
+        </div>
+    }
+
 </div>

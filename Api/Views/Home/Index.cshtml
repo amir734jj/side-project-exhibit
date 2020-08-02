@@ -33,8 +33,12 @@
                 <select id="category" class="form-control"
                         ng-change="refresh()"
                         ng-model="query.category"
-                        ng-options="item.name for item in categories">
+                        ng-options="item for item in categories">
                 </select>
+            </div>
+            <div class="form-group">
+                <label for="order">Keyword:</label>
+                <input type="text" class="form-control" id="keyword" maxlength="10" ng-model="query.keyword" ng-change="refresh()"/>
             </div>
         </form>
     </div>
@@ -43,7 +47,11 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-sm-10">
-                    {{project.title}}
+                    <a href="project/{{project.id}}">
+                        <strong>
+                            {{project.title}}
+                        </strong>
+                    </a>
                 </div>
                 <div class="col-sm-2">
                     <div class="input-group">
@@ -71,7 +79,13 @@
         <div class="panel-body">{{project.description}}</div>
     </div>
 
-    <div class="text-center">
+    <div class="alert alert-warning" ng-if="!projects.length && initialized">
+        <p>
+            Did not find any project matching the criterias.
+        </p>
+    </div>
+
+    <div class="text-center" ng-if="availablePages.length > 1">
         <ul class="pagination">
             <li ng-class="{ active: query.page === page }" ng-repeat="page in availablePages">
                 <a href="#" ng-click="goToPage(page)">{{page}}</a>

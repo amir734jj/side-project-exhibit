@@ -21,9 +21,19 @@ namespace Logic.Crud
             _userLogic = userLogic;
         }
         
-        public async Task<BoardViewModels> Collect(int index, Sort sort, Order order, int pageSize, string category, string keywords)
+        public async Task<BoardViewModels> Collect(int index, Sort sort, Order order, int pageSize, string category, string keyword)
         {
             var ideas = (await _projectLogic.GetAll()).ToList();
+
+            if (!string.IsNullOrWhiteSpace(category))
+            {
+                ideas = ideas.Where(x => x.ProjectCategoryRelationships.Any(y => y.Category.Name == category)).ToList();
+            }
+            
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                ideas = ideas.Where(x => x.Title.Contains(keyword) || x.Description.Contains(keyword)).ToList();
+            }
 
             return new BoardViewModels
             {

@@ -46,15 +46,15 @@
     <div class="panel panel-default" ng-repeat="project in projects">
         <div class="panel-heading">
             <div class="row">
-                <div class="col-sm-10">
+                <div class="col-sm-9">
                     <a href="project/{{project.id}}">
                         <strong>
                             {{project.title}}
                         </strong>
                     </a>
                 </div>
-                <div class="col-sm-2">
-                    <div class="input-group">
+                <div class="col-sm-3">
+                    <div class="input-group pull-right" style="max-width: 15rem">
                         <span class="input-group-btn">
                             <button type="button"
                                     ng-class="['btn', 'btn-success', { 'active': hasVoted(user, project, 'up'), 'disabled': hasVoted(user, project, 'up')}]"
@@ -76,7 +76,7 @@
                 </div>
             </div>
         </div>
-        <div class="panel-body">{{project.description}}</div>
+        <div class="panel-body preserve-linebreak" ng-bind="markdownToTxt(project.description)"></div>
     </div>
 
     <div class="alert alert-warning" ng-if="!projects.length && initialized">

@@ -15,7 +15,7 @@ class BoardQuery {
     }
 }
 
-function Markdown(self) {
+function MarkdownInput(self) {
     self.editor = {
         src: '',
         parsed: ''
@@ -188,6 +188,84 @@ function hasVoted(user, project, type) {
     return !!project.votes.find(x => x.userId === user.id && x.value === type);
 }
 
+class MarkDownToText {
+    /* Using lodash escape implementation: https://github.com/lodash/lodash/blob/master/escape.js */
+    htmlEscapes = {
+        '&': '&amp',
+        '<': '&lt',
+        '>': '&gt',
+        '"': '&quot',
+        "'": '&#39',
+    };
+    reUnescapedHtml = /[&<>"']/g;
+    reHasUnescapedHtml = RegExp(this.reUnescapedHtml.source);
+    escapeHtml = (string) => {
+        if (string && this.reHasUnescapedHtml.test(string)) {
+            return string.replace(this.reUnescapedHtml, (chr) => this.htmlEscapes[chr]);
+        } else {
+            return string;
+        }
+    };
+    blockFn = (block) => block + '\n';
+    inlineFn = (text) => text;
+    newlineFn = () => '\n';
+    emptyFn = () => '';
+    renderer = {
+        // Block elements
+        code: this.blockFn,
+        blockquote: this.blockFn,
+        html: this.emptyFn,
+        heading: this.blockFn,
+        hr: this.emptyFn,
+        list: this.blockFn,
+        listitem: (text) => this.blockFn(text),
+        paragraph: this.blockFn,
+        table: (header, body) => this.blockFn(header) + this.blockFn(body),
+        tablerow: this.blockFn,
+        tablecell: this.blockFn,
+        // Inline elements
+        strong: this.inlineFn,
+        em: this.inlineFn,
+        codespan: this.inlineFn,
+        br: this.newlineFn,
+        del: this.inlineFn,
+        link: (_0, _1, text) => this.inlineFn(text),
+        image: (_0, _2, text) => this.inlineFn(text),
+        text: this.inlineFn,
+    };
+
+    /**
+     * Converts markdown to plaintext. Accepts an option object with the following
+     * fields:
+     *
+     *  - escapeHtml (default: true) Escapes HTML in the final string
+     *  - gfp (default: true) Uses github flavor markdown (passed through to marked)
+     *  - pedantic (default: false) Conform to markdown.pl (passed through to marked)
+     *
+     * @param markdown the markdown to convert
+     * @param options  the options to apply
+     * @returns the unmarked string (plain text)
+     */
+    markdownToTxt(markdown, options = {
+        escapeHtml: true,
+        gfm: true,
+        pedantic: false,
+    }) {
+        if (markdown) {
+            const unmarked = marked(markdown, {
+                gfm: options.gfm,
+                pedantic: options.pedantic,
+                renderer: this.renderer,
+            });
+            if (options.escapeHtml) {
+                return this.escapeHtml(unmarked);
+            }
+            return unmarked;
+        }
+        return '';
+    }
+}
+
 angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
     .constant('isAuthenticated', window.isAuthenticated)
     .constant('user', window.user)
@@ -205,6 +283,9 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
         $scope.user = user;
         $scope.votesIntegerValue = votesIntegerValue;
         $scope.hasVoted = hasVoted;
+        
+        const markDownToText = new MarkDownToText();
+        $scope.markdownToTxt = (...args) => _.take(markDownToText.markdownToTxt(...args).split("\n"), 5).join("\n");
 
         self.getBoard = async () => {
             const {data: {projects, pages, categories}} = await $http.get("/api/board", {params: $scope.query});
@@ -245,7 +326,7 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
             return {data: categories};
         };
 
-        Markdown($scope);
+        MarkdownInput($scope);
 
         $scope.saveChanges = async () => {
             await $http.post('/projects/add', {
@@ -274,7 +355,7 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
             .last()
             .value();
 
-        Markdown($scope);
+        MarkdownInput($scope);
 
         $scope.saveChanges = async () => {
             await $http.put(`/projects/update/${projectId}`, {

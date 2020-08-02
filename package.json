@@ -1,0 +1,27 @@
+{
+  "name": "side-project-client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "engines": {
+    "node": "14.3.0"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.10.5"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.2.3",
+    "@babel/core": "7.4.0",
+    "@babel/node": "^7.10.5",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/plugin-transform-runtime": "^7.10.5",
+    "@babel/preset-env": "7.4.2",
+    "@babel/register": "7.4.0",
+    "babel-preset-minify": "^0.5.1"
+  },
+  "scripts": {
+    "build": "rm -rf client-build || true && mkdir -p client-build && cd Api/wwwroot/scripts && babel . --out-dir ../../../client-build"
+  },
+  "author": "",
+  "license": "ISC"
+}

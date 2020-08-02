@@ -42,8 +42,6 @@ using Models.Relationships;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using React;
-using React.AspNet;
 using StackExchange.Redis;
 using WebMarkupMin.AspNetCore2;
 using static Dal.Utilities.ConnectionStringUtility;
@@ -121,8 +119,6 @@ namespace Api
                 options.Cookie.Name = ApiConstants.AuthenticationSessionCookieName;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.None;
             });
-
-            services.AddReact();
 
             // Make sure a JS engine is registered, or you will get an error!
             services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName)
@@ -306,24 +302,6 @@ namespace Api
             });
             app.UseWebOptimizer();
             
-            app.UseReact(config =>
-            {
-                
-                config.SetBabelConfig(new BabelConfig
-                    {
-                        Presets = new HashSet<string> {"es2015"}
-                    })
-                    .AddScript("~/scripts/script.jsx")
-                    .SetLoadBabel(true)
-                    .SetJsonSerializerSettings(new JsonSerializerSettings
-                    {
-                        StringEscapeHandling = StringEscapeHandling.EscapeHtml,
-                        ContractResolver = new CamelCasePropertyNamesContractResolver()
-                    });
-            });
-            
-           
-
             // Use wwwroot folder as default static path
             app.UseDefaultFiles()
                 .UseStaticFiles()

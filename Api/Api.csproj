@@ -31,9 +31,6 @@
         <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.1.0" />
         <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
         <PackageReference Include="OwaspHeaders.Core" Version="3.5.2" />
-        <PackageReference Include="React.AspNet" Version="5.2.6" />
-        <PackageReference Include="React.AspNet.Middleware" Version="5.2.6" />
-        <PackageReference Include="React.Core" Version="5.2.6" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
         <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.0.0-rc5" />
         <PackageReference Include="Microsoft.AspNetCore" />
@@ -42,38 +39,18 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Update="Views\Profile\Index.cshtml">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
-      <Content Update="Views\Shared\UserContent.cshtml">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
-      <Content Update="Views\About\index.cshtml">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
-      <Content Update="Views\Idea\index.cshtml">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
-      <Content Update="Views\Project\Update.cshtml">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
-      <Content Update="Views\Shared\ProjectInfoGuide.cshtml">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
-      <Content Update="Views\Shared\ProjectDetails.cshtml">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
-      <Content Update="Views\Home\Project.cshtml">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
+        <Folder Include="wwwroot\" />
     </ItemGroup>
+
+    <Target Name="PrePublishTarget" BeforeTargets="PrepareForPublish" Condition="$(DOTNET_RUNNING_IN_CONTAINER) != 'true'">
+        <Exec Command="npm install" />
+        <Exec Command="BABEL_ENV=$ASPNETCORE_ENVIRONMENT npm run build" />
+        <Exec Command="echo $PWD" />
+        <Exec Command="echo $ASPNETCORE_ENVIRONMENT" />
+        <ItemGroup>
+            <Dist Include="../client-build/**" />
+        </ItemGroup>
+        <Copy SourceFiles="@(Dist)" DestinationFolder="$(PublishDir)\wwwroot\scripts\%(RecursiveDir)" SkipUnchangedFiles="true" />
+    </Target>
     
 </Project>

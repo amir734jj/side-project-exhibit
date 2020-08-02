@@ -229,6 +229,7 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
         self.init = async () => {
             await self.getBoard();
             $scope.initialized = true;
+            $scope.$apply();
         };
 
         $scope.refresh = self.init;

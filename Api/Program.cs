@@ -12,7 +12,7 @@ namespace Api
         public static void Main(string[] args)
         {
             var portCandidate = Environment.GetEnvironmentVariable("PORT");
-            var port = string.IsNullOrWhiteSpace(portCandidate) ? portCandidate : "5000";
+            var port = !string.IsNullOrWhiteSpace(portCandidate) ? portCandidate : "5000";
             
             var host = WebHost.CreateDefaultBuilder(args)
                 .UseLamar()

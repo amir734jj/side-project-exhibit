@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Lamar.Microsoft.DependencyInjection;
 using Microsoft.AspNetCore;
@@ -10,9 +11,12 @@ namespace Api
     {
         public static void Main(string[] args)
         {
+            var portCandidate = Environment.GetEnvironmentVariable("PORT");
+            var port = string.IsNullOrWhiteSpace(portCandidate) ? portCandidate : "5000";
+            
             var host = WebHost.CreateDefaultBuilder(args)
                 .UseLamar()
-                .UseUrls("http://*:5000")
+                .UseUrls($"http://*:{port}")
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()

@@ -1,15 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using Amazon;
 using Amazon.Runtime;
 using Amazon.S3;
 using Api.Attributes;
 using Api.Extensions;
-using AutoFixture;
 using AutoMapper;
 using Dal;
 using Dal.Configs;
@@ -20,7 +16,6 @@ using EfCoreRepository.Extensions;
 using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Lamar;
-using Logic.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -38,8 +33,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Models.Constants;
 using Models.Entities;
-using Models.Enums;
-using Models.Relationships;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -191,11 +184,6 @@ namespace Api
                 options.AllowSynchronousIO = true;
             });
 
-            services.AddWebOptimizer(x =>
-            {
-                x.MinifyJsFiles("*.css");
-            });
-
             services.AddDbContext<EntityDbContext>(opt =>
             {
                 if (_env.IsDevelopment())
@@ -317,9 +305,7 @@ namespace Api
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor |
                                    ForwardedHeaders.XForwardedProto
             });
-            
-            app.UseWebOptimizer();
-            
+
             // Use wwwroot folder as default static path
             app.UseDefaultFiles()
                 .UseStaticFiles()

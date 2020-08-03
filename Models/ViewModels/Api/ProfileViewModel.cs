@@ -1,7 +1,6 @@
 
 using Models.Entities;
 using Models.Enums;
-using Newtonsoft.Json;
 
 namespace Models.ViewModels.Api
 {

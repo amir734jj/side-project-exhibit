@@ -1,11 +1,6 @@
 using System.Threading.Tasks;
-using Logic.Extensions;
 using Logic.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Models.Entities;
-using Models.ViewModels.Api;
 
 namespace API.Controllers
 {

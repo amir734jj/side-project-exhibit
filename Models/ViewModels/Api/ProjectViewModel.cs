@@ -1,8 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using Models.Entities;
-using Newtonsoft.Json;
 
 namespace Models.ViewModels.Api
 {

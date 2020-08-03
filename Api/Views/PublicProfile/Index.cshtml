@@ -1,0 +1,24 @@
+@using Models.Extensions
+@model Models.Entities.User
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <h3> @Model.Name </h3>
+
+    <p> @Model.Description </p>
+
+    <p> Email: @Model.Email </p>
+
+    <ul class="list-group">
+        @foreach (var project in Model.Projects)
+        {
+            <li class="list-group-item">
+                <a href="~/Project/@project.Id"> @(project.Title) </a>
+                <span class="badge"> @(project.Votes.Select(x => x.Value.IntValue()).Sum()) </span>
+            </li>
+        }
+    </ul>
+</div>

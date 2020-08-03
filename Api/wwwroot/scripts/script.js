@@ -188,6 +188,10 @@ function hasVoted(user, project, type) {
     return !!project.votes.find(x => x.userId === user.id && x.value === type);
 }
 
+function isMyOwnPost(user, project) {
+    return user.id === project.user.id;
+}
+
 class MarkDownToText {
     /* Using lodash escape implementation: https://github.com/lodash/lodash/blob/master/escape.js */
     htmlEscapes = {
@@ -283,6 +287,7 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
         $scope.user = user;
         $scope.votesIntegerValue = votesIntegerValue;
         $scope.hasVoted = hasVoted;
+        $scope.isMyOwnPost = isMyOwnPost;
         
         const markDownToText = new MarkDownToText();
         $scope.markdownToTxt = (...args) => _.take(markDownToText.markdownToTxt(...args).split("\n"), 5).join("\n");

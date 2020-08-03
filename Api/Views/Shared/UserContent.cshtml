@@ -20,4 +20,9 @@
         @Html.LabelFor(x => x.Role)
         @Html.TextBoxFor(x => x.Role, new {@class = "form-control", type = "text", placeholder = "Enter role", required = "required", value = $"{Model.Role.ToString()}", disabled = "true"})
     </div>
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.Description)
+        @Html.TextAreaFor(x => x.Description, new {@class = "form-control", rows = 5, placeholder = "Enter description", value = $"{Model.Description}"})
+    </div>
 </div>

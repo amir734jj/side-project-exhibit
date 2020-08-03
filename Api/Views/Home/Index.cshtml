@@ -52,10 +52,12 @@
                             {{project.title}}
                         </strong>
                     </a>
+
+                    <p> <small> <a href="user/{{ project.user.id }}">{{ project.user.userName }}</a> </small> </p>
                 </div>
                 <div class="col-sm-3">
                     <div class="input-group pull-right" style="max-width: 15rem">
-                        <span class="input-group-btn">
+                        <span class="input-group-btn" ng-if="!isMyOwnPost(user, project)">
                             <button type="button"
                                     ng-class="['btn', 'btn-success', { 'active': hasVoted(user, project, 'up'), 'disabled': hasVoted(user, project, 'up')}]"
                                     ng-click="vote(project.id, 'up')"
@@ -63,8 +65,8 @@
                                 +
                             </button>
                         </span>
-                        <input type="text" class="form-control text-center" placeholder="Vote" ng-value="votesIntegerValue(project.votes)"/>
-                        <span class="input-group-btn">
+                        <input type="text" class="form-control text-center" placeholder="Vote" ng-value="votesIntegerValue(project.votes)" disabled/>
+                        <span class="input-group-btn" ng-if="!isMyOwnPost(user, project)">
                             <button type="button"
                                     ng-class="['btn', 'btn-danger', { 'active': hasVoted(user, project, 'down'), 'disabled': hasVoted(user, project, 'down')}]"
                                     ng-click="vote(project.id, 'down')"

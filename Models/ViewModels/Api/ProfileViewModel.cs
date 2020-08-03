@@ -29,6 +29,7 @@ namespace Models.ViewModels.Api
             Email = user.Email;
             Description = user.Description;
             Username = user.UserName;
+            Role = user.UserRole;
         }
     }
 }

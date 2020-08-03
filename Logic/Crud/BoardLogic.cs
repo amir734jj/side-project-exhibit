@@ -49,6 +49,14 @@ namespace Logic.Crud
 
         public async Task<Project> Vote(int projectId, int userId, Vote vote)
         {
+            var project = await _projectLogic.Get(projectId);
+
+            // Cannot vote for my own project
+            if (project.User.Id == userId)
+            {
+                return project;
+            }
+            
             await _userLogic.Update(userId, user =>
             {
                 var previousVote = user.Votes.FirstOrDefault(y => y.Project.Id == projectId);

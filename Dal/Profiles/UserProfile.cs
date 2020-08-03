@@ -20,7 +20,9 @@ namespace Dal.Profiles
                 .Include(x => x.Votes)
                 .Include(x => x.Comments)
                 .Include(x => x.Projects)
-                .ThenInclude(x => x.ProjectCategoryRelationships);
+                .ThenInclude(x => x.ProjectCategoryRelationships)
+                .Include(x => x.Projects)
+                .ThenInclude(x => x.Votes);
         }
     }
 }

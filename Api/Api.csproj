@@ -42,6 +42,13 @@
         <Folder Include="wwwroot\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Update="Views\User\Index.cshtml">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+    </ItemGroup>
+
     <Target Name="PrePublishTarget" BeforeTargets="PrepareForPublish" Condition="$(DOTNET_RUNNING_IN_CONTAINER) != 'true'">
         <Exec Command="npm install" />
         <Exec Command="BABEL_ENV=$ASPNETCORE_ENVIRONMENT npm run build" />

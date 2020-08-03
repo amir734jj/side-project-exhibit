@@ -24,6 +24,8 @@ namespace Api.Abstracts
 
         public async Task<ReturnWithErrors<bool>> Register(RegisterViewModel registerViewModel)
         {
+            var users = ResolveUserManager().Users;
+            
             var role = ResolveUserManager().Users.Any() ? UserRoleEnum.Basic : UserRoleEnum.Admin;
 
             var user = new User

@@ -18,6 +18,6 @@ gulp.task('build', function () {
         .pipe(buffer())
         .pipe(sourcemaps.init())
         .pipe(uglify())
-        .pipe(sourcemaps.write('maps'))
+        .pipe(sourcemaps.write(''))
         .pipe(gulp.dest('client-build'));
 });

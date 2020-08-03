@@ -1,5 +1,7 @@
 @using Models.Enums
+@using Logic.Extensions
 @model List<Models.ViewModels.Api.ProjectViewModel>
+@using Markdig
 
 @{
     ViewBag.Title = "Login user";
@@ -40,7 +42,7 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-body">@(project.Description)</div>
+            <div class="panel-body"> @Html.Raw(Markdown.ToHtml(project.Description.TakeNLines(15))) </div>
         </div>
     }
 

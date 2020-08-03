@@ -30,6 +30,7 @@ namespace Dal.Profiles
         public IQueryable<Project> Include<TQueryable>(TQueryable queryable) where TQueryable : IQueryable<Project>
         {
             return queryable
+                .Include(x => x.User)
                 .Include(x => x.Votes)
                 .Include(x => x.ProjectCategoryRelationships)
                 .ThenInclude(x => x.Category)

@@ -9,9 +9,7 @@
 
 @{
     var utility = RequestUtilityBuilder.For(Context);
-    var userInfo = await utility.GetUserInfo();
-    var dateTimeNow = DateTime.UtcNow;
-    var AssemblyVersion = AssemblyInfo.AssemblyVersion;
+    var assemblyVersion = AssemblyInfo.AssemblyVersion;
 }
 
 <!DOCTYPE html>
@@ -51,7 +49,7 @@
     <script src="https://mbenford.github.io/ngTagsInput/js/ng-tags-input.min.js"></script>
 
     @* styles *@
-    <link rel="stylesheet" href="~/styles/style.css#@(AssemblyVersion)">
+    <link rel="stylesheet" href="~/styles/style.css#@(assemblyVersion)">
 
     <script>
         window.isAuthenticated = @(utility.IsAuthenticated().ToString().ToLower());
@@ -145,7 +143,7 @@
 <mini-profiler position="RenderPosition.Right"/>
 
 
-<script src="@Url.Content($"~/scripts/script.js#{AssemblyVersion}")"></script>
+<script src="@Url.Content($"~/scripts/script.js#{assemblyVersion}")"></script>
 
 </body>
 </html>

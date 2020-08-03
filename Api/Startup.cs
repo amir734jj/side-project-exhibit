@@ -29,6 +29,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -178,6 +179,18 @@ namespace Api
                 .AddHtmlMinification()
                 .AddHttpCompression();
             
+            // If using Kestrel:
+            services.Configure<KestrelServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+            });
+
+            // If using IIS:
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+            });
+
             services.AddWebOptimizer(x =>
             {
                 x.MinifyJsFiles("*.jsx");
@@ -293,7 +306,7 @@ namespace Api
             }
             else
             {
-               //  app.UseWebMarkupMin();
+                app.UseWebMarkupMin();
             }
 
             // Not necessary for this workshop but useful when running behind kubernetes

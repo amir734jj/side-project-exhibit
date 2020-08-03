@@ -293,7 +293,7 @@ namespace Api
             }
             else
             {
-                app.UseWebMarkupMin();
+               //  app.UseWebMarkupMin();
             }
 
             // Not necessary for this workshop but useful when running behind kubernetes
@@ -304,6 +304,7 @@ namespace Api
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor |
                                    ForwardedHeaders.XForwardedProto
             });
+            
             app.UseWebOptimizer();
             
             // Use wwwroot folder as default static path

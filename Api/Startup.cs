@@ -193,7 +193,7 @@ namespace Api
 
             services.AddWebOptimizer(x =>
             {
-                x.MinifyJsFiles("*.jsx");
+                x.MinifyJsFiles("*.css");
             });
 
             services.AddDbContext<EntityDbContext>(opt =>

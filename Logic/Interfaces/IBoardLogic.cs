@@ -9,6 +9,12 @@ namespace Logic.Interfaces
     {
         Task<BoardViewModels> Collect(int page, Sort sort, Order order, int pageSize, string category, string keyword);
 
-        Task<Project> Vote(int ideaId, int userId, Vote vote);
+        Task<Project> Vote(int ideaId, User user, Vote vote);
+        
+        Task<Project> AddComment(int projectId, User user, CommentViewModel comment);
+        
+        Task<Project> DeleteComment(int projectId, User user, int commentId);
+        
+        Task<Project> EditComment(int projectId, User userId, int commentId, CommentViewModel comment);
     }
 }

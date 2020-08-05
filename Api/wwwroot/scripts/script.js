@@ -192,6 +192,10 @@ function isMyOwnPost(user, project) {
     return user.id === project.user.id;
 }
 
+function isMyOwnComment(user, comment) {
+    return user.id === comment.user.id;
+}
+
 class MarkDownToText {
     /* Using lodash escape implementation: https://github.com/lodash/lodash/blob/master/escape.js */
     htmlEscapes = {
@@ -288,7 +292,7 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
         $scope.votesIntegerValue = votesIntegerValue;
         $scope.hasVoted = hasVoted;
         $scope.isMyOwnPost = isMyOwnPost;
-        
+
         const markDownToText = new MarkDownToText();
         $scope.markdownToTxt = (...args) => _.take(markDownToText.markdownToTxt(...args).split("\n"), 5).join("\n");
 
@@ -380,6 +384,69 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
             $scope.categories = categories;
             $scope.$apply();
         };
+
+        self.init().then();
+    }])
+    .controller("viewProjectCtrl", ["$scope", "$window", "$http", function ($scope, $window, $http) {
+        const self = {};
+
+        const projectId = _.chain($window.location.href.split('/'))
+            .filter(x => x)
+            .last()
+            .value();
+
+        $scope.comment = '';
+        $scope.marked = marked;
+        $scope.project = null;
+        $scope.isAuthenticated = isAuthenticated;
+        $scope.user = user;
+        $scope.votesIntegerValue = votesIntegerValue;
+        $scope.hasVoted = hasVoted;
+        $scope.isMyOwnPost = isMyOwnPost;
+        $scope.moment = moment;
+        $scope.isMyOwnComment = isMyOwnComment;
+        self.newCommentMode = true;   // false for edit mode
+        self.editCommentId = null;
+
+        $scope.vote = async (id, type) => {
+            const {data} = await $http.post(`/api/board/vote/${id}/${type}`);
+            $scope.project = data;
+            $scope.$apply();
+        };
+
+        self.getProject = async () => {
+            const {data: project} = await $http.get(`/api/project/${projectId}/`);
+            $scope.project = project;
+            $scope.$apply();
+        };
+
+        $scope.addComment = async () => {
+            const {data} = self.newCommentMode ? await $http.post(`/api/board/comment/${projectId}`, {
+                comment: $scope.comment
+            }) : await $http.put(`/api/board/comment/${projectId}/${self.editCommentId}`, {
+                comment: $scope.comment
+            });
+            self.newCommentMode = true;
+            self.editCommentId = null;
+            $scope.comment = '';
+            $scope.project = data;
+            $scope.$apply();
+        };
+
+        $scope.deleteComment = async (comment) => {
+            const {data} = await $http.delete(`/api/board/comment/${projectId}/${comment.id}`);
+            $scope.project = data;
+            $scope.$apply();
+        }
+
+        $scope.editComment = async (comment) => {
+            $scope.comment = comment.text;
+            self.editCommentId = comment.id;
+            self.newCommentMode = false;
+            angular.element('html, body').animate({scrollTop: angular.element("#editCommentBlock").offset().top}, 'slow');
+        }
+
+        self.init = self.getProject;
 
         self.init().then();
     }]);

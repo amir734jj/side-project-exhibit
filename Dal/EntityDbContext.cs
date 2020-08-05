@@ -47,7 +47,7 @@ namespace Dal
 
             modelBuilder.Entity<Project>()
                 .HasMany(x => x.Comments)
-                .WithOne(x => x.Idea);
+                .WithOne(x => x.Project);
             
             modelBuilder.Entity<ProjectCategoryRelationship>()
                 .HasKey(x => new {x.ProjectId, x.CategoryId});

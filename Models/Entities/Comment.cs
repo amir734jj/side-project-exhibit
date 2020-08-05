@@ -13,7 +13,7 @@ namespace Models.Entities
         
         public User User { get; set; }
         
-        public Project Idea { get; set; }
+        public Project Project { get; set; }
         
         public DateTimeOffset CreatedOn { get; set; }
     }

@@ -10,7 +10,7 @@
 
     <p> @Model.Description </p>
 
-    <p> Email: @Model.Email </p>
+    <p> Email: <a href="mailto:@Model.Email">@Model.Email</a> </p>
 
     <ul class="list-group">
         @foreach (var project in Model.Projects)

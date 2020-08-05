@@ -387,7 +387,7 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
 
         self.init().then();
     }])
-    .controller("viewProjectCtrl", ["$scope", "$window", "$http", function ($scope, $window, $http) {
+    .controller("viewProjectCtrl", ["$scope", "$window", "$http", "isAuthenticated", function ($scope, $window, $http, isAuthenticated) {
         const self = {};
 
         const projectId = _.chain($window.location.href.split('/'))
@@ -407,6 +407,7 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
         $scope.isMyOwnComment = isMyOwnComment;
         self.newCommentMode = true;   // false for edit mode
         self.editCommentId = null;
+        $scope.isAuthenticated = isAuthenticated;
 
         $scope.vote = async (id, type) => {
             const {data} = await $http.post(`/api/board/vote/${id}/${type}`);

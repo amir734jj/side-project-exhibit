@@ -54,8 +54,8 @@
                     </div>
                     <div class="col-sm-3" ng-if="isMyOwnComment(user, comment)">
                         <div class="btn-group pull-right">
-                          <button type="button" class="btn btn-primary" ng-click="editComment(comment)">Edit</button>
-                          <button type="button" class="btn btn-danger" ng-click="deleteComment(comment)">Delete</button>
+                            <button type="button" class="btn btn-primary" ng-click="editComment(comment)">Edit</button>
+                            <button type="button" class="btn btn-danger" ng-click="deleteComment(comment)">Delete</button>
                         </div>
                     </div>
                 </div>
@@ -70,5 +70,11 @@
             <textarea class="form-control" rows="2" id="comment" ng-model="comment"></textarea>
         </div>
         <button type="button" class="btn btn-default" ng-click="addComment()">Submit</button>
+    </div>
+
+    <div class="alert alert-info" ng-if="!isAuthenticated">
+        <p>
+            Please login to be able to add a comment
+        </p>
     </div>
 </div>

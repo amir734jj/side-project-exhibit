@@ -7,8 +7,10 @@
 
 <div ng-controller="boardCtrl" class="container">
 
-    <h3> @ApplicationName </h3>
-    <p> Idea foundry for the future. </p>
+    <div class="page-header">
+        <h3> @ApplicationName </h3>
+        <p> Idea foundry for the future. Share you side project, get noticed! </p>
+    </div>
 
     <div class="margin-bottom">
         <form class="form-inline">
@@ -47,28 +49,42 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-sm-9">
-                    <a href="/project/{{project.id}}">
-                        <strong>
-                            {{project.title}}
-                        </strong>
-                    </a>
-
-                    <p> <small> <a href="/user/{{ project.user.id }}">{{ project.user.userName }}</a> </small> </p>
+                    <h4>
+                        <a href="/project/{{project.id}}">
+                            <strong>
+                                {{project.title}}
+                            </strong>
+                        </a>
+                        <small>
+                            <a href="/user/{{ project.user.id }}">
+                                <span class="label label-primary"> {{ project.user.userName }} </span>
+                            </a>
+                        </small>
+                    </h4>
                 </div>
                 <div class="col-sm-3">
                     <div class="input-group pull-right" style="max-width: 15rem">
                         <span class="input-group-btn" ng-if="!isMyOwnPost(user, project)">
                             <button type="button"
-                                    ng-class="['btn', 'btn-success', { 'active': hasVoted(user, project, 'up'), 'disabled': hasVoted(user, project, 'up')}]"
+                                    data-toggle="{{!isAuthenticated ? 'tooltip' : ''"
+                                    title="Login to vote"
+                                    ng-class="['btn', 'btn-success', 'btn-sm', { 'active': hasVoted(user, project, 'up'), 'disabled': hasVoted(user, project, 'up')}]"
                                     ng-click="vote(project.id, 'up')"
                                     ng-disabled="!isAuthenticated">
                                 +
                             </button>
                         </span>
-                        <input type="text" class="form-control text-center" placeholder="Vote" ng-value="votesIntegerValue(project.votes)" disabled/>
+                        <input type="text"
+                               data-toggle="{{isMyOwnPost(user, project) ? 'tooltip' : ''"
+                               title="Cannot vote for your own project"
+                               class="form-control text-center input-sm"
+                               placeholder="Vote"
+                               ng-value="votesIntegerValue(project.votes)" disabled/>
                         <span class="input-group-btn" ng-if="!isMyOwnPost(user, project)">
                             <button type="button"
-                                    ng-class="['btn', 'btn-danger', { 'active': hasVoted(user, project, 'down'), 'disabled': hasVoted(user, project, 'down')}]"
+                                    data-toggle="{{!isAuthenticated ? 'tooltip' : ''"
+                                    title="Login to vote"
+                                    ng-class="['btn', 'btn-danger', 'btn-sm', { 'active': hasVoted(user, project, 'down'), 'disabled': hasVoted(user, project, 'down')}]"
                                     ng-click="vote(project.id, 'down')"
                                     ng-disabled="!isAuthenticated">
                                 -
@@ -79,6 +95,9 @@
             </div>
         </div>
         <div class="panel-body preserve-linebreak" ng-bind="markdownToTxt(project.description)"></div>
+        <div class="panel-footer">
+            <span class="label label-default" ng-repeat="item in project.projectCategoryRelationships">{{item.category.name}}</span>
+        </div>
     </div>
 
     <div class="alert alert-warning" ng-if="!projects.length && initialized">

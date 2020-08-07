@@ -11,29 +11,40 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-sm-9">
-                        <strong>
-                            {{project.title}}
-                        </strong>
-                        <p>
+                        <h4>
+                            <strong>
+                                {{project.title}}
+                            </strong>
                             <small>
-                                <a href="/user/{{ project.user.id }}">{{ project.user.userName }}</a>
+                                <a href="/user/{{ project.user.id }}">
+                                    <span class="label label-primary"> {{ project.user.userName }} </span>
+                                </a>
                             </small>
-                        </p>
+                        </h4>
                     </div>
                     <div class="col-sm-3">
                         <div class="input-group pull-right" style="max-width: 15rem">
                             <span class="input-group-btn" ng-if="!isMyOwnPost(user, project)">
                                 <button type="button"
-                                        ng-class="['btn', 'btn-success', { 'active': hasVoted(user, project, 'up'), 'disabled': hasVoted(user, project, 'up')}]"
+                                        data-toggle="{{!isAuthenticated ? 'tooltip' : ''"
+                                        title="Login to vote"
+                                        ng-class="['btn', 'btn-success', 'btn-sm', { 'active': hasVoted(user, project, 'up'), 'disabled': hasVoted(user, project, 'up')}]"
                                         ng-click="vote(project.id, 'up')"
                                         ng-disabled="!isAuthenticated">
                                     +
                                 </button>
                             </span>
-                            <input type="text" class="form-control text-center" placeholder="Vote" ng-value="votesIntegerValue(project.votes)" disabled/>
+                            <input type="text"
+                                   class="form-control text-center input-sm"
+                                   placeholder="Vote"
+                                   data-toggle="{{isMyOwnPost(user, project) ? 'tooltip' : ''"
+                                   title="Cannot vote for your own project"
+                                   ng-value="votesIntegerValue(project.votes)" disabled/>
                             <span class="input-group-btn" ng-if="!isMyOwnPost(user, project)">
                                 <button type="button"
-                                        ng-class="['btn', 'btn-danger', { 'active': hasVoted(user, project, 'down'), 'disabled': hasVoted(user, project, 'down')}]"
+                                        data-toggle="{{!isAuthenticated ? 'tooltip' : ''"
+                                        title="Login to vote"
+                                        ng-class="['btn', 'btn-danger', 'btn-sm', { 'active': hasVoted(user, project, 'down'), 'disabled': hasVoted(user, project, 'down')}]"
                                         ng-click="vote(project.id, 'down')"
                                         ng-disabled="!isAuthenticated">
                                     -
@@ -44,6 +55,9 @@
                 </div>
             </div>
             <div class="panel-body" ng-bind-html="marked(project.description)"></div>
+            <div class="panel-footer">
+                <span class="label label-default" ng-repeat="item in project.projectCategoryRelationships">{{item.category.name}}</span>
+            </div>
         </div>
 
         <div class="panel panel-default" ng-repeat="comment in project.comments">
@@ -64,12 +78,14 @@
         </div>
     </div>
 
-    <div ng-show="project" id="editCommentBlock">
-        <div class="form-group">
-            <label for="comment">Comment:</label>
-            <textarea class="form-control" rows="2" id="comment" ng-model="comment"></textarea>
+    <div ng-show="project && isAuthenticated" id="editCommentBlock">
+        <div ng-class="['form-group', { 'has-error': hasError }]">
+            <label for="comment" class="control-label">Comment:</label>
+            <textarea class="form-control" rows="2" id="comment" ng-model="comment" ng-attr-has-error="hasError"></textarea>
+            <span class="help-block" ng-if="hasError"> Comment block is empty or less than 15 characters long </span>
         </div>
         <button type="button" class="btn btn-default" ng-click="addComment()">Submit</button>
+        <button type="button" class="btn btn-default" ng-click="clear()" ng-if="hasError || !newCommentMode">Clear</button>
     </div>
 
     <div class="alert alert-info" ng-if="!isAuthenticated">

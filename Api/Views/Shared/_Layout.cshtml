@@ -4,12 +4,17 @@
 @using Logic.Extensions
 @using Api.Extensions
 @using Api.Utilities
+@using Models.Constants
+@using Models.Enums
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Env
 @inject IHttpRequestUtilityBuilder RequestUtilityBuilder;
+@inject GlobalConfigs GlobalConfigs;
+@inject CacheBustingUtility CacheBustingUtility;
 
 @{
     var utility = RequestUtilityBuilder.For(Context);
-    var assemblyVersion = AssemblyInfo.AssemblyVersion;
+    var cacheBustingKey = CacheBustingUtility.CacheBustingKey();
+    var themes = Themes;
 }
 
 <!DOCTYPE html>
@@ -31,6 +36,11 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+    @if (!string.IsNullOrEmpty(GlobalConfigs.Theme) && !"default".Equals(GlobalConfigs.Theme, StringComparison.CurrentCultureIgnoreCase))
+    {
+        <link rel="stylesheet" href="~/styles/themes/@(themes[GlobalConfigs.Theme])?@cacheBustingKey" />
+    }
+
     @* sanitize *@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-sanitize.js"></script>
 
@@ -39,20 +49,20 @@
 
     @* markdown *@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/1.1.1/marked.min.js"></script>
-    
+
     @* font-awesome *@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    
+
     @* tags input *@
-    <link rel="stylesheet" href="https://mbenford.github.io/ngTagsInput/css/ng-tags-input.min.css" />
-    <link href="https://mbenford.github.io/ngTagsInput/css/ng-tags-input.bootstrap.min.css" />
+    <link rel="stylesheet" href="https://mbenford.github.io/ngTagsInput/css/ng-tags-input.min.css"/>
+    <link href="https://mbenford.github.io/ngTagsInput/css/ng-tags-input.bootstrap.min.css"/>
     <script src="https://mbenford.github.io/ngTagsInput/js/ng-tags-input.min.js"></script>
-    
+
     @* moment.js *@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
 
     @* styles *@
-    <link rel="stylesheet" href="~/styles/style.css#@(assemblyVersion)">
+    <link rel="stylesheet" href="~/styles/style.css#@(cacheBustingKey)">
 
     <script>
         window.isAuthenticated = @(utility.IsAuthenticated().ToString().ToLower());
@@ -98,6 +108,13 @@
                 }
                 else
                 {
+                    if ((await utility.GetUserInfo()).UserRoleEnum == UserRoleEnum.Admin)
+                    {
+                        <li>
+                            <a href="~/Config"><span class="glyphicon glyphicon-wrench"></span> Config </a>
+                        </li>
+                    }
+
                     <li>
                         <a href="~/Projects"><span class="glyphicon glyphicon-grain"></span> Projects </a>
                     </li>
@@ -146,7 +163,7 @@
 <mini-profiler position="RenderPosition.Right"/>
 
 
-<script src="@Url.Content($"~/scripts/script.js#{assemblyVersion}")"></script>
+<script src="@Url.Content($"~/scripts/script.js#{cacheBustingKey}")"></script>
 
 </body>
 </html>

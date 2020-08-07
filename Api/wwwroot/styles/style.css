@@ -55,3 +55,7 @@ span.pre {
 .label {
     margin-right: 0.5rem;
 }
+
+.form-inline .form-group {
+    margin-right: 1.5rem;
+}

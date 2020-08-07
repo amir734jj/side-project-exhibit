@@ -39,7 +39,7 @@
 
     <ItemGroup>
         <Folder Include="wwwroot\**\*">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Folder>
     </ItemGroup>
 

@@ -32,6 +32,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Models;
 using Models.Constants;
 using Models.Entities;
 using Newtonsoft.Json;
@@ -162,6 +163,8 @@ namespace Api
                     x.SerializerSettings.Converters.Add(new StringEnumConverter { NamingStrategy =  new CamelCaseNamingStrategy()});
                     x.SerializerSettings.ContractResolver =
                         new CamelCasePropertyNamesContractResolver();
+
+                    x.SerializerSettings.ContractResolver = new IgnoreUserContractResolver();
                 })
                 .AddRazorPagesOptions(x => x.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute()));
 

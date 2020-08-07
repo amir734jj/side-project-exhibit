@@ -78,7 +78,7 @@
         </div>
     </div>
 
-    <div ng-show="project && isAuthenticated" id="editCommentBlock">
+    <div ng-show="!loading && project && isAuthenticated" id="editCommentBlock">
         <div ng-class="['form-group', { 'has-error': hasError }]">
             <label for="comment" class="control-label">Comment:</label>
             <textarea class="form-control" rows="2" id="comment" ng-model="comment" ng-attr-has-error="hasError"></textarea>
@@ -88,9 +88,11 @@
         <button type="button" class="btn btn-default" ng-click="clear()" ng-if="hasError || !newCommentMode">Clear</button>
     </div>
 
-    <div class="alert alert-info" ng-if="!isAuthenticated">
+    <div class="alert alert-info" ng-if="!loading && !isAuthenticated">
         <p>
             Please login to be able to add a comment
         </p>
     </div>
+    
+    @await Html.PartialAsync("Spinner")
 </div>

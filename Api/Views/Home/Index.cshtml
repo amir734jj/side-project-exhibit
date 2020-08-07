@@ -100,16 +100,12 @@
         </div>
     </div>
 
+    @await Html.PartialAsync("Spinner")
+    
     <div class="alert alert-warning" ng-if="!projects.length && initialized">
         <p>
             Did not find any project matching the criterias.
         </p>
-    </div>
-
-    <div class="row" style="margin-top: 4rem">
-        <div class="col-md-2 col-md-offset-5">
-            <div class="loader" ng-show="loading"></div>
-        </div>
     </div>
 
     <div class="text-center" ng-if="availablePages.length > 1">

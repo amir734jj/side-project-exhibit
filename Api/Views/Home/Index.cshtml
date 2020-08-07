@@ -106,6 +106,12 @@
         </p>
     </div>
 
+    <div class="row">
+        <div class="col-md-2 col-md-offset-5">
+            <div class="loader" ng-show="loading"></div>
+        </div>
+    </div>
+
     <div class="text-center" ng-if="availablePages.length > 1">
         <ul class="pagination">
             <li ng-class="{ active: query.page === page }" ng-repeat="page in availablePages">

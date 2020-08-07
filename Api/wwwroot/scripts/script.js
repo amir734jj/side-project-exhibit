@@ -294,6 +294,8 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
         let self = {
             paginationSize: 5,
         };
+        
+        $scope.loading = true;
         $scope.initialized = false;
         $scope.availablePages = [];
         $scope.projects = [];
@@ -331,6 +333,7 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
         self.init = async () => {
             await self.getBoard();
             $scope.initialized = true;
+            $scope.loading = false;
             $scope.$apply();
         };
 

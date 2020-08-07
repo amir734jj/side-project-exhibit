@@ -10,5 +10,11 @@
 
     <div ng-controller="updateProjectCtrl">
         @await Html.PartialAsync("ProjectDetails")
+        
+        <div class="row">
+            <div class="col-md-2 col-md-offset-5">
+                <div class="loader" ng-show="loading"></div>
+            </div>
+        </div>
     </div>
 </div>

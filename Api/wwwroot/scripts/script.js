@@ -378,6 +378,7 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
         $scope.titleError = false;
         $scope.descriptionError = false;
         $scope.categoriesError = false;
+        $scope.loading = true;
 
         $scope.categories = [];
         $scope.loadTags = async (query) => {
@@ -420,6 +421,7 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
             $scope.title = title;
             $scope.editor.src = description;
             $scope.categories = categories;
+            $scope.loading = false;
             $scope.$apply();
         };
 

@@ -104,17 +104,17 @@ namespace Logic.Crud
             });
         }
 
-        public async Task<Project> Vote(int projectId, User user, Vote vote)
+        public async Task<Project> Vote(int projectId, User identity, Vote vote)
         {
-            var project = await _projectLogic.For(user).Get(projectId);
+            var project = await _projectLogic.For(identity).Get(projectId);
 
             // Cannot vote for my own project
-            if (project.User.Id == user.Id)
+            if (project.User.Id == identity.Id)
             {
                 return project;
             }
             
-            await _userLogic.Update(user.Id, user =>
+            await _userLogic.Update(identity.Id, user =>
             {
                 var previousVote = user.Votes.FirstOrDefault(y => y.Project.Id == projectId);
 

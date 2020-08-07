@@ -1,23 +1,17 @@
-using System.Collections.Immutable;
+using System;
 using Models.ViewModels.Config;
 
 namespace Models.Constants
 {
-    public static class GlobalConfigs
+    public class GlobalConfigs : GlobalConfigViewModel
     {
-        public static ImmutableHashSet<int> StartedStreams { get; set; } = ImmutableHashSet<int>.Empty;
+        public DateTimeOffset LastModified { get; set; }
 
-        public static void UpdateGlobalConfigs(GlobalConfigViewModel globalConfigViewModel)
+        public void Update(GlobalConfigViewModel viewModel)
         {
-            StartedStreams = globalConfigViewModel.StartedStreams;
-        }
-
-        public static GlobalConfigViewModel ToViewModel()
-        {
-            return new GlobalConfigViewModel
-            {
-                StartedStreams = StartedStreams
-            };
+            Theme = viewModel.Theme;
+            EmailTestMode = viewModel.EmailTestMode;
+            LastModified = DateTimeOffset.Now;
         }
     }
 }

@@ -13,6 +13,7 @@
         <div class="row">
             <div class="col-sm-10">
                 <h3> Your projects </h3>
+                <p> View and manage your projects </p>
             </div>
             <div class="col-sm-2">
                 <a href="~/Projects/Add" class="btn btn-primary pull-right"> Add Project </a>
@@ -26,18 +27,22 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-sm-10">
-                        <a href="~/Projects/Update/@(project.Id)">
-                            <strong> @(project.Title) </strong>
-                        </a>
+                        <h4>
+                            <a href="~/Projects/Update/@(project.Id)">
+                                <strong> @(project.Title) </strong>
+                            </a>
+                        </h4>
                     </div>
                     <div class="col-sm-2">
                         <div class="btn-group pull-right">
-                            <label class="btn btn-success">
-                                @project.Votes.Count(x => x.Value == Vote.Up)
-                            </label>
-                            <label class="btn btn-danger">
-                                @project.Votes.Count(x => x.Value == Vote.Down)
-                            </label>
+                            <h4>
+                                <span class="label label-default">
+                                    + @project.Votes.Count(x => x.Value == Vote.Up)
+                                    /
+                                    - @project.Votes.Count(x => x.Value == Vote.Down)
+                                </span>
+                                <a class="btn btn-danger btn-sm" href="~/Projects/Delete/@(project.Id)" validate-before-going> Delete </a>
+                            </h4>
                         </div>
                     </div>
                 </div>

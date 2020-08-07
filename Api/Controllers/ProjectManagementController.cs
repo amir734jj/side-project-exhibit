@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Logic.Extensions;
 using Logic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +15,7 @@ namespace Api.Controllers
     public class ProjectManagementController : Controller
     {
         private readonly IProjectManagementLogic _projectManagementLogic;
+        
         private readonly UserManager<User> _userManager;
 
         public ProjectManagementController(IProjectManagementLogic projectManagementLogic,
@@ -30,6 +32,8 @@ namespace Api.Controllers
             var user = await GetUser();
 
             var projects = await _projectManagementLogic.GetProjects(user);
+            
+            TempData.CopyTo(ViewData);
 
             return View(projects);
         }
@@ -86,6 +90,19 @@ namespace Api.Controllers
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
 
             return user;
+        }
+        
+        [HttpGet]
+        [Route("Delete/{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            await _projectManagementLogic.Delete(user, id);
+
+            TempData["Message"] = "Successfully deleted the project";
+
+            return RedirectToAction("Index");
         }
     }
 }

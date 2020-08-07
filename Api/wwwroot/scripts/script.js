@@ -277,6 +277,18 @@ class MarkDownToText {
 angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
     .constant('isAuthenticated', window.isAuthenticated)
     .constant('user', window.user)
+    .directive('validateBeforeGoing', ["$window", function ($window) {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+                angular.element(element).on("click", (e) => {
+                    if (!$window.confirm("Are you sure to delete the project?")) {
+                        e.preventDefault();
+                    }
+                });
+            }
+        }
+    }])
     .controller('boardCtrl', ['$scope', '$http', 'isAuthenticated', 'user', async ($scope, $http, isAuthenticated, user) => {
 
         let self = {
@@ -328,6 +340,10 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
     }])
     .controller("addProjectCtrl", ["$scope", "$window", "$http", function ($scope, $window, $http) {
 
+        $scope.titleError = false;
+        $scope.descriptionError = false;
+        $scope.categoriesError = false;
+
         $scope.categories = [];
         $scope.loadTags = async (query) => {
             const {data} = await $http.get("/api/category");
@@ -337,7 +353,16 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
 
         MarkdownInput($scope);
 
-        $scope.saveChanges = async () => {
+        $scope.saveChanges = async ($event) => {
+            $scope.titleError = !($scope.title && $scope.title.length >= 5);
+            $scope.descriptionError = !($scope.editor.src && $scope.editor.src.length >= 20);
+            $scope.categoriesError = !($scope.categories && $scope.categories.length >= 1);
+
+            if ($scope.titleError || $scope.descriptionError || $scope.categoriesError) {
+                $event.preventDefault();
+                return false;
+            }
+
             await $http.post('/projects/add', {
                 title: $scope.title,
                 description: $scope.editor.src,
@@ -349,6 +374,10 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
 
     }])
     .controller("updateProjectCtrl", ["$scope", "$window", "$http", function ($scope, $window, $http) {
+
+        $scope.titleError = false;
+        $scope.descriptionError = false;
+        $scope.categoriesError = false;
 
         $scope.categories = [];
         $scope.loadTags = async (query) => {
@@ -366,7 +395,16 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
 
         MarkdownInput($scope);
 
-        $scope.saveChanges = async () => {
+        $scope.saveChanges = async ($event) => {
+            $scope.titleError = !($scope.title && $scope.title.length >= 5);
+            $scope.descriptionError = !($scope.editor.src && $scope.editor.src.length >= 20);
+            $scope.categoriesError = !($scope.categories && $scope.categories.length >= 1);
+
+            if ($scope.titleError || $scope.descriptionError || $scope.categoriesError) {
+                $event.preventDefault();
+                return false;
+            }
+
             await $http.put(`/projects/update/${projectId}`, {
                 id: projectId,
                 title: $scope.title,
@@ -405,9 +443,10 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
         $scope.isMyOwnPost = isMyOwnPost;
         $scope.moment = moment;
         $scope.isMyOwnComment = isMyOwnComment;
-        self.newCommentMode = true;   // false for edit mode
+        $scope.newCommentMode = true;   // false for edit mode
         self.editCommentId = null;
         $scope.isAuthenticated = isAuthenticated;
+        $scope.hasError = false;
 
         $scope.vote = async (id, type) => {
             const {data} = await $http.post(`/api/board/vote/${id}/${type}`);
@@ -422,12 +461,15 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
         };
 
         $scope.addComment = async () => {
-            const {data} = self.newCommentMode ? await $http.post(`/api/board/comment/${projectId}`, {
+            $scope.hasError = !($scope.comment && $scope.comment.length >= 15);
+            if ($scope.hasError) return;
+
+            const {data} = $scope.newCommentMode ? await $http.post(`/api/board/comment/${projectId}`, {
                 comment: $scope.comment
             }) : await $http.put(`/api/board/comment/${projectId}/${self.editCommentId}`, {
                 comment: $scope.comment
             });
-            self.newCommentMode = true;
+            $scope.newCommentMode = true;
             self.editCommentId = null;
             $scope.comment = '';
             $scope.project = data;
@@ -443,8 +485,14 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
         $scope.editComment = async (comment) => {
             $scope.comment = comment.text;
             self.editCommentId = comment.id;
-            self.newCommentMode = false;
+            $scope.newCommentMode = false;
             angular.element('html, body').animate({scrollTop: angular.element("#editCommentBlock").offset().top}, 'slow');
+        }
+
+        $scope.clear = () => {
+            $scope.hasError = false;
+            $scope.comment = '';
+            $scope.newCommentMode = true;
         }
 
         self.init = self.getProject;

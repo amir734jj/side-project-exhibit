@@ -10,11 +10,11 @@ namespace Logic.Interfaces
         Task Add(User user, ProjectViewModel projectViewModel);
         
         Task Update(User user, ProjectViewModel projectViewModel);
-        
-        Task Update(User user, int projectId);
-        
+
         Task<ProjectViewModel> GetProjectById(User user, int projectId);
 
         Task<List<ProjectViewModel>> GetProjects(User user);
+
+        Task Delete(User user, int projectId);
     }
 }

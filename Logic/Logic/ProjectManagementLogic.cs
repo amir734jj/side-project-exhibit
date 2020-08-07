@@ -54,6 +54,11 @@ namespace Logic.Logic
                 project.ProjectCategoryRelationships = categories;
             });
         }
+        
+        public async Task Delete(User user, int projectId)
+        {
+            await _projectLogic.For(user).Delete(projectId);
+        }
 
         public async Task Update(User user, int projectId)
         {

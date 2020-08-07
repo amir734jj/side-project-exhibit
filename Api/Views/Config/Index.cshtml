@@ -1,0 +1,23 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using Models.Constants
+@model Models.ViewModels.Config.GlobalConfigViewModel
+
+@{
+    ViewBag.Title = "Configuration";
+    Layout = "_Layout";
+    var selectedTheme = Model.Theme;
+}
+
+<div class="container">
+    @using (Html.BeginForm("UpdateConfig", "Config", FormMethod.Post))
+    {
+        <div class="form-group">
+            @Html.LabelFor(x => x.Theme)
+            @Html.DropDownListFor(x => x.Theme, ApplicationConstants.Themes.Select(x => new SelectListItem {Text = x.Key, Value = x.Key, Selected = x.Key == selectedTheme}), new {@class = "form-control"})
+        </div>
+
+        <div class="form-group" style="margin: 1rem;">
+            <button type="submit" class="btn btn-success">Save Configuration</button>
+        </div>
+    }
+</div>

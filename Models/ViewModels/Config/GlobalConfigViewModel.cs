@@ -1,19 +1,14 @@
 using System.Collections.Immutable;
+using System.ComponentModel.DataAnnotations;
 
 namespace Models.ViewModels.Config
 {
     public class GlobalConfigViewModel
     {
-        public ImmutableHashSet<int> StartedStreams { get; set; }
+        [Display(Name = "Email Test Mode")]
+        public bool EmailTestMode { get; set; }
 
-        public GlobalConfigViewModel()
-        {
-            StartedStreams = ImmutableHashSet<int>.Empty;;
-        }
-
-        public GlobalConfigViewModel(GlobalConfigViewModel globalConfigViewModel) : this()
-        {
-            StartedStreams = globalConfigViewModel.StartedStreams;
-        }
+        [Display(Name = "Website Theme")]
+        public string Theme { get; set; } = "default";
     }
 }

@@ -27,7 +27,7 @@ span.pre {
 
 .markdown-preview {
     border: 1px solid darkgrey;
-    min-height: 20rem;
+    min-height: 21.5rem;
     border-radius: 10px;
     padding: 4px;
 }
@@ -42,5 +42,16 @@ span.pre {
 
 .preserve-linebreak {
     white-space: pre-wrap
+}
 
+.navbar {
+    border-radius: 0;
+}
+
+.panel-body {
+    padding: 10px;
+}
+
+.label {
+    margin-right: 0.5rem;
 }

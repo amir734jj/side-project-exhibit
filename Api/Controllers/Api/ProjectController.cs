@@ -1,10 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Logic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Api.Abstracts;
 using Models.Entities;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Api.Controllers.Api
 {
@@ -31,9 +33,33 @@ namespace Api.Controllers.Api
         [NonAction]
         protected override async Task<IBasicLogic<Project>> BasicLogic()
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
 
-            return _projectLogic.For(user);
+                return _projectLogic.For(user);
+            }
+
+            return _projectLogic;
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("")]
+        [SwaggerOperation("GetAll")]
+        [ProducesResponseType(typeof(IEnumerable<Project>), 200)]
+        public override Task<IActionResult> GetAll()
+        {
+            return base.GetAll();
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("{id}")]
+        [SwaggerOperation("Get")]
+        public override Task<IActionResult> Get(int id)
+        {
+            return base.Get(id);
         }
     }
 }

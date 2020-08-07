@@ -8,7 +8,7 @@ namespace Logic.Interfaces
     {
         GlobalConfigViewModel ResolveGlobalConfig();
 
-        Task UpdateGlobalConfig(Func<GlobalConfigViewModel, GlobalConfigViewModel> update);
+        Task UpdateGlobalConfig(GlobalConfigViewModel globalConfigViewModel);
 
         Task Refresh();
     }

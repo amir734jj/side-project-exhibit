@@ -16,6 +16,7 @@ using EfCoreRepository.Extensions;
 using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Lamar;
+using Logic.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -234,6 +235,8 @@ namespace Api
                 x.Cookie.MaxAge = TimeSpan.FromMinutes(60);
             });
 
+            services.For<GlobalConfigs>().Use(new GlobalConfigs()).Singleton();
+
             // If environment is localhost then use mock email service
             if (_env.IsDevelopment())
             {
@@ -263,7 +266,7 @@ namespace Api
                     ctx.GetInstance<S3ServiceConfig>()
                 ));
             }
-
+            
             // Register stuff in container, using the StructureMap APIs...
             services.Scan(_ =>
             {
@@ -276,8 +279,14 @@ namespace Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IConfigLogic configLogic)
         {
+            if (!env.IsDevelopment())
+            {
+                // Refresh global config
+                configLogic.Refresh();
+            }
+
             app.UseResponseCompression();
 
             if (_env.IsDevelopment())

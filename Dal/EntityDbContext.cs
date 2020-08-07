@@ -37,13 +37,15 @@ namespace Dal
 
             modelBuilder.Entity<User>()
                 .HasMany(x => x.Comments)
-                .WithOne(x => x.User)
-                .OnDelete(DeleteBehavior.Cascade);
+                .WithOne(x => x.User);
+
+            modelBuilder.Entity<Comment>()
+                .HasOne(x => x.Project)
+                .WithMany(x => x.Comments);
 
             modelBuilder.Entity<User>()
                 .HasMany(x => x.Projects)
-                .WithOne(x => x.User)
-                .OnDelete(DeleteBehavior.Cascade);
+                .WithOne(x => x.User);
 
             modelBuilder.Entity<Project>()
                 .HasMany(x => x.Comments)

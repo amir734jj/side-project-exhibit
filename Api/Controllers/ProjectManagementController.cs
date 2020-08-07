@@ -10,7 +10,7 @@ using Models.ViewModels.Api;
 namespace Api.Controllers
 {
     [ApiExplorerSettings(IgnoreApi = true)]
-    [AllowAnonymous]
+    [Authorize]
     [Route("Projects")]
     public class ProjectManagementController : Controller
     {
@@ -25,6 +25,7 @@ namespace Api.Controllers
             _userManager = userManager;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [Route("")]
         public async Task<IActionResult> Index()

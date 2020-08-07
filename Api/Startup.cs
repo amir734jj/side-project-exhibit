@@ -236,6 +236,8 @@ namespace Api
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(x =>
             {
                 x.Cookie.MaxAge = TimeSpan.FromMinutes(60);
+                x.LoginPath = new PathString("/Login/");
+                x.LogoutPath = new PathString("/Logout/");
             });
 
             services.For<GlobalConfigs>().Use(new GlobalConfigs()).Singleton();

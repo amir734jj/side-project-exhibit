@@ -55,7 +55,7 @@
                 </div>
             </div>
             <div class="panel-body" ng-bind-html="marked(project.description)"></div>
-            <div class="panel-footer">
+            <div class="panel-footer" ng-show="project.projectCategoryRelationships.length">
                 <span class="label label-default" ng-repeat="item in project.projectCategoryRelationships">{{item.category.name}}</span>
             </div>
         </div>

@@ -15,6 +15,7 @@
     var utility = RequestUtilityBuilder.For(Context);
     var cacheBustingKey = CacheBustingUtility.CacheBustingKey();
     var themes = Themes;
+    var info = await utility.GetUserInfo();
 }
 
 <!DOCTYPE html>
@@ -66,7 +67,7 @@
 
     <script>
         window.isAuthenticated = @(utility.IsAuthenticated().ToString().ToLower());
-        window.user = @Html.Raw((await utility.GetUserInfo()).ToJson());
+        window.user = @Html.Raw(info.ToJson());
     </script>
 </head>
 <body>
@@ -95,7 +96,7 @@
                 {
                 }
 
-                @if ((await utility.GetUserInfo()).UserRoleEnum == UserRoleEnum.Admin)
+                @if (info.UserRoleEnum == UserRoleEnum.Admin)
                 {
                     <li class="@(ViewContext.RouteData.Matches("User") ? "active" : "")">
                         <a href="~/User">Users</a>
@@ -119,7 +120,7 @@
                 }
                 else
                 {
-                    if ((await utility.GetUserInfo()).UserRoleEnum == UserRoleEnum.Admin)
+                    if (info.UserRoleEnum == UserRoleEnum.Admin)
                     {
                         <li class="@(ViewContext.RouteData.Matches("Config") ? "active" : "")">
                             <a href="~/Config"><span class="glyphicon glyphicon-wrench"></span> Config </a>

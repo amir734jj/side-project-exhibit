@@ -46,9 +46,9 @@ namespace Api.Controllers.Api
         [HttpGet]
         [Route("{id}")]
         [SwaggerOperation("Get")]
-        public override Task<IActionResult> Get(int id)
+        public override async Task<IActionResult> Get(int id)
         {
-            return base.Get(id);
+            return Ok(await _projectLogic.Get(id));
         }
     }
 }

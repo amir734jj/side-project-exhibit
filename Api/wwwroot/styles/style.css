@@ -75,5 +75,5 @@ span.pre {
 }
 
 .table-side-scroll {
-    overflow:scroll;
+    overflow-x: auto;
 }

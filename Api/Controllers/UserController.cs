@@ -63,7 +63,7 @@ namespace API.Controllers
         [Route("UpdateUserRole/{id}/{userRoleEnum}/Then")]
         public async Task<IActionResult> UpdateUserRoleThen(int id, UserRoleEnum userRoleEnum)
         {
-            var user = await _userLogic.Get(id);
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
             
             switch (userRoleEnum)
             {

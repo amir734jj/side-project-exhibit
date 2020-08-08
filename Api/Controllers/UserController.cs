@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using EfCoreRepository.Interfaces;
 using Logic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +15,8 @@ namespace API.Controllers
     [Route("[controller]")]
     public class UserController : Controller
     {
+        private readonly IEfRepository _efRepository;
+        
         private readonly IUserLogic _userLogic;
         
         private readonly UserManager<User> _userManager;
@@ -23,8 +26,9 @@ namespace API.Controllers
         /// </summary>
         /// <param name="userLogic"></param>
         /// <param name="userManager"></param>
-        public UserController(IUserLogic userLogic, UserManager<User> userManager)
+        public UserController(IEfRepository efRepository, IUserLogic userLogic, UserManager<User> userManager)
         {
+            _efRepository = efRepository;
             _userLogic = userLogic;
             _userManager = userManager;
         }
@@ -61,18 +65,24 @@ namespace API.Controllers
         [HttpGet]
         [Route("UpdateUserRole/{id}/{userRoleEnum}")]
         public async Task<IActionResult> UpdateUserRole(int id, UserRoleEnum userRoleEnum)
-        {;
-            var userEntity = await _userLogic.Update(id, x => x.UserRole = userRoleEnum);
+        {
+            var userLogicEf = _efRepository.For<User, int>().Session();
+
+            var user = await userLogicEf.Get(id);
+
+            user.UserRole = userRoleEnum;
+            
+            await userLogicEf.Update(id, user);
 
             switch (userRoleEnum)
             {
                 case UserRoleEnum.Basic:
-                    await _userManager.AddToRoleAsync(userEntity, UserRoleEnum.Basic.ToString());
-                    await _userManager.RemoveFromRoleAsync(userEntity, UserRoleEnum.Admin.ToString());
+                    await _userManager.AddToRoleAsync(user, UserRoleEnum.Basic.ToString());
+                    await _userManager.RemoveFromRoleAsync(user, UserRoleEnum.Admin.ToString());
                     break;
                 case UserRoleEnum.Admin:
-                    await _userManager.AddToRoleAsync(userEntity, UserRoleEnum.Admin.ToString());
-                    await _userManager.AddToRoleAsync(userEntity, UserRoleEnum.Basic.ToString());
+                    await _userManager.AddToRoleAsync(user, UserRoleEnum.Admin.ToString());
+                    await _userManager.AddToRoleAsync(user, UserRoleEnum.Basic.ToString());
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(userRoleEnum), userRoleEnum, null);

@@ -10,6 +10,7 @@ namespace Dal.Profiles
         public User Update(User entity, User dto)
         {
             entity.LastLoginTime = dto.LastLoginTime;
+            entity.UserRole = dto.UserRole;
 
             return entity;
         }

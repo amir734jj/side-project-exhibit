@@ -24,8 +24,7 @@ namespace Api.Controllers
             _projectManagementLogic = projectManagementLogic;
             _userManager = userManager;
         }
-
-        [AllowAnonymous]
+        
         [HttpGet]
         [Route("")]
         public async Task<IActionResult> Index()

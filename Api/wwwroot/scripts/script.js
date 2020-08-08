@@ -461,7 +461,7 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
         };
 
         self.getProject = async () => {
-            const {data: project} = await $http.get(`/api/project/${projectId}/`);
+            const {data: project} = await $http.get(`/project/${projectId}/`);
             $scope.project = project;
             $scope.loading = false;
             $scope.$apply();

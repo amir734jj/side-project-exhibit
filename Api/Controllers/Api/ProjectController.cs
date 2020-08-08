@@ -32,23 +32,9 @@ namespace Api.Controllers.Api
         [NonAction]
         protected override async Task<IBasicLogic<Project>> BasicLogic()
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
 
-                return _projectLogic.For(user);
-            }
-
-            return _projectLogic;
-        }
-
-        [AllowAnonymous]
-        [HttpGet]
-        [Route("{id}")]
-        [SwaggerOperation("Get")]
-        public override async Task<IActionResult> Get(int id)
-        {
-            return Ok(await _projectLogic.Get(id));
+            return _projectLogic.For(user);
         }
     }
 }

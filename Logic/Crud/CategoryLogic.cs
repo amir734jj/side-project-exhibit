@@ -31,9 +31,9 @@ namespace Logic.Crud
             return _categoryDal;
         }
 
-        public async Task<DisposableResult<List<Category>>> GetOrCreate(List<string> items)
+        public async Task<List<Category>> GetOrCreate(List<string> items)
         {
-            var logic = _categoryDal.Session();
+            var logic = _categoryDal;
             
             var categories = (await logic.GetAll()).ToList();
 
@@ -45,12 +45,10 @@ namespace Logic.Crud
                 joinedResult.Where(x => x.p == null)
                     .Select(x => x.c)
                     .Select(x => logic.Save(new Category {Name = x.ToLower()})));
-
-            await logic.DisposeAsync();
             
             categories = (await logic.GetAll()).ToList();
 
-            return new DisposableResult<List<Category>>(categories.Join(items, x => x.Name.ToLower(), x => x, (category, s) => category).ToList(), () => logic.DisposeAsync());
+            return categories.Join(items, x => x.Name.ToLower(), x => x, (category, s) => category).ToList();
         }
 
         public ICategoryLogic SetRepository(IEfRepository efRepository)

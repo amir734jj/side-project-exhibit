@@ -77,7 +77,7 @@ namespace Logic.Logic
         {
             var disposableResult = await _categoryLogic.SetRepository(_efRepository).GetOrCreate(projectViewModel.Categories);
             
-            var categories = disposableResult.Result
+            var categories = disposableResult
                 .Select(x => new ProjectCategoryRelationship
                 {
                     ProjectId = projectViewModel.Id,

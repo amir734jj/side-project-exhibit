@@ -35,7 +35,7 @@ namespace Logic.Logic
                 Description = projectViewModel.Description
             });
 
-            project.ProjectCategoryRelationships = disposableResult.Result
+            project.ProjectCategoryRelationships = disposableResult
                 .Select(x => new ProjectCategoryRelationship
                 {
                     ProjectId = project.Id,
@@ -49,7 +49,7 @@ namespace Logic.Logic
         {
             var disposableResult = await _categoryLogic.SetRepository(_repository).GetOrCreate(projectViewModel.Categories);
             
-            var categories = disposableResult.Result
+            var categories = disposableResult
                 .Select(x => new ProjectCategoryRelationship
                 {
                     ProjectId = projectViewModel.Id,

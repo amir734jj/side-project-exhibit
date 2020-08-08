@@ -8,7 +8,7 @@ namespace Logic.Interfaces
 {
     public interface ICategoryLogic : IBasicLogic<Category>
     {
-        Task<DisposableResult<List<Category>>> GetOrCreate(List<string> items);
+        Task<List<Category>> GetOrCreate(List<string> items);
 
         ICategoryLogic SetRepository(IEfRepository efRepository);
 

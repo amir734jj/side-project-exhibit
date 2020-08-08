@@ -48,6 +48,14 @@
                 </div>
             </div>
             <div class="panel-body"> @Html.Raw(Markdown.ToHtml(project.Description.TakeNLines(15))) </div>
+            <div class="panel-footer">
+                @foreach (var category in project.Categories)
+                {
+                    <span class="label label-default">
+                        @(category)
+                    </span>
+                }
+            </div>
         </div>
     }
 

@@ -209,7 +209,7 @@ namespace Api
                 .AddDefaultTokenProviders();
 
             // L2 EF cache
-            if (true || _env.IsDevelopment())
+            if (_env.IsDevelopment())
             {
                 EntityFrameworkCache.Initialize(new InMemoryCache());
             }

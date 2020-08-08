@@ -41,7 +41,7 @@
                                     /
                                     -@project.Votes.Count(x => x.Value == Vote.Down)
                                 </span>
-                                <a class="btn btn-danger btn-sm" href="~/Projects/Delete/@(project.Id)" validate-before-going> Delete </a>
+                                <a class="btn btn-danger btn-sm" href="~/Projects/Delete/@(project.Id)" validate-before-going data-message="Are you sure to delete this project?"> Delete </a>
                             </h4>
                         </div>
                     </div>

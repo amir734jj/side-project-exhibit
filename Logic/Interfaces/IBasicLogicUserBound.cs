@@ -1,4 +1,5 @@
-﻿using Models.Entities;
+﻿using EfCoreRepository.Interfaces;
+using Models.Entities;
 using Models.Interfaces;
 
 namespace Logic.Interfaces

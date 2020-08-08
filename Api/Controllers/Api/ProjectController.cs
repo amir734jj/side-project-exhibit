@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Logic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -41,16 +40,6 @@ namespace Api.Controllers.Api
             }
 
             return _projectLogic;
-        }
-
-        [AllowAnonymous]
-        [HttpGet]
-        [Route("")]
-        [SwaggerOperation("GetAll")]
-        [ProducesResponseType(typeof(IEnumerable<Project>), 200)]
-        public override Task<IActionResult> GetAll()
-        {
-            return base.GetAll();
         }
 
         [AllowAnonymous]

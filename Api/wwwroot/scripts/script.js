@@ -282,7 +282,7 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
             restrict: 'A',
             link: function (scope, element, attrs) {
                 angular.element(element).on("click", (e) => {
-                    if (!$window.confirm("Are you sure to delete the project?")) {
+                    if (!$window.confirm(attrs["data-message"])) {
                         e.preventDefault();
                     }
                 });
@@ -503,6 +503,60 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
         }
 
         self.init = self.getProject;
+
+        self.init().then();
+    }])
+    .controller("adminUpdateProjectCtrl", ["$scope", "$window", "$http", function ($scope, $window, $http) {
+
+        $scope.titleError = false;
+        $scope.descriptionError = false;
+        $scope.categoriesError = false;
+        $scope.loading = true;
+
+        $scope.categories = [];
+        $scope.loadTags = async (query) => {
+            const {data} = await $http.get("/api/category");
+            const categories = data.map(x => x.name).filter(x => x.toLowerCase().includes(query))
+            return {data: categories};
+        };
+
+        const self = {};
+
+        const projectId = _.chain($window.location.href.split('/'))
+            .filter(x => x)
+            .last()
+            .value();
+
+        MarkdownInput($scope);
+
+        $scope.saveChanges = async ($event) => {
+            $scope.titleError = !($scope.title && $scope.title.length >= 5);
+            $scope.descriptionError = !($scope.editor.src && $scope.editor.src.length >= 20);
+            $scope.categoriesError = !($scope.categories && $scope.categories.length >= 1);
+
+            if ($scope.titleError || $scope.descriptionError || $scope.categoriesError) {
+                $event.preventDefault();
+                return false;
+            }
+
+            await $http.put(`/admin/project/${projectId}`, {
+                id: projectId,
+                title: $scope.title,
+                description: $scope.editor.src,
+                categories: $scope.categories
+            });
+
+            $window.location.href = '/admin';
+        };
+
+        self.init = async () => {
+            const {data: {title, description, categories}} = await $http.get(`/admin/project/${projectId}/json`);
+            $scope.title = title;
+            $scope.editor.src = description;
+            $scope.categories = categories;
+            $scope.loading = false;
+            $scope.$apply();
+        };
 
         self.init().then();
     }]);

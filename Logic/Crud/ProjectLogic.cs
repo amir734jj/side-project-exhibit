@@ -26,5 +26,10 @@ namespace Logic.Crud
         {
             return _userDal;
         }
+
+        public IProjectLogic SetRepository(IEfRepository efRepository)
+        {
+            return new ProjectLogic(efRepository);
+        }
     }
 }

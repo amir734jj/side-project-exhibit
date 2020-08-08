@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using EfCoreRepository.Interfaces;
 using Logic.Abstracts;
 using Logic.Interfaces;
+using Models;
 using Models.Entities;
 
 namespace Logic.Crud
@@ -30,9 +31,11 @@ namespace Logic.Crud
             return _categoryDal;
         }
 
-        public async Task<List<Category>> GetOrCreate(List<string> items)
+        public async Task<DisposableResult<List<Category>>> GetOrCreate(List<string> items)
         {
-            var categories = await GetAll();
+            var logic = _categoryDal.Session();
+            
+            var categories = (await logic.GetAll()).ToList();
 
             var joinedResult = items
                 .GroupJoin(categories, c => c.ToLower(), p => p.Name, (c, ps) => new {c, ps})
@@ -41,11 +44,32 @@ namespace Logic.Crud
             await Task.WhenAll(
                 joinedResult.Where(x => x.p == null)
                     .Select(x => x.c)
-                    .Select(x => Save(new Category {Name = x.ToLower()})));
+                    .Select(x => logic.Save(new Category {Name = x.ToLower()})));
 
-            categories = await GetAll();
+            await logic.DisposeAsync();
+            
+            categories = (await logic.GetAll()).ToList();
 
-            return categories.Join(items, x => x.Name.ToLower(), x => x, (category, s) => category).ToList();
+            return new DisposableResult<List<Category>>(categories.Join(items, x => x.Name.ToLower(), x => x, (category, s) => category).ToList(), () => logic.DisposeAsync());
+        }
+
+        public ICategoryLogic SetRepository(IEfRepository efRepository)
+        {
+            return new CategoryLogic(efRepository);
+        }
+
+        public async Task CleanOrphans()
+        {
+            await using var logic = _categoryDal.Session();
+
+            foreach (var category in await logic.GetAll())
+            {
+                if (category.ProjectCategoryRelationships == null ||
+                    category.ProjectCategoryRelationships.All(y => y.Project == null))
+                {
+                    await logic.Delete(category.Id);
+                }
+            }
         }
     }
 }

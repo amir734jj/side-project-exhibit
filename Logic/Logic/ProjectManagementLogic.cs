@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EfCoreRepository.Interfaces;
 using Logic.Interfaces;
 using Models.Entities;
 using Models.Relationships;
@@ -10,44 +11,52 @@ namespace Logic.Logic
 {
     public class ProjectManagementLogic : IProjectManagementLogic
     {
+        private readonly IEfRepository _repository;
+        
         private readonly IProjectLogic _projectLogic;
+        
         private readonly ICategoryLogic _categoryLogic;
 
-        public ProjectManagementLogic(IProjectLogic projectLogic, ICategoryLogic categoryLogic)
+        public ProjectManagementLogic(IEfRepository repository, IProjectLogic profileLogic, ICategoryLogic categoryLogic)
         {
-            _projectLogic = projectLogic;
+            _repository = repository;
+            _projectLogic = profileLogic;
             _categoryLogic = categoryLogic;
         }
         
         public async Task Add(User user, ProjectViewModel projectViewModel)
         {
-            var project = await _projectLogic.Save( new Project
+            var disposableResult = await _categoryLogic.SetRepository(_repository).GetOrCreate(projectViewModel.Categories);
+
+            var project = await _projectLogic.SetRepository(_repository).Save(new Project
             {
                 User = user,
                 Title = projectViewModel.Title,
                 Description = projectViewModel.Description
             });
 
-            project.ProjectCategoryRelationships = (await _categoryLogic.GetOrCreate(projectViewModel.Categories))
+            project.ProjectCategoryRelationships = disposableResult.Result
                 .Select(x => new ProjectCategoryRelationship
                 {
                     ProjectId = project.Id,
                     CategoryId = x.Id
                 }).ToList();
 
-            await _projectLogic.Update(project.Id, project);
+            await _projectLogic.SetRepository(_repository).Update(project.Id, project);
         }
 
         public async Task Update(User user, ProjectViewModel projectViewModel)
         {
-            var categories = (await _categoryLogic.GetOrCreate(projectViewModel.Categories))
+            var disposableResult = await _categoryLogic.SetRepository(_repository).GetOrCreate(projectViewModel.Categories);
+            
+            var categories = disposableResult.Result
                 .Select(x => new ProjectCategoryRelationship
                 {
                     ProjectId = projectViewModel.Id,
                     CategoryId = x.Id
                 }).ToList();
             
-            await _projectLogic.For(user).Update(projectViewModel.Id, project =>
+            await _projectLogic.SetRepository(_repository).For(user).Update(projectViewModel.Id, project =>
             {
                 project.Title = projectViewModel.Title;
                 project.Description = projectViewModel.Description;
@@ -56,11 +65,6 @@ namespace Logic.Logic
         }
         
         public async Task Delete(User user, int projectId)
-        {
-            await _projectLogic.For(user).Delete(projectId);
-        }
-
-        public async Task Update(User user, int projectId)
         {
             await _projectLogic.For(user).Delete(projectId);
         }

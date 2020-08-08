@@ -12,6 +12,6 @@ namespace Models.Entities
         [Column(TypeName = "varchar(256)")]
         public string Name { get; set; }
         
-        public List<ProjectCategoryRelationship> ProjectCategoryRelationships { get; set; }
+        public List<ProjectCategoryRelationship> ProjectCategoryRelationships { get; set; } = new List<ProjectCategoryRelationship>();
     }
 }

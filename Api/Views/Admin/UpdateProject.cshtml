@@ -1,0 +1,17 @@
+@{
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <div class="page-header">
+        <h3>Update Project</h3>
+    </div>
+
+    <div ng-controller="adminUpdateProjectCtrl">
+        <div ng-show="!loading">
+            @await Html.PartialAsync("ProjectDetails")
+        </div>
+
+        @await Html.PartialAsync("Spinner")
+    </div>
+</div>

@@ -1,5 +1,6 @@
 using System.Linq;
 using EfCoreRepository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Models.Entities;
 
 namespace Dal.Profiles
@@ -23,7 +24,9 @@ namespace Dal.Profiles
 
         public IQueryable<Category> Include<TQueryable>(TQueryable queryable) where TQueryable : IQueryable<Category>
         {
-            return queryable;
+            return queryable
+                .Include(x => x.ProjectCategoryRelationships)
+                .ThenInclude(x => x.Project);
         }
     }
 }

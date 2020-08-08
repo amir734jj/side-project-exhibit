@@ -38,7 +38,7 @@
 
     @if (!string.IsNullOrEmpty(GlobalConfigs.Theme) && !"default".Equals(GlobalConfigs.Theme, StringComparison.CurrentCultureIgnoreCase))
     {
-        <link rel="stylesheet" href="~/styles/themes/@(themes[GlobalConfigs.Theme])?@cacheBustingKey" />
+        <link rel="stylesheet" href="~/styles/themes/@(themes[GlobalConfigs.Theme])?@cacheBustingKey"/>
     }
 
     @* sanitize *@
@@ -83,26 +83,33 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
-                <li>
+                <li class="@(ViewContext.RouteData.Matches("") ? "active" : "")">
                     <a href="~/"> Board </a>
                 </li>
 
-                <li>
+                <li class="@(ViewContext.RouteData.Matches("About") ? "active" : "")">
                     <a href="~/About"> About </a>
                 </li>
 
                 @if (utility.IsAuthenticated())
                 {
                 }
+
+                @if ((await utility.GetUserInfo()).UserRoleEnum == UserRoleEnum.Admin)
+                {
+                    <li class="@(ViewContext.RouteData.Matches("User") ? "active" : "")">
+                        <a href="~/User">Users</a>
+                    </li>
+                }
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
                 @if (!utility.IsAuthenticated())
                 {
-                    <li>
+                    <li class="@(ViewContext.RouteData.Matches("Register") ? "active" : "")">
                         <a href="~/Account/Register"><span class="glyphicon glyphicon-user"></span> Register </a>
                     </li>
-                    <li>
+                    <li class="@(ViewContext.RouteData.Matches("Login") ? "active" : "")">
                         <a href="~/Account/login"><span class="glyphicon glyphicon-log-in"></span> Login </a>
                     </li>
                 }
@@ -110,19 +117,19 @@
                 {
                     if ((await utility.GetUserInfo()).UserRoleEnum == UserRoleEnum.Admin)
                     {
-                        <li>
+                        <li class="@(ViewContext.RouteData.Matches("Config") ? "active" : "")">
                             <a href="~/Config"><span class="glyphicon glyphicon-wrench"></span> Config </a>
                         </li>
                     }
 
-                    <li>
+                    <li class="@(ViewContext.RouteData.Matches("Projects") ? "active" : "")">
                         <a href="~/Projects"><span class="glyphicon glyphicon-grain"></span> Projects </a>
                     </li>
 
-                    <li>
+                    <li class="@(ViewContext.RouteData.Matches("Profile") ? "active" : "")">
                         <a href="~/Profile"><span class="glyphicon glyphicon-user"></span> Profile</a>
                     </li>
-                    <li>
+                    <li class="@(ViewContext.RouteData.Matches("Logout") ? "active" : "")">
                         <a href="~/Account/Logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
                     </li>
                 }

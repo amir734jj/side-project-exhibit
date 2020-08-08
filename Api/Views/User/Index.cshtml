@@ -1,0 +1,75 @@
+﻿@using Models.Enums
+@using Api.Interfaces
+@model IEnumerable<Models.Entities.User>
+@inject IHttpRequestUtilityBuilder RequestUtilityBuilder;
+
+@{
+    ViewBag.Title = "Users";
+    Layout = "_Layout";
+    var userInfo = await RequestUtilityBuilder.For(Context).GetUserInfo();
+}
+
+<div class="container">
+    <div class="page-header">
+        <h3>List of Users <small>(@Model.Count())</small></h3>
+    </div>
+
+    <table class="table table-hover table-bordered">
+        <thead>
+        <tr>
+            <th>Fullname</th>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Role</th>
+            <th class="hidden-xs">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var user in Model)
+        {
+            var disabled = userInfo.Username == user.UserName;
+            
+            <tr>
+                <td>@user.Name</td>
+                <td>@user.Email</td>
+                <td>@user.UserName</td>
+                <td>@user.UserRole</td>
+                
+                <td class="hidden-xs">
+                        @if (disabled)
+                        {
+                            switch (user.UserRole)
+                            {
+                                case UserRoleEnum.Basic:
+                                    <a href="" class="btn btn-primary disabled">Set Admin</a>
+                                    break;
+                                case UserRoleEnum.Admin:
+                                    <a href="" class="btn btn-primary disabled">Set Basic</a>
+                                    break;
+                                default:
+                                    throw new ArgumentOutOfRangeException();
+                            }
+                            <a href="" class="btn btn-danger disabled">Delete</a>
+                        }
+                        else
+                        {
+                            switch (user.UserRole)
+                            {
+                                case UserRoleEnum.Basic:
+                                    <a href="~/User/updateUserRole/@user.Id/@UserRoleEnum.Admin" class="btn btn-primary">Set Admin</a>
+                                    break;
+                                case UserRoleEnum.Admin:
+                                    <a href="~/User/updateUserRole/@user.Id/@UserRoleEnum.Basic" class="btn btn-primary">Set Basic</a>
+                                    break;
+                                default:
+                                    throw new ArgumentOutOfRangeException();
+                            }
+                            <a href="~/User/delete/@user.Id" class="btn btn-danger">Delete</a>
+                        }
+                    </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+</div>

@@ -106,7 +106,7 @@ namespace Logic.Crud
 
         public async Task<Project> Vote(int projectId, User identity, Vote vote)
         {
-            var project = await _projectLogic.For(identity).Get(projectId);
+            var project = await _projectLogic.Get(projectId);
 
             // Cannot vote for my own project
             if (project.User.Id == identity.Id)

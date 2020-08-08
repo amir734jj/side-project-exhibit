@@ -9,3 +9,8 @@ Website: https://side-project-exhibit.herokuapp.com/
 - Angular.js + babel
 - Postgres
 - Markdown
+
+Notes:
+- Make sure you have the .NET Core SDK installed ([Download](https://www.microsoft.com/net/learn/get-started))
+- To view environment variables make sure to install `heroku cli` and then
+  - `heroku config --json --app="side-project-exhibit"`

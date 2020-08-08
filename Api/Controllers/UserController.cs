@@ -15,8 +15,6 @@ namespace API.Controllers
     [Route("[controller]")]
     public class UserController : Controller
     {
-        private readonly IEfRepository _efRepository;
-        
         private readonly IUserLogic _userLogic;
         
         private readonly UserManager<User> _userManager;
@@ -26,9 +24,8 @@ namespace API.Controllers
         /// </summary>
         /// <param name="userLogic"></param>
         /// <param name="userManager"></param>
-        public UserController(IEfRepository efRepository, IUserLogic userLogic, UserManager<User> userManager)
+        public UserController(IUserLogic userLogic, UserManager<User> userManager)
         {
-            _efRepository = efRepository;
             _userLogic = userLogic;
             _userManager = userManager;
         }
@@ -57,23 +54,17 @@ namespace API.Controllers
 
             return RedirectToAction("Index");
         }
-         
+
         /// <summary>
         /// Update User Role
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("UpdateUserRole/{id}/{userRoleEnum}")]
-        public async Task<IActionResult> UpdateUserRole(int id, UserRoleEnum userRoleEnum)
+        [Route("UpdateUserRole/{id}/{userRoleEnum}/Then")]
+        public async Task<IActionResult> UpdateUserRoleThen(int id, UserRoleEnum userRoleEnum)
         {
-            var userLogicEf = _efRepository.For<User, int>().Session();
-
-            var user = await userLogicEf.Get(id);
-
-            user.UserRole = userRoleEnum;
+            var user = await _userLogic.Get(id);
             
-            await userLogicEf.Update(id, user);
-
             switch (userRoleEnum)
             {
                 case UserRoleEnum.Basic:
@@ -87,8 +78,21 @@ namespace API.Controllers
                 default:
                     throw new ArgumentOutOfRangeException(nameof(userRoleEnum), userRoleEnum, null);
             }
-            
+
             return RedirectToAction("Index");
+        }
+        
+        /// <summary>
+        /// Update User Role
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("UpdateUserRole/{id}/{userRoleEnum}")]
+        public async Task<IActionResult> UpdateUserRole(int id, UserRoleEnum userRoleEnum)
+        {
+            await _userLogic.Update(id, x => x.UserRole = userRoleEnum);
+            
+            return RedirectToAction("UpdateUserRoleThen", new { id, userRoleEnum });
         }
     }
 }

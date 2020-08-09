@@ -42,30 +42,30 @@
                             switch (user.UserRole)
                             {
                                 case UserRoleEnum.Basic:
-                                    <a href="" class="btn btn-primary disabled">Set Admin</a>
+                                    <a href="" class="btn btn-primary btn-sm disabled">Set Admin</a>
                                     break;
                                 case UserRoleEnum.Admin:
-                                    <a href="" class="btn btn-primary disabled">Set Basic</a>
+                                    <a href="" class="btn btn-primary btn-sm disabled">Set Basic</a>
                                     break;
                                 default:
                                     throw new ArgumentOutOfRangeException();
                             }
-                            <a href="" class="btn btn-danger disabled">Delete</a>
+                            <a href="" class="btn btn-danger btn-sm disabled">Delete</a>
                         }
                         else
                         {
                             switch (user.UserRole)
                             {
                                 case UserRoleEnum.Basic:
-                                    <a href="~/User/updateUserRole/@user.Id/@UserRoleEnum.Admin" class="btn btn-primary">Set Admin</a>
+                                    <a href="~/User/updateUserRole/@user.Id/@UserRoleEnum.Admin" class="btn btn-primary btn-sm">Set Admin</a>
                                     break;
                                 case UserRoleEnum.Admin:
-                                    <a href="~/User/updateUserRole/@user.Id/@UserRoleEnum.Basic" class="btn btn-primary">Set Basic</a>
+                                    <a href="~/User/updateUserRole/@user.Id/@UserRoleEnum.Basic" class="btn btn-primary btn-sm">Set Basic</a>
                                     break;
                                 default:
                                     throw new ArgumentOutOfRangeException();
                             }
-                            <a href="~/User/delete/@user.Id" class="btn btn-danger">Delete</a>
+                            <a href="~/User/delete/@user.Id" class="btn btn-danger btn-sm">Delete</a>
                         }
                     </td>
             </tr>

@@ -198,21 +198,8 @@ function isMyOwnComment(user, comment) {
 
 class MarkDownToText {
     /* Using lodash escape implementation: https://github.com/lodash/lodash/blob/master/escape.js */
-    htmlEscapes = {
-        '&': '&amp',
-        '<': '&lt',
-        '>': '&gt',
-        '"': '&quot',
-        "'": '&#39',
-    };
-    reUnescapedHtml = /[&<>"']/g;
-    reHasUnescapedHtml = RegExp(this.reUnescapedHtml.source);
     escapeHtml = (string) => {
-        if (string && this.reHasUnescapedHtml.test(string)) {
-            return string.replace(this.reUnescapedHtml, (chr) => this.htmlEscapes[chr]);
-        } else {
-            return string;
-        }
+        return angular.element("<textarea/>").html(string).text();
     };
     blockFn = (block) => block + '\n';
     inlineFn = (text) => text;
@@ -282,10 +269,27 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
             restrict: 'A',
             link: function (scope, element, attrs) {
                 angular.element(element).on("click", (e) => {
-                    if (!$window.confirm(attrs["data-message"])) {
+                    if (!$window.confirm(attrs.message)) {
                         e.preventDefault();
                     }
                 });
+            }
+        }
+    }])
+    .directive('toolTip', ["$window", function ($window) {
+        return {
+            restrict: 'A',
+            scope: true,
+            link: function (scope, element, attrs) {
+                if (JSON.parse(attrs.toolTipCondition)) {
+                    angular.element(element)
+                        .attr("title", attrs.toolTipMessage)
+                        .data("toggle", 'tooltip');
+                } else {
+                    angular.element(element)
+                        .removeAttr("title")
+                        .removeData("toggle", 'tooltip');
+                }
             }
         }
     }])

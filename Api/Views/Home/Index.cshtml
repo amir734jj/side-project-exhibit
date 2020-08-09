@@ -66,8 +66,9 @@
                     <div class="input-group pull-right" style="max-width: 15rem">
                         <span class="input-group-btn" ng-if="!isMyOwnPost(user, project)">
                             <button type="button"
-                                    data-toggle="{{!isAuthenticated ? 'tooltip' : ''"
-                                    title="Login to vote"
+                                    tool-tip
+                                    tool-tip-condition="{{ !isAuthenticated }}"
+                                    tool-tip-message="Please login to vote"
                                     ng-class="['btn', 'btn-success', 'btn-sm', { 'active': hasVoted(user, project, 'up'), 'disabled': hasVoted(user, project, 'up')}]"
                                     ng-click="vote(project.id, 'up')"
                                     ng-disabled="!isAuthenticated">
@@ -75,15 +76,17 @@
                             </button>
                         </span>
                         <input type="text"
-                               data-toggle="{{isMyOwnPost(user, project) ? 'tooltip' : ''"
-                               title="Cannot vote for your own project"
+                               tool-tip
+                               tool-tip-condition="{{ isMyOwnPost(user, project) }}"
+                               tool-tip-message="Cannot vote for your own project"
                                class="form-control text-center input-sm"
                                placeholder="Vote"
                                ng-value="votesIntegerValue(project.votes)" disabled/>
                         <span class="input-group-btn" ng-if="!isMyOwnPost(user, project)">
                             <button type="button"
-                                    data-toggle="{{!isAuthenticated ? 'tooltip' : ''"
-                                    title="Login to vote"
+                                    tool-tip
+                                    tool-tip-condition="{{ !isAuthenticated }}"
+                                    tool-tip-message="Please login to vote"
                                     ng-class="['btn', 'btn-danger', 'btn-sm', { 'active': hasVoted(user, project, 'down'), 'disabled': hasVoted(user, project, 'down')}]"
                                     ng-click="vote(project.id, 'down')"
                                     ng-disabled="!isAuthenticated">
@@ -101,7 +104,7 @@
     </div>
 
     @await Html.PartialAsync("Spinner")
-    
+
     <div class="alert alert-warning" ng-if="!projects.length && initialized">
         <p>
             Did not find any project matching the criterias.

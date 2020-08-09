@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Amazon;
 using Amazon.Runtime;
@@ -284,8 +285,10 @@ namespace Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IConfigLogic configLogic)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IConfigLogic configLogic, IUserLogic userLogic)
         {
+            var all = userLogic.GetAll().Result.ToList();
+            
             if (!env.IsDevelopment())
             {
                 // Refresh global config
@@ -318,6 +321,16 @@ namespace Api
                 // This is particularly important so that HttpContent.Request.Scheme will be correct behind a SSL terminating proxy
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor |
                                    ForwardedHeaders.XForwardedProto
+            });
+
+            app.Use(async (context, next) =>
+            {
+                await next();
+                if (context.Response.StatusCode == 404)
+                {
+                    context.Request.Path = "/error/404";
+                    await next();
+                }
             });
 
             // Use wwwroot folder as default static path

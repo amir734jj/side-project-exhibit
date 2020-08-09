@@ -11,7 +11,7 @@ using Models.Enums;
 namespace API.Controllers
 {
     [ApiExplorerSettings(IgnoreApi = true)]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     [Route("[controller]")]
     public class UserController : Controller
     {

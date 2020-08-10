@@ -2,7 +2,9 @@
 
 This project is a medium for everyone to showcase their side project or weekend project. This website is open source.
 
-Website: https://side-project-exhibit.herokuapp.com/
+Website:
+  - https://side-project-exhibit.herokuapp.com/
+  - https://www.anahita.dev/
 
 ### Tools and libraries
 - .NET Core

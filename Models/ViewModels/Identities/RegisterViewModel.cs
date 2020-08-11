@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Models.ViewModels.Identities
 {
     /// <summary>
@@ -10,6 +12,9 @@ namespace Models.ViewModels.Identities
         public string Username { get; set; }
         
         public string Password { get; set; }
+        
+        [Display(Name = "Confirm Password")]
+        public string ConfirmPassword { get; set; }
         
         public string Email { get; set; }
     }

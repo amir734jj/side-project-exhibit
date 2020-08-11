@@ -24,7 +24,10 @@ namespace Api.Abstracts
 
         public async Task<ReturnWithErrors<bool>> Register(RegisterViewModel registerViewModel)
         {
-            var users = ResolveUserManager().Users;
+            if (registerViewModel.Password != registerViewModel.ConfirmPassword)
+            {
+                return new ReturnWithErrors<bool>(false, new List<string> { "Passwords do not match"});
+            }
             
             var role = ResolveUserManager().Users.Any() ? UserRoleEnum.Basic : UserRoleEnum.Admin;
 

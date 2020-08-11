@@ -51,6 +51,10 @@
     @* markdown *@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/1.1.1/marked.min.js"></script>
 
+    @* angular + bootstrap toggle *@
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/angular-bootstrap-toggle@0.4.0/dist/angular-bootstrap-toggle.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/angular-bootstrap-toggle@0.4.0/dist/angular-bootstrap-toggle.min.js"></script>
+
     @* font-awesome *@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
@@ -70,7 +74,7 @@
         window.user = @Html.Raw(info.ToJson());
     </script>
 </head>
-<body>
+<body ng-app="ideaBoardApp">
 
 <nav class="navbar navbar-default">
     <div class="container-fluid">
@@ -101,7 +105,7 @@
                     <li class="@(ViewContext.RouteData.Matches("User") ? "active" : "")">
                         <a href="~/User">Users</a>
                     </li>
-                    
+
                     <li class="@(ViewContext.RouteData.Matches("Admin") ? "active" : "")">
                         <a href="~/Admin">Admin</a>
                     </li>
@@ -139,6 +143,15 @@
                     </li>
                 }
             </ul>
+
+            <div class="navbar-form navbar-right" ng-controller="darkModeCtrl">
+                <div class="form-group">
+                    <toggle ng-model="darkMode"
+                            on="<i class='fa fa-moon-o' aria-hidden='true'></i>"
+                            off="<i class='fa fa-sun-o' aria-hidden='true'></i>">
+                    </toggle>
+                </div>
+            </div>
         </div>
     </div>
 </nav>
@@ -168,8 +181,10 @@
 }
 
 
-<div class="container-fluid" ng-app="ideaBoardApp" ng-cloak>
+<div class="container-fluid" ng-cloak>
     @RenderBody()
+
+
 </div>
 
 <mini-profiler position="RenderPosition.Right"/>

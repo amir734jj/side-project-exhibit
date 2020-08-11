@@ -261,7 +261,7 @@ class MarkDownToText {
     }
 }
 
-angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
+angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput', 'ui.toggle'])
     .constant('isAuthenticated', window.isAuthenticated)
     .constant('user', window.user)
     .directive('validateBeforeGoing', ["$window", function ($window) {
@@ -291,6 +291,27 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput'])
                         .removeData("toggle", 'tooltip');
                 }
             }
+        }
+    }])
+    .controller('darkModeCtrl', ['$scope', "$window", function ($scope, $window) {
+        $scope.darkMode = false;
+        
+        const darkStyleDom = angular.element('<link rel="stylesheet" href="/styles/themes/darkly.bootstrap.min.css" type="text/css" />');
+
+        $window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            $scope.darkMode = !!e.matches;
+        });
+
+        $scope.$watch('darkMode', function(newValue, oldValue) {
+            if (newValue) {
+                angular.element('head').append(darkStyleDom);
+            } else {
+                darkStyleDom.remove();
+            }
+        });
+
+        if ($window.matchMedia && $window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            $scope.darkMode = true;
         }
     }])
     .controller('boardCtrl', ['$scope', '$http', 'isAuthenticated', 'user', async ($scope, $http, isAuthenticated, user) => {

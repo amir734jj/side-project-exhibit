@@ -96,16 +96,13 @@ namespace Api
 
             services.AddRouting(options => options.LowercaseUrls = true);
 
-            if (_env.IsDevelopment())
+            if (true || _env.IsDevelopment())
             {
                 services.AddDistributedMemoryCache();
             }
             else
             {
-                var redisConnectionString =
-                    ConnectionStringUrlToRedisResource(_configuration.GetValue<string>("REDISTOGO_URL"));
 
-                services.AddStackExchangeRedisCache(c => c.Configuration = redisConnectionString);
             }
 
             services.AddSession(options =>
@@ -226,17 +223,7 @@ namespace Api
             }
             else
             {
-                services.AddEFSecondLevelCache(options =>
-                    options.UseEasyCachingCoreProvider("redis").DisableLogging(true)
-                );
 
-                var redisConnectionString =
-                    ConnectionStringUrlToRedisResource(_configuration.GetValue<string>("REDISTOGO_URL"));
-
-                var redisConfigurationOptions = ConfigurationOptions.Parse(redisConnectionString);
-
-                // Important
-                redisConfigurationOptions.AbortOnConnectFail = false;
             }
 
             services.AddEfRepository<EntityDbContext>(x =>

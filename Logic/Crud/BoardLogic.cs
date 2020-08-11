@@ -25,6 +25,8 @@ namespace Logic.Crud
         {
             var ideas = (await _projectLogic.GetAll()).ToList();
 
+            var allCategories = ideas.SelectMany(x => x.ProjectCategoryRelationships.Select(y => y.Category)).ToList();
+
             if (!string.IsNullOrWhiteSpace(category))
             {
                 ideas = ideas.Where(x => x.ProjectCategoryRelationships.Any(y => y.Category.Name == category)).ToList();
@@ -62,7 +64,8 @@ namespace Logic.Crud
                 Projects = paginatedResult ,
                 CurrentPage = 1,
                 Categories = ideas.SelectMany(x => x.ProjectCategoryRelationships.Select(y => y.Category)).ToList(),
-                Pages = (int) Math.Ceiling(1.0 * ideas.Count / pageSize)
+                Pages = (int) Math.Ceiling(1.0 * ideas.Count / pageSize),
+                AllCategories = allCategories
             };
         }
 

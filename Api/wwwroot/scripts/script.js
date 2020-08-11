@@ -261,7 +261,7 @@ class MarkDownToText {
     }
 }
 
-angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput', 'ui.toggle'])
+angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput', 'ui.toggle', 'angular-loading-bar'])
     .constant('isAuthenticated', window.isAuthenticated)
     .constant('user', window.user)
     .directive('validateBeforeGoing', ["$window", function ($window) {

@@ -12,8 +12,8 @@ using Dal;
 using Dal.Configs;
 using Dal.Interfaces;
 using Dal.ServiceApi;
-using EFCache;
 using EfCoreRepository.Extensions;
+using EFCoreSecondLevelCacheInterceptor;
 using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Lamar;
@@ -210,12 +210,26 @@ namespace Api
                 .AddDefaultTokenProviders();
 
             // L2 EF cache
-            if (_env.IsDevelopment())
+            if (true || _env.IsDevelopment())
             {
-                EntityFrameworkCache.Initialize(new InMemoryCache());
+                services.AddEFSecondLevelCache(options =>
+                    options.UseEasyCachingCoreProvider("memory").DisableLogging(true)
+                );
+
+                // Add an in-memory cache service provider
+                // More info: https://easycaching.readthedocs.io/en/latest/In-Memory/
+                services.AddEasyCaching(options =>
+                {
+                    // use memory cache with your own configuration
+                    options.UseInMemory("memory");
+                });
             }
             else
             {
+                services.AddEFSecondLevelCache(options =>
+                    options.UseEasyCachingCoreProvider("redis").DisableLogging(true)
+                );
+
                 var redisConnectionString =
                     ConnectionStringUrlToRedisResource(_configuration.GetValue<string>("REDISTOGO_URL"));
 
@@ -223,8 +237,6 @@ namespace Api
 
                 // Important
                 redisConfigurationOptions.AbortOnConnectFail = false;
-
-                EntityFrameworkCache.Initialize(new EFCache.Redis.RedisCache(redisConfigurationOptions));
             }
 
             services.AddEfRepository<EntityDbContext>(x =>

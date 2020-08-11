@@ -10,6 +10,8 @@
 
     <ItemGroup>
         <PackageReference Include="AutoFixture" Version="4.13.0" />
+        <PackageReference Include="EasyCaching.InMemory" Version="0.8.10" />
+        <PackageReference Include="EasyCaching.Redis" Version="0.8.10" />
         <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore" Version="3.4.4" />
         <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore.Native.linux-x64" Version="3.4.4" />
         <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore.Native.osx-x64" Version="3.4.4" />

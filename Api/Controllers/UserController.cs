@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using EfCoreRepository.Interfaces;
 using Logic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

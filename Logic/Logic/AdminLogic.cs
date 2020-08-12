@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using EfCoreRepository.Interfaces;
-using Logic.Crud;
 using Logic.Interfaces;
 using Models.Relationships;
 using Models.ViewModels.Api;

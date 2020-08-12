@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using EfCoreRepository.Interfaces;
 using Logic.Abstracts;
 using Logic.Interfaces;
-using Models;
 using Models.Entities;
 
 namespace Logic.Crud

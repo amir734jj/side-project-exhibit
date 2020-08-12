@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using Amazon;
 using Amazon.Runtime;
@@ -147,7 +146,12 @@ namespace Api
 
                     // Exception filter attribute
                     x.Filters.Add<ExceptionFilterAttribute>();
-                }).AddNewtonsoftJson(x =>
+                })
+                .AddViewOptions(x =>
+                {
+                    x.HtmlHelperOptions.ClientValidationEnabled = true;
+                })
+                .AddNewtonsoftJson(x =>
                 {
                     x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                     x.SerializerSettings.Converters.Add(new StringEnumConverter { NamingStrategy =  new CamelCaseNamingStrategy()});

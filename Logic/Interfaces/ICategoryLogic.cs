@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using EfCoreRepository.Interfaces;
-using Models;
 using Models.Entities;
 
 namespace Logic.Interfaces

@@ -1,4 +1,3 @@
-using System;
 using Dal.Extensions;
 using Models.Utilities;
 using Npgsql;

@@ -41,7 +41,6 @@ using Models.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using StackExchange.Redis;
 using WebMarkupMin.AspNetCore2;
 using static Dal.Utilities.ConnectionStringUtility;
 using static Models.Constants.ApplicationConstants;
@@ -98,14 +97,7 @@ namespace Api
 
             services.AddRouting(options => options.LowercaseUrls = true);
 
-            if (_env.IsDevelopment())
-            {
-                services.AddDistributedMemoryCache();
-            }
-            else
-            {
-                services.AddStackExchangeRedisCache(x => x.Configuration = _configuration.GetValue<string>("REDISTOGO_URL"));
-            }
+            services.AddDistributedMemoryCache();
             
             services.AddSession(options =>
             {
@@ -295,10 +287,8 @@ namespace Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IConfigLogic configLogic, IUserLogic userLogic)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IConfigLogic configLogic)
         {
-            var all = userLogic.GetAll().Result.ToList();
-            
             if (!env.IsDevelopment())
             {
                 // Refresh global config

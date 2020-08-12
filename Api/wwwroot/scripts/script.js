@@ -264,6 +264,9 @@ class MarkDownToText {
 angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput', 'ui.toggle', 'angular-loading-bar'])
     .constant('isAuthenticated', window.isAuthenticated)
     .constant('user', window.user)
+    .config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
+        cfpLoadingBarProvider.includeSpinner = false;
+    }])
     .directive('validateBeforeGoing', ["$window", function ($window) {
         return {
             restrict: 'A',

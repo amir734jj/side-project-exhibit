@@ -12,6 +12,7 @@ using Dal;
 using Dal.Configs;
 using Dal.Interfaces;
 using Dal.ServiceApi;
+using EasyCaching.Core.Configurations;
 using EfCoreRepository.Extensions;
 using EFCoreSecondLevelCacheInterceptor;
 using JavaScriptEngineSwitcher.ChakraCore;
@@ -36,6 +37,7 @@ using Microsoft.OpenApi.Models;
 using Models;
 using Models.Constants;
 using Models.Entities;
+using Models.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -96,15 +98,15 @@ namespace Api
 
             services.AddRouting(options => options.LowercaseUrls = true);
 
-            if (true || _env.IsDevelopment())
+            if (_env.IsDevelopment())
             {
                 services.AddDistributedMemoryCache();
             }
             else
             {
-
+                services.AddStackExchangeRedisCache(x => x.Configuration = _configuration.GetValue<string>("REDISTOGO_URL"));
             }
-
+            
             services.AddSession(options =>
             {
                 // Set a short timeout for easy testing.
@@ -207,23 +209,32 @@ namespace Api
                 .AddDefaultTokenProviders();
 
             // L2 EF cache
-            if (true || _env.IsDevelopment())
+            if (_env.IsDevelopment())
             {
                 services.AddEFSecondLevelCache(options =>
                     options.UseEasyCachingCoreProvider("memory").DisableLogging(true)
                 );
 
-                // Add an in-memory cache service provider
-                // More info: https://easycaching.readthedocs.io/en/latest/In-Memory/
-                services.AddEasyCaching(options =>
-                {
-                    // use memory cache with your own configuration
-                    options.UseInMemory("memory");
-                });
+                services.AddEasyCaching(options => options.UseInMemory("memory"));
             }
             else
             {
+                services.AddEFSecondLevelCache(options =>
+                    options.UseEasyCachingCoreProvider("redis").DisableLogging(true));
 
+                services.AddEasyCaching(options =>
+                {
+                    var (_, dictionary) = UrlUtility.UrlToResource(_configuration.GetValue<string>("REDISTOGO_URL"));
+
+                    // use memory cache with your own configuration
+                    options.UseRedis(x =>
+                    {
+                        x.DBConfig.Endpoints.Add(new ServerEndPoint(dictionary["Host"], int.Parse(dictionary["Port"])));
+                        x.DBConfig.Username = dictionary["Username"];
+                        x.DBConfig.Password = dictionary["Password"];
+                        x.DBConfig.AbortOnConnectFail = false;
+                    });
+                });
             }
 
             services.AddEfRepository<EntityDbContext>(x =>

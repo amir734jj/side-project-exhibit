@@ -22,6 +22,7 @@ namespace Models.Utilities
 
             var connectionStringBuilder = new Dictionary<string, string>
             {
+                ["Port"] = url.Port.ToString(),
                 ["Host"] = url.Host,
                 ["Username"] = url.UserInfo.Split(':').GetValue(0)?.ToString(),
                 ["Password"] = url.UserInfo.Split(':').GetValue(1)?.ToString(),

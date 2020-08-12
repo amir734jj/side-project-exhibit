@@ -1,3 +1,4 @@
+using System;
 using Dal.Extensions;
 using Models.Utilities;
 using Npgsql;
@@ -31,7 +32,8 @@ namespace Dal.Utilities
                 TrustServerCertificate = true,
                 Pooling = true,
                 // Hard limit
-                MaxPoolSize = 5
+                MaxPoolSize = 5,
+                Port = int.Parse(table["Port"])
             };
 
             return connectionStringBuilder.ToString();

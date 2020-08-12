@@ -45,10 +45,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Update="Views\Error\404.cshtml">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
+        <Content Update="Views\Error\404.cshtml">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        </Content>
     </ItemGroup>
 
     <Target Name="PrePublishTarget" BeforeTargets="PrepareForPublish" Condition="$(DOTNET_RUNNING_IN_CONTAINER) != 'true'">
@@ -59,7 +59,7 @@
         <ItemGroup>
             <Dist Include="../client-build/**" />
         </ItemGroup>
-        <Copy SourceFiles="@(Dist)" DestinationFolder="$(PublishDir)\wwwroot\scripts\%(RecursiveDir)" SkipUnchangedFiles="true" />
+        <Copy SourceFiles="@(Dist)" DestinationFolder="$(PublishDir)\wwwroot\%(RecursiveDir)" SkipUnchangedFiles="true" />
     </Target>
-    
+
 </Project>

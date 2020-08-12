@@ -20,6 +20,8 @@
     "babelify": "^10.0.0",
     "browserify": "^16.5.1",
     "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.1",
+    "gulp-clean-css": "^4.3.0",
     "gulp-cli": "^2.3.0",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-uglify": "^3.0.2",
@@ -27,7 +29,7 @@
     "vinyl-source-stream": "^2.0.0"
   },
   "scripts": {
-    "build": "rm -rf client-build || true && mkdir -p client-build && gulp build"
+    "build": "rm -rf client-build || true && mkdir -p client-build && gulp"
   },
   "author": "",
   "license": "ISC"

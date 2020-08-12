@@ -167,8 +167,10 @@
     <div class="container">
 
         <div class="alert alert-danger">
-            <p>
-                <strong> @(ViewData["ErrorKey"])</strong> @(ViewData["ErrorValues"])
+            <p class="preserve-linebreak">
+                <strong> @(ViewData["ErrorKey"])</strong> 
+                
+                <br />@(ViewData["ErrorValues"])
             </p>
         </div>
     </div>
@@ -179,7 +181,7 @@
     <div class="container">
 
         <div class="alert alert-success">
-            <p>
+            <p class="preserve-linebreak">
                 @(ViewData["Message"])
             </p>
         </div>
@@ -189,8 +191,6 @@
 
 <div class="container-fluid" ng-cloak>
     @RenderBody()
-
-
 </div>
 
 <mini-profiler position="RenderPosition.Right"/>

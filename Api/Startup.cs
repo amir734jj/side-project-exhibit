@@ -136,8 +136,6 @@ namespace Api
 
             services.AddMvc(x =>
                 {
-                    x.ModelValidatorProviders.Clear();
-
                     // Not need to have https
                     x.RequireHttpsPermanent = false;
 

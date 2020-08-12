@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Api.Abstracts;
 using Logic.Extensions;
 using Microsoft.AspNetCore.Identity;
@@ -64,6 +65,14 @@ namespace Api.Controllers
         [SwaggerOperation("LoginHandler")]
         public async Task<IActionResult> LoginHandler(LoginViewModel loginViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                TempData["ErrorKey"] = "Model state validation failed";
+                TempData["ErrorValues"] = string.Join("\n", ModelState.Values.SelectMany(x => x.Errors.Select(y =>y.ErrorMessage)));
+
+                return RedirectToAction("Login");
+            }
+            
             var result = await base.Login(loginViewModel);
 
             if (result.ReturnValue)
@@ -100,6 +109,14 @@ namespace Api.Controllers
         [SwaggerOperation("RegisterHandler")]
         public async Task<IActionResult> RegisterHandler(RegisterViewModel registerViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                TempData["ErrorKey"] = "Model state validation failed";
+                TempData["ErrorValues"] = string.Join("\n", ModelState.Values.Select(x => x.Errors.Select(y =>y.ErrorMessage)));
+
+                return RedirectToAction("Register");
+            }
+
             // Save the user
             var result = await Register(registerViewModel);
 

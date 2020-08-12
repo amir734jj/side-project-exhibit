@@ -21,6 +21,8 @@
         
             <div class="col-sm-10">
                 @Html.TextBoxFor(x => x.Email, new { type = "email", placeholder = "Enter email", @class = "form-control", required = "required" })
+                
+                @Html.ValidationMessageFor(m => m.Email)
             </div>
         </div>
         
@@ -29,6 +31,8 @@
         
             <div class="col-sm-10">
                 @Html.TextBoxFor(x => x.Name, new { type = "text", placeholder = "Enter name", @class = "form-control", required = "required" })
+                
+                @Html.ValidationMessageFor(m => m.Name)
             </div>
         </div>
 
@@ -37,6 +41,8 @@
         
             <div class="col-sm-10">
                 @Html.TextBoxFor(x => x.Username, new { type = "text", placeholder = "Enter username", @class = "form-control", required = "required" })
+                
+                @Html.ValidationMessageFor(m => m.Username)
             </div>
         </div>
 
@@ -45,6 +51,8 @@
 
             <div class="col-sm-10">
                 @Html.TextBoxFor(x => x.Password, new { type = "password", placeholder = "Enter password", @class = "form-control", required = "required" })
+                
+                @Html.ValidationMessageFor(m => m.Password)
             </div>
         </div>
         
@@ -53,6 +61,8 @@
 
             <div class="col-sm-10">
                 @Html.TextBoxFor(x => x.ConfirmPassword, new { type = "password", placeholder = "Enter password again", @class = "form-control", required = "required" })
+                
+                @Html.ValidationMessageFor(m => m.ConfirmPassword)
             </div>
         </div>
 

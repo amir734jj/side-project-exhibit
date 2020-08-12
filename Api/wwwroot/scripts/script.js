@@ -305,13 +305,21 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput', 'ui.toggle', 'angul
         $scope.$watch('darkMode', function(newValue, oldValue) {
             if (newValue) {
                 angular.element('head').append(darkStyleDom);
+                $window.localStorage.setItem("darkMode", JSON.stringify({ timestamp: Date.now() }));
             } else {
                 darkStyleDom.remove();
+                $window.localStorage.removeItem("darkMode");
             }
         });
 
         if ($window.matchMedia && $window.matchMedia('(prefers-color-scheme: dark)').matches) {
             $scope.darkMode = true;
+        } else {
+            const result = $window.localStorage.getItem("darkMode") && JSON.parse($window.localStorage.getItem("darkMode"));
+            
+            if (result && moment().diff(result.timestamp, 'minutes') < 30) {
+                $scope.darkMode = true;   
+            }
         }
     }])
     .controller('boardCtrl', ['$scope', '$http', 'isAuthenticated', 'user', async ($scope, $http, isAuthenticated, user) => {

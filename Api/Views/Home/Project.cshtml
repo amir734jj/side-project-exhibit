@@ -32,7 +32,7 @@
                                         tool-tip
                                         tool-tip-condition="{{ !isAuthenticated }}"
                                         tool-tip-message="Please login to vote"
-                                        ng-class="['btn', 'btn-success', 'btn-sm', { 'active': hasVoted(user, project, 'up'), 'disabled': hasVoted(user, project, 'up')}]"
+                                        ng-class="['btn', { 'btn-success': !hasVoted(user, project, 'up'), 'btn-default': hasVoted(user, project, 'up') }, 'btn-sm', { 'active': hasVoted(user, project, 'up'), 'disabled': hasVoted(user, project, 'up')}]"
                                         ng-click="vote(project.id, 'up')"
                                         ng-disabled="!isAuthenticated">
                                     +
@@ -50,7 +50,7 @@
                                         tool-tip
                                         tool-tip-condition="{{ !isAuthenticated }}"
                                         tool-tip-message="Please login to vote"
-                                        ng-class="['btn', 'btn-danger', 'btn-sm', { 'active': hasVoted(user, project, 'down'), 'disabled': hasVoted(user, project, 'down')}]"
+                                        ng-class="['btn', { 'btn-danger': !hasVoted(user, project, 'down'), 'btn-default': hasVoted(user, project, 'down') }, 'btn-sm', { 'active': hasVoted(user, project, 'down'), 'disabled': hasVoted(user, project, 'down')}]"
                                         ng-click="vote(project.id, 'down')"
                                         ng-disabled="!isAuthenticated">
                                     -

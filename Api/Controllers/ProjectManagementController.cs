@@ -49,6 +49,11 @@ namespace Api.Controllers
         [Route("Add")]
         public async Task<IActionResult> AddHandler([FromBody] ProjectViewModel projectViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("ModelState validation failed");
+            }
+            
             var user = await GetUser();
 
             await _projectManagementLogic.Add(user, projectViewModel);
@@ -78,6 +83,11 @@ namespace Api.Controllers
         [Route("Update/{id}")]
         public async Task<IActionResult> UpdateHandler([FromBody] ProjectViewModel projectViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("ModelState validation failed");
+            }
+
             var user = await GetUser();
 
             await _projectManagementLogic.Update(user, projectViewModel);

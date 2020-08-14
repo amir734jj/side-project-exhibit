@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,7 +33,8 @@ namespace Logic.Logic
             {
                 User = user,
                 Title = projectViewModel.Title,
-                Description = projectViewModel.Description
+                Description = projectViewModel.Description,
+                CreatedOn = DateTimeOffset.Now
             });
 
             project.ProjectCategoryRelationships = disposableResult
@@ -79,7 +81,8 @@ namespace Logic.Logic
                 Description = project.Description,
                 Id = project.Id,
                 Categories = project.ProjectCategoryRelationships.Select(x => x.Category.Name).ToList(),
-                Votes = project.Votes
+                Votes = project.Votes,
+                CreatedOn = project.CreatedOn
             };
         }
         
@@ -95,7 +98,8 @@ namespace Logic.Logic
                     Description = project.Description,
                     Id = project.Id,
                     Categories = project.ProjectCategoryRelationships.Select(x => x.Category.Name).ToList(),
-                    Votes = project.Votes
+                    Votes = project.Votes,
+                    CreatedOn = project.CreatedOn
                 };
             }).ToList();
         }

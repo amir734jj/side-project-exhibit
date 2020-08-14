@@ -66,6 +66,10 @@
                                 <span class="label label-primary"> {{ project.user.userName }} </span>
                             </a>
                         </small>
+                        
+                        <small>
+                            <span class="label label-default disabled"> {{moment(project.createdOn).format('MMMM Do YYYY, h:mm:ss a')}} </span>
+                        </small>
                     </h4>
                 </div>
                 <div class="col-sm-3">

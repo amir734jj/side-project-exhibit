@@ -342,6 +342,7 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput', 'ui.toggle', 'angul
         $scope.votesIntegerValue = votesIntegerValue;
         $scope.hasVoted = hasVoted;
         $scope.isMyOwnPost = isMyOwnPost;
+        $scope.moment = moment;
 
         const markDownToText = new MarkDownToText();
         $scope.markdownToTxt = (...args) => _.take(markDownToText.markdownToTxt(...args).split("\n"), 5).join("\n");
@@ -489,6 +490,7 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput', 'ui.toggle', 'angul
         self.editCommentId = null;
         $scope.isAuthenticated = isAuthenticated;
         $scope.hasError = false;
+        $scope.moment = moment;
 
         $scope.vote = async (id, type) => {
             const {data} = await $http.post(`/api/board/vote/${id}/${type}`);

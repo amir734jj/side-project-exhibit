@@ -17,16 +17,21 @@ namespace Logic.Logic
         private readonly IProjectLogic _projectLogic;
         
         private readonly ICategoryLogic _categoryLogic;
+        
+        private readonly IUserLogic _userLogic;
 
-        public ProjectManagementLogic(IEfRepository repository, IProjectLogic profileLogic, ICategoryLogic categoryLogic)
+        public ProjectManagementLogic(IEfRepository repository, IProjectLogic profileLogic, ICategoryLogic categoryLogic, IUserLogic userLogic)
         {
             _repository = repository;
             _projectLogic = profileLogic;
             _categoryLogic = categoryLogic;
+            _userLogic = userLogic;
         }
         
         public async Task Add(User user, ProjectViewModel projectViewModel)
         {
+            user = await _userLogic.Get(user.Id);
+            
             var disposableResult = await _categoryLogic.SetRepository(_repository).GetOrCreate(projectViewModel.Categories);
 
             var project = await _projectLogic.SetRepository(_repository).Save(new Project
@@ -49,6 +54,8 @@ namespace Logic.Logic
 
         public async Task Update(User user, ProjectViewModel projectViewModel)
         {
+            user = await _userLogic.Get(user.Id);
+            
             var disposableResult = await _categoryLogic.SetRepository(_repository).GetOrCreate(projectViewModel.Categories);
             
             var categories = disposableResult

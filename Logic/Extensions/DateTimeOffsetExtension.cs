@@ -12,7 +12,7 @@ namespace Logic.Extensions
                                        : day % 10 == 2 && day != 12 ? "nd"
                                        : day % 10 == 3 && day != 13 ? "rd" : "th");
 
-            return date.ToString("MMMM DAY, h:mm:ss tt").Replace("DAY", dayStringOrdinal);
+            return date.ToString("MMMM DAY, h:mm tt").Replace("DAY", dayStringOrdinal);
         }
     }
 }

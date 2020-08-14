@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Logic.Extensions;
 using Logic.Interfaces;
 using Models.Entities;
 using Models.Enums;
@@ -63,7 +64,7 @@ namespace Logic.Crud
             {
                 Projects = paginatedResult ,
                 CurrentPage = 1,
-                Categories = ideas.SelectMany(x => x.ProjectCategoryRelationships.Select(y => y.Category)).ToList(),
+                Categories = ideas.SelectMany(x => x.ProjectCategoryRelationships.Select(y => y.Category)).DistinctBy(x => x.Name).ToList(),
                 Pages = (int) Math.Ceiling(1.0 * ideas.Count / pageSize),
                 AllCategories = allCategories
             };

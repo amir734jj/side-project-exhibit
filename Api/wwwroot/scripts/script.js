@@ -320,7 +320,7 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput', 'ui.toggle', 'angul
         } else {
             const result = $window.localStorage.getItem("darkMode") && JSON.parse($window.localStorage.getItem("darkMode"));
             
-            if (result && moment().diff(result.timestamp, 'minutes') < 30) {
+            if (result && Math.abs(moment().diff(result.timestamp, 'minutes')) < 30) {
                 $scope.darkMode = true;   
             }
         }

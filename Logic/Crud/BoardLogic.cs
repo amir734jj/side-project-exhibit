@@ -30,12 +30,16 @@ namespace Logic.Crud
 
             if (!string.IsNullOrWhiteSpace(category))
             {
-                ideas = ideas.Where(x => x.ProjectCategoryRelationships.Any(y => y.Category.Name == category)).ToList();
+                ideas = ideas.Where(x => x.ProjectCategoryRelationships.Any(y => y.Category.Name.Equals(category, StringComparison.OrdinalIgnoreCase))).ToList();
             }
             
             if (!string.IsNullOrWhiteSpace(keyword))
             {
-                ideas = ideas.Where(x => x.Title.Contains(keyword) || x.Description.Contains(keyword)).ToList();
+                ideas = ideas.Where(x =>
+                    x.Title.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                    x.ProjectCategoryRelationships.Select(y => y.Category.Name)
+                        .Contains(keyword, StringComparer.OrdinalIgnoreCase) ||
+                    x.Description.Contains(keyword, StringComparison.OrdinalIgnoreCase)).ToList();
             }
             
             ideas = sort switch

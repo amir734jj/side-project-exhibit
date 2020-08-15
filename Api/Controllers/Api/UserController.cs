@@ -10,7 +10,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace Api.Controllers.Api
 {
     // [ApiExplorerSettings(IgnoreApi = true)]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     public class UserController : Controller
     {

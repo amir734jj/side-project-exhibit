@@ -10,7 +10,7 @@ using Models.Enums;
 namespace API.Controllers
 {
     [ApiExplorerSettings(IgnoreApi = true)]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [Route("[controller]")]
     public class UserController : Controller
     {

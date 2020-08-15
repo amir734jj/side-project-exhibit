@@ -65,7 +65,7 @@
                                 default:
                                     throw new ArgumentOutOfRangeException();
                             }
-                            <a href="~/User/delete/@user.Id" class="btn btn-danger btn-sm">Delete</a>
+                            <a href="~/User/delete/@user.Id" class="btn btn-danger btn-sm" validate-before-going data-message="Are you sure to delete this user?">Delete</a>
                         }
                     </td>
             </tr>

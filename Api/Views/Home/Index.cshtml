@@ -32,21 +32,29 @@
             </div>
             <div class="form-group">
                 <label for="order">Categories:</label>
-                <select id="category" class="form-control"
-                        ng-change="refresh()"
-                        ng-model="query.category"
-                        ng-options="item for item in categories">
-                </select>
-                <button class="btn btn-sm btn-danger" ng-show="query.category" ng-click="query.category = ''; refresh();">
-                    <i class="fa fa-times" aria-hidden="true"></i>
-                </button>
+                <div class="input-group">
+                    <select id="category" class="form-control"
+                            ng-change="refresh()"
+                            ng-model="query.category"
+                            ng-options="item for item in categories">
+                    </select>
+                    <div class="input-group-btn" ng-show="query.category">
+                        <button class="btn btn-danger" ng-click="query.category = ''; refresh();">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
             <div class="form-group">
                 <label for="order">Keyword:</label>
-                <input type="text" class="form-control" id="keyword" maxlength="10" ng-model="query.keyword" ng-change="refresh()" ng-model-options="{ debounce: 1000 }"/>
-                <button class="btn btn-sm btn-danger" ng-show="query.keyword" ng-click="query.keyword = ''; refresh();">
-                    <i class="fa fa-times" aria-hidden="true"></i>
-                </button>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="keyword" maxlength="10" ng-model="query.keyword" ng-change="refresh()" ng-model-options="{ debounce: 1000 }"/>
+                    <div class="input-group-btn" ng-show="query.keyword">
+                        <button class="btn btn-danger" ng-click="query.keyword = ''; refresh();">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
@@ -66,7 +74,7 @@
                                 <span class="label label-primary"> {{ project.user.userName }} </span>
                             </a>
                         </small>
-                        
+
                         <small>
                             <span class="label label-default disabled"> {{moment(project.createdOn).format('MMMM Do YYYY, h:mm a')}} </span>
                         </small>

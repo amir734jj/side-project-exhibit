@@ -30,14 +30,16 @@ namespace Dal
             modelBuilder.Entity<Category>()
                 .HasIndex(x => x.Name)
                 .IsUnique();
-            
+
             modelBuilder.Entity<UserVote>()
                 .HasOne(x => x.User)
-                .WithMany(x => x.Votes);
+                .WithMany(x => x.Votes)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<User>()
                 .HasMany(x => x.Comments)
-                .WithOne(x => x.User);
+                .WithOne(x => x.User)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Comment>()
                 .HasOne(x => x.Project)
@@ -45,7 +47,8 @@ namespace Dal
 
             modelBuilder.Entity<User>()
                 .HasMany(x => x.Projects)
-                .WithOne(x => x.User);
+                .WithOne(x => x.User)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Project>()
                 .HasMany(x => x.Comments)

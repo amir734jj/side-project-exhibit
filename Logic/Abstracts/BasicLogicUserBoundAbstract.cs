@@ -42,12 +42,12 @@ namespace Logic.Abstracts
 
         public override async Task<IEnumerable<T>> GetAll()
         {
-            return (await _basicCrudDal.GetAll()).Where(x => x.User.Id == _user.Id).ToList();
+            return (await _basicCrudDal.GetAll()).Where(x => x.User?.Id == _user?.Id).ToList();
         }
 
         public override async Task<T> Get(int id)
         {
-            return (await _basicCrudDal.GetAll()).Where(x => x.User.Id == _user.Id).FirstOrDefault(x => x.Id == id);
+            return (await _basicCrudDal.GetAll()).Where(x => x.User?.Id == _user?.Id).FirstOrDefault(x => x.Id == id);
         }
 
         public override async Task<T> Update(int id, T dto)

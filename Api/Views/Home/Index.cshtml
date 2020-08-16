@@ -10,6 +10,11 @@
     <div class="page-header">
         <h3> @ApplicationName </h3>
         <p> Idea foundry for the future. Share you side project, get noticed! </p>
+        
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <p> You need to <a href="~/Account/Login">login</a> to vote or comment </p>
+        }
     </div>
 
     <div class="margin-bottom">

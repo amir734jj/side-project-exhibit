@@ -70,7 +70,7 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-sm-9">
-                        <a href="/user/{{ comment.user.id }}">{{ project.user.userName }}</a> on {{moment(comment.createdOn).format('MMMM Do YYYY, h:mm:ss a')}}
+                        <a href="/user/{{ comment.user.id }}">{{ comment.user.userName }}</a> on {{moment(comment.createdOn).format('MMMM Do YYYY, h:mm:ss a')}}
                     </div>
                     <div class="col-sm-3" ng-if="isMyOwnComment(user, comment)">
                         <div class="btn-group pull-right">

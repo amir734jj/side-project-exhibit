@@ -36,7 +36,8 @@ namespace Dal.Profiles
                 .ThenInclude(x => x.ProjectCategoryRelationships)
                 .Include(x => x.ProjectCategoryRelationships)
                 .ThenInclude(x => x.Project)
-                .Include(x => x.Comments);
+                .Include(x => x.Comments)
+                .ThenInclude(x => x.User);
         }
     }
 }

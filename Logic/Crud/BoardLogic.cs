@@ -76,6 +76,8 @@ namespace Logic.Crud
 
         public async Task<Project> AddComment(int projectId, User user, CommentViewModel commentViewModel)
         {
+            user = await _userLogic.Get(user.Id);
+            
             return await _projectLogic.For(user).Update(projectId, project =>
             {
                 project.Comments.Add(new Comment

@@ -19,6 +19,9 @@ namespace Dal.Profiles
         {
             return queryable
                 .Include(x => x.Votes)
+                .ThenInclude(x => x.User)
+                .Include(x => x.Votes)
+                .ThenInclude(x => x.Project)
                 .Include(x => x.Comments)
                 .Include(x => x.Projects)
                 .ThenInclude(x => x.ProjectCategoryRelationships)

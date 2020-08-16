@@ -41,7 +41,7 @@ span.pre {
 }
 
 .preserve-linebreak {
-    white-space: pre-wrap
+    white-space: pre-wrap;
 }
 
 .navbar {

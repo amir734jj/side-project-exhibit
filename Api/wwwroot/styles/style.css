@@ -129,3 +129,7 @@ span.pre {
 }
 
 /* End Spinner */
+
+.custom-tag {
+    color: black !important;
+}

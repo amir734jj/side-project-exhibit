@@ -39,7 +39,7 @@ namespace Logic.Logic
         {
             var comment = await _commentLogic.Get(id);
 
-            return new CommentViewModel {Comment = comment.Text};
+            return new CommentViewModel {Comment = comment.Text, Id = comment.Id};
         }
 
         public async Task<ProjectViewModel> GetProject(int id)

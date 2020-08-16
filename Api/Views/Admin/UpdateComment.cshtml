@@ -9,8 +9,9 @@
         <h3>Update Comment</h3>
     </div>
 
-    @using (Html.BeginForm("UpdateCommentHandler", "Admin", FormMethod.Post, new {@class = "form-horizontal"}))
-    {
+    <form method="post" action="~/Admin/Comment/@(Model.Id)" class="form-horizontal">
+        @Html.TextAreaFor(x => x.Id, new { @class = "hidden "})
+        
         <div class="form-group">
             @Html.LabelFor(x => x.Comment, new {@class = "control-label col-sm-2"})
 
@@ -24,5 +25,5 @@
                 <button type="submit" class="btn btn-primary">Update</button>
             </div>
         </div>
-    }
+    </form>
 </div>

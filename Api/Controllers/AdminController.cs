@@ -56,7 +56,7 @@ namespace Api.Controllers
             
             return RedirectToAction("Index");
         }
-        
+
         [HttpGet]
         [Route("Comment/{id}")]
         public async Task<IActionResult> UpdateComment([FromRoute] int id)
@@ -65,7 +65,7 @@ namespace Api.Controllers
             
             return View(comment);
         }
-        
+
         [HttpPost]
         [Route("Comment/{id}")]
         public async Task<IActionResult> UpdateCommentHandler([FromRoute] int id, CommentViewModel commentViewModel)
@@ -74,7 +74,7 @@ namespace Api.Controllers
             
             return RedirectToAction("Index");
         }
-        
+
         [HttpGet]
         [Route("Project/{id}")]
         public async Task<IActionResult> UpdateProject([FromRoute] int id)

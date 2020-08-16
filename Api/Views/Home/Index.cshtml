@@ -100,14 +100,6 @@
                                class="form-control text-center input-sm"
                                placeholder="Vote"
                                ng-value="votesIntegerValue(project.votes)" disabled/>
-                        <input type="text"
-                               ng-show="!isAuthenticated"
-                               tool-tip
-                               tool-tip-condition="{{ isMyOwnPost(user, project) }}"
-                               tool-tip-message="Cannot vote for your own project"
-                               class="form-control text-center input-sm"
-                               placeholder="Vote"
-                               ng-value="votesIntegerValue(project.votes)" disabled/>
                         <span class="input-group-btn" ng-if="!isMyOwnPost(user, project)">
                             <button type="button"
                                     tool-tip

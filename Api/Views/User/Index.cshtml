@@ -1,5 +1,6 @@
 ﻿@using Models.Enums
 @using Api.Interfaces
+@using Logic.Extensions
 @model IEnumerable<Models.Entities.User>
 @inject IHttpRequestUtilityBuilder RequestUtilityBuilder;
 
@@ -16,27 +17,29 @@
 
     <div class="table-side-scroll">
         <table class="table table-hover table-bordered">
-        <thead>
-        <tr>
-            <th>Fullname</th>
-            <th>Email</th>
-            <th>Username</th>
-            <th>Role</th>
-            <th class="hidden-xs">Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var user in Model)
-        {
-            var disabled = userInfo.Username == user.UserName;
-            
+            <thead>
             <tr>
-                <td>@user.Name</td>
-                <td>@user.Email</td>
-                <td>@user.UserName</td>
-                <td>@user.UserRole</td>
-                
-                <td class="hidden-xs">
+                <th>Fullname</th>
+                <th>Email</th>
+                <th class="hidden-sm hidden-xs">Username</th>
+                <th>Last Login</th>
+                <th class="hidden-sm hidden-xs">Role</th>
+                <th class="hidden-xs">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var user in Model)
+            {
+                var disabled = userInfo.Username == user.UserName;
+
+                <tr>
+                    <td>@user.Name</td>
+                    <td>@user.Email</td>
+                    <td class="hidden-sm hidden-xs">@user.UserName</td>
+                    <td>@user.LastLoginTime.ToDisplayDate()</td>
+                    <td class="hidden-sm hidden-xs">@user.UserRole</td>
+
+                    <td class="hidden-xs">
                         @if (disabled)
                         {
                             switch (user.UserRole)
@@ -68,10 +71,10 @@
                             <a href="~/User/delete/@user.Id" class="btn btn-danger btn-sm" validate-before-going data-message="Are you sure to delete this user?">Delete</a>
                         }
                     </td>
-            </tr>
-        }
-        </tbody>
-    </table>
+                </tr>
+            }
+            </tbody>
+        </table>
     </div>
 
 </div>

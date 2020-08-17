@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Logic.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
@@ -21,6 +22,8 @@ namespace Api.Abstracts
         public abstract SignInManager<User> ResolveSignInManager();
 
         public abstract RoleManager<IdentityRole<int>> ResolveRoleManager();
+
+        public abstract IUserLogic UserLogic();
 
         public async Task<ReturnWithErrors<bool>> Register(RegisterViewModel registerViewModel)
         {
@@ -98,6 +101,8 @@ namespace Api.Abstracts
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(principal), authProperties);
+            
+            await UserLogic().Update(result.Id, x => x.LastLoginTime = DateTimeOffset.Now);
 
             return new ReturnWithErrors<bool>(true);
         }

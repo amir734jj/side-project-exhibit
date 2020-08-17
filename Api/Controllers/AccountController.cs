@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Api.Abstracts;
 using Logic.Extensions;
+using Logic.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Models.Entities;
@@ -19,12 +20,15 @@ namespace Api.Controllers
         private readonly SignInManager<User> _signInManager;
         
         private readonly RoleManager<IdentityRole<int>> _roleManager;
+        
+        private readonly IUserLogic _userLogic;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole<int>> roleManager)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole<int>> roleManager, IUserLogic userLogic)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _userLogic = userLogic;
         }
 
         public override UserManager<User> ResolveUserManager()
@@ -40,6 +44,11 @@ namespace Api.Controllers
         public override RoleManager<IdentityRole<int>> ResolveRoleManager()
         {
             return _roleManager;
+        }
+
+        public override IUserLogic UserLogic()
+        {
+            return _userLogic;
         }
 
         /// <summary>

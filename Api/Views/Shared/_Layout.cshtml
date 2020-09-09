@@ -126,9 +126,12 @@
             <ul class="nav navbar-nav navbar-right">
                 @if (!utility.IsAuthenticated())
                 {
-                    <li class="@(ViewContext.RouteData.Matches("Account", "Register") ? "active" : "")">
-                        <a href="~/Account/Register"><span class="glyphicon glyphicon-user"></span> Register </a>
-                    </li>
+                    if (ViewContext.RouteData.Matches("Account", "Register"))
+                    {
+                        <li class="@(ViewContext.RouteData.Matches("Account", "Register") ? "active" : "")">
+                            <a href="~/Account/Register"><span class="glyphicon glyphicon-user"></span> Register </a>
+                        </li>
+                    }
                     <li class="@(ViewContext.RouteData.Matches("Account", "Login") ? "active" : "")">
                         <a href="~/Account/login"><span class="glyphicon glyphicon-log-in"></span> Login </a>
                     </li>

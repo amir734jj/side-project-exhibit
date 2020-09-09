@@ -46,7 +46,7 @@ namespace Api.Controllers
             
             var amir = new MemoryStream(bytes);
 
-            return File(amir, "text/plain", "test.txt");
+            return File(amir, "text/plain", "03a01a77d19c0563a6c59f694cbe0d07.txt");
         }
     }
 }

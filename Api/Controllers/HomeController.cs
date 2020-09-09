@@ -36,5 +36,12 @@ namespace Api.Controllers
             
             return View(project);
         }
+
+        [HttpGet]
+        [Route("03a01a77d19c0563a6c59f694cbe0d07.txt")]
+        public IActionResult Temp()
+        {
+            return Ok("");
+        }
     }
 }

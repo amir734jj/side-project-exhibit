@@ -24,6 +24,8 @@
     <title> @(!string.IsNullOrWhiteSpace(ViewBag.Title) ? ViewBag.Title : ApplicationName) </title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
     @* jQuery*@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -196,7 +198,7 @@
 }
 
 
-<div class="container-fluid" ng-cloak>
+<div class="container-fluid main" ng-cloak>
     @RenderBody()
 </div>
 

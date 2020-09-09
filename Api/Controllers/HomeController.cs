@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using Logic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -41,7 +42,11 @@ namespace Api.Controllers
         [Route("03a01a77d19c0563a6c59f694cbe0d07.txt")]
         public IActionResult Temp()
         {
-            return Ok("");
+            var bytes = new byte[] {1, 2, 3, 4, 5, 6, 7, 8};
+            
+            var amir = new MemoryStream(bytes);
+
+            return File(amir, "text/plain", "test.txt");
         }
     }
 }

@@ -11,6 +11,7 @@
     <ItemGroup>
         <PackageReference Include="AWSSDK.S3" Version="3.3.110.42" />
         <PackageReference Include="EFCoreSecondLevelCacheInterceptor" Version="1.8.2" />
+        <PackageReference Include="Mailjet.Api" Version="1.2.2" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.6" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.6" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.6" />

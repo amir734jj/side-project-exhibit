@@ -10,7 +10,9 @@ using AutoMapper;
 using Dal;
 using Dal.Configs;
 using Dal.Interfaces;
+using DAL.Interfaces;
 using Dal.ServiceApi;
+using DAL.ServiceApi;
 using EasyCaching.Core.Configurations;
 using EfCoreRepository.Extensions;
 using EFCoreSecondLevelCacheInterceptor;
@@ -18,6 +20,7 @@ using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Lamar;
 using Logic.Interfaces;
+using Mailjet.Client;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -247,10 +250,17 @@ namespace Api
 
             services.For<GlobalConfigs>().Use(new GlobalConfigs()).Singleton();
 
+            // Initialize the email jet client
+            services.For<IMailjetClient>().Use(new MailjetClient(
+                _configuration.GetValue<string>("MAIL_JET_KEY"),
+                _configuration.GetValue<string>("MAIL_JET_SECRET"))
+            ).Singleton();
+            
             // If environment is localhost then use mock email service
             if (_env.IsDevelopment())
             {
                 services.For<IS3Service>().Use(new S3Service()).Singleton();
+                services.For<IEmailServiceApi>().Use(new EmailServiceApi()).Singleton();
             }
             else
             {

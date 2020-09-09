@@ -140,3 +140,8 @@ body {
 .main {
     padding-bottom: 2rem;
 }
+
+.vote-value {
+    border-right: 0;
+    border-left: 0;
+}

@@ -39,7 +39,7 @@
                                 </button>
                             </span>
                             <input type="text"
-                                   class="form-control text-center input-sm"
+                                   ng-class="['form-control', 'text-center', 'input-sm', { 'vote-value': !isMyOwnPost(user, project) }]"
                                    placeholder="Vote"
                                    tool-tip
                                    tool-tip-condition="{{ isMyOwnPost(user, project) }}"

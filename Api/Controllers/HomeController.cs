@@ -39,14 +39,14 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        [Route("03a01a77d19c0563a6c59f694cbe0d07.txt")]
+        [Route("c521ff02d9fd250aca3514d7c104dd4e.txt")]
         public IActionResult Temp()
         {
             var bytes = new byte[] {1, 2, 3, 4, 5, 6, 7, 8};
             
             var amir = new MemoryStream(bytes);
 
-            return File(amir, "text/plain", "03a01a77d19c0563a6c59f694cbe0d07.txt");
+            return File(amir, "text/plain", "c521ff02d9fd250aca3514d7c104dd4e.txt");
         }
     }
 }

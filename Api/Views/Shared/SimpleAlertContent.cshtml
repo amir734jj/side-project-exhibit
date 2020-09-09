@@ -1,0 +1,15 @@
+@if (ViewData.ContainsKey("Error"))
+{
+    <div class="alert alert-danger alert-dismissible fade in">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+        <strong>Error!</strong> @(ViewData["Error"])
+    </div>
+}
+
+@if (ViewData.ContainsKey("Message"))
+{
+    <div class="alert alert-success alert-dismissible fade in">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+        <strong>Success!</strong> @(ViewData["Message"])
+    </div>
+}

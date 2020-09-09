@@ -8,4 +8,8 @@
       <ProjectReference Include="..\Dal\Dal.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Flurl" Version="2.8.2" />
+    </ItemGroup>
+
 </Project>

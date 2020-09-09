@@ -25,11 +25,11 @@ namespace Api.Abstracts
 
         public abstract IUserLogic UserLogic();
 
-        public async Task<ReturnWithErrors<bool>> Register(RegisterViewModel registerViewModel)
+        public async Task<ReturnWithErrors<(bool, User)>> Register(RegisterViewModel registerViewModel)
         {
             if (registerViewModel.Password != registerViewModel.ConfirmPassword)
             {
-                return new ReturnWithErrors<bool>(false, new List<string> { "Passwords do not match"});
+                return new ReturnWithErrors<(bool, User)>((false, null), new List<string> { "Passwords do not match"});
             }
             
             var role = ResolveUserManager().Users.Any() ? UserRoleEnum.Basic : UserRoleEnum.Admin;
@@ -47,7 +47,7 @@ namespace Api.Abstracts
 
             if (!result1.Succeeded)
             {
-                return new ReturnWithErrors<bool>(false,result1.Errors.Select(err => err.Description).ToList());
+                return new ReturnWithErrors<(bool, User)>((false, null), result1.Errors.Select(err => err.Description).ToList());
             }
 
             var result2 = new List<IdentityResult>();
@@ -62,7 +62,7 @@ namespace Api.Abstracts
                 }
             }
 
-            return new ReturnWithErrors<bool>(result2.All(x => x.Succeeded),
+            return new ReturnWithErrors<(bool, User)>((result2.All(x => x.Succeeded), user),
                 result2.SelectMany(errs => errs.Errors.Select(err => err.Description)).ToList());
         }
 

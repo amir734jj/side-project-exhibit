@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Api.Abstracts;
 using Logic.Extensions;
 using Logic.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Models.Entities;
@@ -23,8 +24,11 @@ namespace Api.Controllers
         
         private readonly IUserLogic _userLogic;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole<int>> roleManager, IUserLogic userLogic)
+        private readonly IUserSetup _userSetup;
+
+        public AccountController(IUserSetup userSetup, UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole<int>> roleManager, IUserLogic userLogic)
         {
+            _userSetup = userSetup;
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
@@ -65,6 +69,17 @@ namespace Api.Controllers
             return View();
         }
         
+        [HttpGet]
+        [Route("Setup/{userId}")]
+        [SwaggerOperation("Setup")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Setup([FromRoute] int userId)
+        {
+            await _userSetup.Setup(userId);
+
+            return RedirectToAction("Login");
+        }
+
         /// <summary>
         ///     Handles login the user
         /// </summary>
@@ -129,11 +144,9 @@ namespace Api.Controllers
             // Save the user
             var result = await Register(registerViewModel);
 
-            if (result.ReturnValue)
+            if (result.ReturnValue.Item1)
             {
-                TempData["Message"] = "Successfully registered";
-
-                return RedirectToAction("Register");
+                return RedirectToAction("Setup", new {userId = result.ReturnValue.Item2.Id});
             }
 
             TempData["ErrorKey"] = "Failed to register";

@@ -97,7 +97,7 @@ namespace Logic.Logic
         {
             var projects = await _projectLogic.For(user).GetAll();
 
-            return projects.Select(project =>
+            return projects.OrderByDescending(x => x.CreatedOn).Select(project =>
             {
                 return new ProjectViewModel
                 {

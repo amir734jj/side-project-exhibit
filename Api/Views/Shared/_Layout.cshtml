@@ -191,15 +191,9 @@
 @if (!ViewData.GetOrElse("Message", null).IsNull())
 {
     <div class="container">
-
-        <div class="alert alert-success">
-            <p class="preserve-linebreak">
-                @(ViewData["Message"])
-            </p>
-        </div>
+        @await Html.PartialAsync("SimpleAlertContent", ViewData)
     </div>
 }
-
 
 <div class="container-fluid main" ng-cloak>
     @RenderBody()

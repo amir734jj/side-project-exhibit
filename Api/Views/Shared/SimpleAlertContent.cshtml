@@ -2,7 +2,10 @@
 {
     <div class="alert alert-danger alert-dismissible fade in">
         <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
-        <strong>Error!</strong> @(ViewData["Error"])
+        <strong>Error!</strong>
+        <p class="preserve-linebreak">
+            @(ViewData["Error"])
+        </p>
     </div>
 }
 
@@ -10,6 +13,10 @@
 {
     <div class="alert alert-success alert-dismissible fade in">
         <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
-        <strong>Success!</strong> @(ViewData["Message"])
+        <strong>Success!</strong>
+
+        <p class="preserve-linebreak">
+            @(ViewData["Message"])
+        </p>
     </div>
 }

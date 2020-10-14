@@ -6,13 +6,13 @@ namespace Models.Constants
     {
         public static readonly string AuthenticationSessionCookieName = ApplicationName.ToLower();
 
-        public const string SiteEmail = "amir@hesamian.com";
+        public const string SiteEmail = "admin@anahita.dev";
         
-        public const string SiteUrl = "http://www.milwaukeeinternationals.com";
+        public const string SiteUrl = "https://www.anahita.dev";
 
         public static readonly string[] AdminEmail =
         {
-            "amirhesamyan@gmail.com"
+            "admin@anahita.dev",
         };
     }
 }

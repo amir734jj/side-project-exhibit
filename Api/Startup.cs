@@ -285,6 +285,12 @@ namespace Api
                     ctx.GetInstance<IAmazonS3>(),
                     ctx.GetInstance<S3ServiceConfig>()
                 ));
+
+                services.For<MailGunConfig>().Use(new MailGunConfig
+                {
+                    ApiKey = _configuration.GetRequiredValue<string>("MAILGUN_API_KEY"),
+                    Domain = _configuration.GetRequiredValue<string>("MAILGUN_DOMAIN")
+                });
             }
             
             // Register stuff in container, using the StructureMap APIs...

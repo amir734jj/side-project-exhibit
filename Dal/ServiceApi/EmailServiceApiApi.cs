@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dal.Configs;
 using DAL.Interfaces;
 using Mailjet.Client;
-using Mailjet.Client.Resources;
+using Microsoft.Extensions.Logging;
 using Models.Constants;
-using Newtonsoft.Json.Linq;
+using RestSharp;
+using RestSharp.Authenticators;
 
 namespace DAL.ServiceApi
 {
@@ -14,9 +16,13 @@ namespace DAL.ServiceApi
     {
         private readonly bool _connected;
 
-        private readonly IMailjetClient _mailJetClient;
+        private readonly ILogger<EmailServiceApi> _logger;
         
+        private readonly IMailjetClient _mailJetClient;
+
         private readonly GlobalConfigs _globalConfigs;
+        
+        private readonly MailGunConfig _mailGunConfig;
 
         public EmailServiceApi()
         {
@@ -26,13 +32,17 @@ namespace DAL.ServiceApi
         /// <summary>
         /// Constructor dependency injection
         /// </summary>
+        /// <param name="logger"></param>
         /// <param name="mailJetClient"></param>
         /// <param name="globalConfigs"></param>
-        public EmailServiceApi(IMailjetClient mailJetClient, GlobalConfigs globalConfigs)
+        /// <param name="mailGunConfig"></param>
+        public EmailServiceApi(ILogger<EmailServiceApi> logger, IMailjetClient mailJetClient, GlobalConfigs globalConfigs, MailGunConfig mailGunConfig)
         {
             _connected = true;
+            _logger = logger;
             _mailJetClient = mailJetClient;
             _globalConfigs = globalConfigs;
+            _mailGunConfig = mailGunConfig;
         }
 
         /// <summary>
@@ -46,7 +56,24 @@ namespace DAL.ServiceApi
         {
             if (_connected && !string.IsNullOrWhiteSpace(emailAddress))
             {
-                var task = Task.Delay(TimeSpan.FromSeconds(1)).ContinueWith(async _ =>
+                var client = new RestClient
+                {
+                    BaseUrl = new Uri("https://api.mailgun.net/v3"),
+                    Authenticator = new HttpBasicAuthenticator("api", _mailGunConfig.ApiKey)
+                };
+                var request = new RestRequest();
+                request.AddParameter("domain", _mailGunConfig.Domain, ParameterType.UrlSegment);
+                request.Resource = "{domain}/messages";
+                request.AddParameter("from", ApiConstants.SiteEmail);
+                request.AddParameter("to", emailAddress);
+                request.AddParameter("subject", emailSubject);
+                request.AddParameter("html", emailHtml);
+                request.Method = Method.POST;
+                var response = await client.ExecuteAsync(request);
+                
+                _logger.LogTrace(response.Content);
+
+                /*var task = Task.Delay(TimeSpan.FromSeconds(1)).ContinueWith(async _ =>
                 {
                     var emailList = new JArray
                     {
@@ -71,7 +98,7 @@ namespace DAL.ServiceApi
                     await _mailJetClient.PostAsync(request);
                 });
 
-                await task;
+                await task;*/
             }
         }
 

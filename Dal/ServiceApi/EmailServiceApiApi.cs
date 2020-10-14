@@ -44,9 +44,6 @@ namespace DAL.ServiceApi
         /// <returns></returns>
         public async Task SendEmailAsync(string emailAddress, string emailSubject, string emailHtml)
         {
-            // Original GMail service
-            // return _connected ? _emailServiceApi.SendAsync(emailAddress, emailSubject, emailText, true) : Task.CompletedTask;
-
             if (_connected && !string.IsNullOrWhiteSpace(emailAddress))
             {
                 var task = Task.Delay(TimeSpan.FromSeconds(1)).ContinueWith(async _ =>
@@ -63,8 +60,8 @@ namespace DAL.ServiceApi
                     }
 
                     var request = new MailjetRequest {Resource = Send.Resource}
-                        .Property(Send.FromEmail, "tourofmilwaukee@gmail.com")
-                        .Property(Send.FromName, "Milwaukee-Internationals")
+                        .Property(Send.FromEmail, "admin@anahita.dev")
+                        .Property(Send.FromName, "Anahita.dev")
                         .Property(Send.Subject, emailSubject)
                         .Property(Send.HtmlPart, emailHtml)
                         // CC to ...

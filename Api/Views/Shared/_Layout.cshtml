@@ -24,7 +24,7 @@
     <title> @(!string.IsNullOrWhiteSpace(ViewBag.Title) ? ViewBag.Title : ApplicationName) </title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
     @* jQuery*@
@@ -51,14 +51,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.10.2/underscore-min.js"></script>
 
     @* angular loading progress bar *@
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.js"></script>
-    
+
     @* Input validator *@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
     <script src="https://raw.githack.com/sandrocaseiro/jquery.validate.unobtrusive.bootstrap/master/jquery.validate.unobtrusive.bootstrap.min.js"></script>
-    
+
     @* markdown *@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/1.1.1/marked.min.js"></script>
 
@@ -157,10 +157,10 @@
                     </li>
                 }
             </ul>
-
-            @if (GlobalConfigs.Theme == "flatly")
-            {
-                <div class="navbar-form navbar-right hidden-xs hidden-sm" ng-controller="darkModeCtrl">
+            
+            <div class="navbar-form navbar-right hidden-xs hidden-sm" ng-controller="darkModeCtrl">
+                @if (GlobalConfigs.Theme == "flatly")
+                {
                     <div class="form-group">
                         <toggle ng-model="darkMode"
                                 toggle-class="active"
@@ -168,8 +168,16 @@
                                 off="<i class='fa fa-sun-o' aria-hidden='true'></i>">
                         </toggle>
                     </div>
-                </div>
-            }
+                }
+                
+                @if (utility.IsAuthenticated())
+                {
+                    <div class="form-group" style="margin-left: 1rem">
+                        @await Html.PartialAsync("Notification")
+                    </div>
+                }
+            </div>
+
         </div>
     </div>
 </nav>
@@ -180,9 +188,9 @@
 
         <div class="alert alert-danger">
             <p class="preserve-linebreak">
-                <strong> @(ViewData["ErrorKey"])</strong> 
-                
-                <br />@(ViewData["ErrorValues"])
+                <strong> @(ViewData["ErrorKey"])</strong>
+
+                <br/>@(ViewData["ErrorValues"])
             </p>
         </div>
     </div>
@@ -218,7 +226,7 @@
       woopra.track();
     </script>
     <!-- End of Woopra Code -->
-    
+
     @if (utility.IsAuthenticated())
     {
         <script>

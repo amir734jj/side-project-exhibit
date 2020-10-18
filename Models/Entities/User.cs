@@ -27,6 +27,9 @@ namespace Models.Entities
         [Display(Name = "User Role")]
         public UserRoleEnum UserRole { get; set; }
         
+        [Column(TypeName = "jsonb")]
+        public List<UserNotification> UserNotifications { get; set; } = new List<UserNotification>();
+        
         public object Obfuscate()
         {
             const string pattern = @"(?<=[\w]{1})[\w-\._\+%]*(?=[\w]{1}@)";

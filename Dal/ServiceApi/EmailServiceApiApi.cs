@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Dal.Configs;
-using DAL.Interfaces;
+using Dal.Interfaces;
 using Mailjet.Client;
 using Microsoft.Extensions.Logging;
 using Models.Constants;
 using RestSharp;
 using RestSharp.Authenticators;
 
-namespace DAL.ServiceApi
+namespace Dal.ServiceApi
 {
     public class EmailServiceApi : IEmailServiceApi
     {

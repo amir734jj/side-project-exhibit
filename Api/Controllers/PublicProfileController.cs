@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Logic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace API.Controllers
+namespace Api.Controllers
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     [Route("User")]

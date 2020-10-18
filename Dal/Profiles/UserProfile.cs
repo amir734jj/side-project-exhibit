@@ -11,6 +11,7 @@ namespace Dal.Profiles
         {
             entity.LastLoginTime = dto.LastLoginTime;
             entity.UserRole = dto.UserRole;
+            entity.UserNotifications = dto.UserNotifications;
 
             return entity;
         }

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Models.Entities;
 using Models.Enums;
 
-namespace API.Controllers
+namespace Api.Controllers
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize(Roles = "Admin")]

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DAL.Interfaces
+namespace Dal.Interfaces
 {
     public interface IEmailServiceApi
     {

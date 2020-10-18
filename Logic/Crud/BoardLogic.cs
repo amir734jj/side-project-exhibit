@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Logic.Extensions;
@@ -78,7 +79,7 @@ namespace Logic.Crud
         {
             user = await _userLogic.Get(user.Id);
             
-            return await _projectLogic.For(user).Update(projectId, project =>
+            await _projectLogic.For(user).Update(projectId, project =>
             {
                 project.Comments.Add(new Comment
                 {
@@ -88,6 +89,21 @@ namespace Logic.Crud
                     User = user
                 });
             });
+            
+            var project = await _projectLogic.For(user).Get(projectId);
+
+            await _userLogic.Update(project.User.Id, x =>
+            {
+                x.UserNotifications.Add(new UserNotification
+                {
+                    Subject = "New Comment",
+                    Text = $"New comment by @{user.UserName} for project {project.Title}",
+                    DateTime = DateTimeOffset.Now,
+                    Collected = false
+                });
+            });
+
+            return project;
         }
 
         public async Task<Project> DeleteComment(int projectId, User user, int commentId)
@@ -114,22 +130,26 @@ namespace Logic.Crud
             });
         }
 
-        public async Task<Project> Vote(int projectId, User identity, Vote vote)
+        public async Task<Project> Vote(int projectId, User user, Vote vote)
         {
             var project = await _projectLogic.Get(projectId);
 
             // Cannot vote for my own project
-            if (project.User.Id == identity.Id)
+            if (project.User.Id == user.Id)
             {
                 return project;
             }
+
+            var isNewVote = false;
             
-            await _userLogic.Update(identity.Id, user =>
+            await _userLogic.Update(user.Id, user =>
             {
                 var previousVote = user.Votes.FirstOrDefault(y => y.Project.Id == projectId);
 
                 if (previousVote == null)
                 {
+                    isNewVote = true;
+                    
                     user.Votes.Add(new UserVote { ProjectId = projectId, UserId = user.Id, Value = vote });
                 }
                 else
@@ -144,6 +164,20 @@ namespace Logic.Crud
                     }
                 }
             });
+
+            if (isNewVote)
+            {
+                await _userLogic.Update(project.User.Id, x =>
+                {
+                    x.UserNotifications.Add(new UserNotification
+                    {
+                        Subject = $"New {vote.ToString()} vote",
+                        Text = $"New {vote.ToString().ToLower()} vote by @{user.UserName} for project {project.Title}",
+                        DateTime = DateTimeOffset.Now,
+                        Collected = false
+                    });
+                });
+            }
 
             return await _projectLogic.Get(projectId);
         }

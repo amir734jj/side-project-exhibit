@@ -296,6 +296,21 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput', 'ui.toggle', 'angul
             }
         }
     }])
+    .controller('notificationCtrl', ['$scope', '$http', async function ($scope, $http) {
+
+        $scope.moment = moment;
+        $scope.newNotification = false;
+        
+        $scope.open = async function () {
+            if ($scope.newNotification) {
+                await $http.post('/api/notification/markAsSeen', { });
+            }
+        }
+        
+        const {data: notifications} = await $http.get('/api/notification');
+        $scope.notifications = notifications;
+        $scope.newNotification = _.some(notifications, x => !x.collected);
+    }])
     .controller('darkModeCtrl', ['$scope', "$window", function ($scope, $window) {
         $scope.darkMode = false;
         

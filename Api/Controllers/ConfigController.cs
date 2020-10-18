@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models.ViewModels.Config;
 
-namespace API.Controllers
+namespace Api.Controllers
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     [Route("[controller]")]

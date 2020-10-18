@@ -1,0 +1,19 @@
+<div class="dropdown" ng-controller="notificationCtrl">
+    <button ng-class="['btn', { 'btn-default': !newNotification, 'btn-danger': newNotification }, 'dropdown-toggle']" type="button" data-toggle="dropdown" ng-click="open()">
+        <i class="fa fa-bell"></i>
+        <span class="caret"></span>
+    </button>
+
+    <ul class="dropdown-menu col-md-6" style="min-width: 45rem !important;">
+        <li ng-if="!newNotification" class="disabled">
+            <a href="#">No new notification</a>
+        </li>
+        <li ng-if="!newNotification && notifications.length" class="divider"></li>
+        <li ng-if="notifications.length" ng-repeat="notification in notifications track by $index">
+            <div style="margin: 1rem">
+                <p>{{ notification.subject }} - {{moment(notification.dateTime).format("dddd, MMMM Do, H:mm")}}</p>
+                <sub>{{ notification.subject }}</sub>
+            </div>
+        </li>
+    </ul>
+</div>

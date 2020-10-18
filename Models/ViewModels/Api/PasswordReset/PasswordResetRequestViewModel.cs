@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Models.ViewModels.PasswordReset
+namespace Models.ViewModels.Api.PasswordReset
 {
     public class PasswordResetRequestViewModel
     {

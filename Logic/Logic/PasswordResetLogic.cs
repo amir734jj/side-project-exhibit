@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using DAL.Interfaces;
+using Dal.Interfaces;
 using Flurl;
 using Logic.Interfaces;
 using Models.Constants;

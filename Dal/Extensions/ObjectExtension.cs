@@ -16,5 +16,10 @@ namespace Dal.Extensions
             
             return DefaultEncoding.GetBytes(json);
         }
+
+        public static T DeepClone<T>(this T data)
+        {
+            return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(data));
+        }
     }
 }

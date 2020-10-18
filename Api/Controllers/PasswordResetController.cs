@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Models.Entities;
-using Models.ViewModels.PasswordReset;
+using Models.ViewModels.Api.PasswordReset;
 
-namespace API.Controllers
+namespace Api.Controllers
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     [AllowAnonymous]

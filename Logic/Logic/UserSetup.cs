@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Dal;
-using DAL.Interfaces;
+using Dal.Interfaces;
 using Logic.Interfaces;
 
 namespace Logic.Logic

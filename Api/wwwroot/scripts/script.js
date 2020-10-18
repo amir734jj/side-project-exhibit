@@ -296,7 +296,7 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput', 'ui.toggle', 'angul
             }
         }
     }])
-    .controller('notificationCtrl', ['$scope', '$http', async function ($scope, $http) {
+    .controller('notificationCtrl', ['$scope', '$http', '$window', async function ($scope, $http, $window) {
 
         $scope.moment = moment;
         $scope.newNotification = false;
@@ -304,7 +304,7 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput', 'ui.toggle', 'angul
         $scope.open = async function () {
             if ($scope.newNotification) {
                 await $http.post('/api/notification/markAsSeen', { });
-                $scope.newNotification = false;
+                $window.setTimeout(() => $scope.newNotification = false, 5000);
             }
         }
         

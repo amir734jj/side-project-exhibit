@@ -304,6 +304,7 @@ angular.module('ideaBoardApp', ['ngSanitize', 'ngTagsInput', 'ui.toggle', 'angul
         $scope.open = async function () {
             if ($scope.newNotification) {
                 await $http.post('/api/notification/markAsSeen', { });
+                $scope.newNotification = false;
             }
         }
         

@@ -12,7 +12,7 @@
         <li ng-if="notifications.length" ng-repeat="notification in notifications track by $index">
             <div style="margin: 1rem">
                 <p>{{ notification.subject }} - {{moment(notification.dateTime).format("dddd, MMMM Do, H:mm")}}</p>
-                <sub>{{ notification.subject }}</sub>
+                <sub>{{ notification.text }}</sub>
             </div>
         </li>
     </ul>

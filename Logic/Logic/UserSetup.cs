@@ -1,21 +1,22 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Dal;
 using Dal.Interfaces;
 using Logic.Interfaces;
+using Models.Entities;
 
 namespace Logic.Logic
 {
     public class UserSetup : IUserSetup
     {
-        private readonly EntityDbContext _dbContext;
         private readonly IUserLogic _userLogic;
+        
         private readonly IEmailServiceApi _emailServiceApi;
 
-        public UserSetup(EntityDbContext dbContext, IUserLogic userLogic, IEmailServiceApi emailServiceApi)
+        public UserSetup(IUserLogic userLogic, IEmailServiceApi emailServiceApi)
         {
-            _dbContext = dbContext;
             _userLogic = userLogic;
             _emailServiceApi = emailServiceApi;
         }
@@ -26,6 +27,17 @@ namespace Logic.Logic
 
             var user = users.FirstOrDefault(x => x.Id == userId) ??
                        throw new Exception($"Failed to find the user with userId = {userId}");
+
+            await _userLogic.Update(user.Id, x => x.UserNotifications = new List<UserNotification>
+            {
+                new UserNotification
+                {
+                    Subject = "Welcome to Anahita.dev",
+                    Text = $"Welcome {user.Name} to Anahita.dev",
+                    DateTime = new DateTimeOffset(),
+                    Collected = false
+                }
+            });
 
             await _emailServiceApi.SendEmailAsync(user.Email, "Welcome to Anahita.dev", $@"
                 <p> Welcome {user.Name} </p>

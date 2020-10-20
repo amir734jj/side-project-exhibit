@@ -22,8 +22,11 @@
 <html lang="en">
 <head>
     <title> @(!string.IsNullOrWhiteSpace(ViewBag.Title) ? ViewBag.Title : ApplicationName) </title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="description" content="Showcase your side projects and weekend projects for free">
+    <meta name="keywords" content="Anahita.dev, side-project, Anahita, Hesamian">
+    <meta name="author" content="Seyedamirhossein Hesamian">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
@@ -157,7 +160,7 @@
                     </li>
                 }
             </ul>
-            
+
             <div class="navbar-form navbar-right hidden-xs hidden-sm" ng-controller="darkModeCtrl">
                 @if (GlobalConfigs.Theme == "flatly")
                 {
@@ -169,7 +172,7 @@
                         </toggle>
                     </div>
                 }
-                
+
                 @if (utility.IsAuthenticated())
                 {
                     <div class="form-group" style="margin-left: 1rem">

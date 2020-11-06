@@ -1,9 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Dal.Extensions;
-using EfCoreRepository.Interfaces;
 using Logic.Interfaces;
 using Models.Entities;
 

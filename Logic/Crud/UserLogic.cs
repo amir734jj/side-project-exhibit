@@ -7,7 +7,7 @@ namespace Logic.Crud
 {
     public class UserLogic : BasicLogicAbstract<User>, IUserLogic
     {
-        private readonly IBasicCrudType<User, int> _userDal;
+        private readonly IBasicCrudWrapper<User, int> _userDal;
 
         /// <summary>
         /// Constructor dependency injection
@@ -22,7 +22,7 @@ namespace Logic.Crud
         /// Returns DAL
         /// </summary>
         /// <returns></returns>
-        protected override IBasicCrudType<User, int> GetBasicCrudDal()
+        protected override IBasicCrudWrapper<User, int> GetBasicCrudDal()
         {
             return _userDal;
         }

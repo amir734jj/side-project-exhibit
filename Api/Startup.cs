@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Amazon;
@@ -13,6 +14,7 @@ using Dal.Interfaces;
 using Dal.ServiceApi;
 using EasyCaching.Core.Configurations;
 using EfCoreRepository.Extensions;
+using EfCoreRepository.Interfaces;
 using EFCoreSecondLevelCacheInterceptor;
 using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
@@ -303,8 +305,28 @@ namespace Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IConfigLogic configLogic)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IConfigLogic configLogic, IEfRepository repository)
         {
+            var dal = repository.For<User, int>().Session();
+            
+            foreach (var user in dal.GetAll().Result)
+            {
+                user.UserNotifications = new List<UserNotification>
+                {
+                    new UserNotification
+                    {
+                        Subject = "Welcome Back",
+                        Text = "Thanks for coming back to Anahita.dev.",
+                        Collected = false,
+                        DateTime = DateTimeOffset.Now
+                    }
+                };
+
+                dal.Update(user.Id, user).Wait();
+            }
+            
+            dal.Dispose();
+            
             if (!env.IsDevelopment())
             {
                 // Refresh global config

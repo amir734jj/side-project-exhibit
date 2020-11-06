@@ -13,7 +13,7 @@ namespace Logic.Abstracts
         /// Returns instance of basic DAL
         /// </summary>
         /// <returns></returns>
-        protected abstract IBasicCrudType<T, int> GetBasicCrudDal();
+        protected abstract IBasicCrudWrapper<T, int> GetBasicCrudDal();
 
         /// <summary>
         /// Call forwarding

@@ -10,7 +10,7 @@ namespace Logic.Crud
 {
     public class CategoryLogic : BasicLogicAbstract<Category>, ICategoryLogic
     {
-        private readonly IBasicCrudType<Category, int> _categoryDal;
+        private readonly IBasicCrudWrapper<Category, int> _categoryDal;
 
         /// <summary>
         /// Constructor dependency injection
@@ -25,7 +25,7 @@ namespace Logic.Crud
         /// Returns DAL
         /// </summary>
         /// <returns></returns>
-        protected override IBasicCrudType<Category, int> GetBasicCrudDal()
+        protected override IBasicCrudWrapper<Category, int> GetBasicCrudDal()
         {
             return _categoryDal;
         }

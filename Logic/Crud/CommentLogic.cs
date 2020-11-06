@@ -8,7 +8,7 @@ namespace Logic.Crud
 {
     public class CommentLogic : BasicLogicAbstract<Comment>, ICommentLogic
     {
-        private readonly IBasicCrudType<Comment, int> _commentLogic;
+        private readonly IBasicCrudWrapper<Comment, int> _commentLogic;
 
         /// <summary>
         /// Constructor dependency injection
@@ -23,7 +23,7 @@ namespace Logic.Crud
         /// Returns DAL
         /// </summary>
         /// <returns></returns>
-        protected override IBasicCrudType<Comment, int> GetBasicCrudDal()
+        protected override IBasicCrudWrapper<Comment, int> GetBasicCrudDal()
         {
             return _commentLogic;
         }

@@ -20,9 +20,9 @@ namespace Logic.Abstracts
     {
         private readonly User _user;
         
-        private readonly IBasicCrudType<T, int> _basicCrudDal;
+        private readonly IBasicCrudWrapper<T, int> _basicCrudDal;
 
-        public BasicLogicUserBoundImpl(User user, IBasicCrudType<T, int> basicCrudDal)
+        public BasicLogicUserBoundImpl(User user, IBasicCrudWrapper<T, int> basicCrudDal)
         {
             _user = user;
             _basicCrudDal = basicCrudDal;
@@ -35,7 +35,7 @@ namespace Logic.Abstracts
             return base.Save(instance);
         }
 
-        protected override IBasicCrudType<T, int> GetBasicCrudDal()
+        protected override IBasicCrudWrapper<T, int> GetBasicCrudDal()
         {
             return _basicCrudDal;
         }

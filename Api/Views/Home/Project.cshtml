@@ -60,7 +60,9 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-body" ng-bind-html="marked(project.description)"></div>
+            <div class="panel-body">
+                <p class="readable-text" ng-bind-html="marked(project.description)"></p>
+            </div>
             <div class="panel-footer" ng-show="project.projectCategoryRelationships.length">
                 <span class="label label-default" ng-repeat="item in project.projectCategoryRelationships">{{item.category.name}}</span>
             </div>
@@ -74,13 +76,13 @@
                     </div>
                     <div class="col-sm-3" ng-if="isMyOwnComment(user, comment)">
                         <div class="btn-group pull-right">
-                            <button type="button" class="btn btn-primary" ng-click="editComment(comment)">Edit</button>
-                            <button type="button" class="btn btn-danger" ng-click="deleteComment(comment)">Delete</button>
+                            <button type="button" class="btn btn-sm btn-primary" ng-click="editComment(comment)">Edit</button>
+                            <button type="button" class="btn btn-sm btn-danger" ng-click="deleteComment(comment)">Delete</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="panel-body"> {{ comment.text }} </div>
+            <div class="panel-body"> <p class="readable-text">{{ comment.text }}</p> </div>
         </div>
     </div>
 

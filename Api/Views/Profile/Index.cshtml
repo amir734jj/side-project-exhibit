@@ -1,7 +1,10 @@
+@using Api.Interfaces
 @model Models.ViewModels.Api.ProfileViewModel
+@inject IHttpRequestUtilityBuilder RequestUtilityBuilder;
 
 @{
     Layout = "_Layout";
+    var userInfo = await RequestUtilityBuilder.For(Context).GetUserInfo();
 }
 
 <div class="container">
@@ -10,5 +13,7 @@
         @Html.Partial("UserContent", Model, new ViewDataDictionary(ViewData) {{"Type", "Edit"}})
 
         <input class="btn btn-primary" type="submit" value="Update"/>
+        
+        <a class="btn btn-default" href="~/user/in/@userInfo.Username">View as public</a>
     }
 </div>

@@ -8,17 +8,23 @@
 <div class="container">
     <h3> @Model.Name </h3>
 
-    <p class="preserve-linebreak"> @Model.Description </p>
+    <div class="clearfix">
+        <p class="preserve-linebreak readable-text"> @Model.Description </p>
+    </div>
 
-    <p> Email: <a href="mailto:@Model.Email">@Model.Email</a> </p>
+    <div class="clearfix">
+        <p> Email: <a href="mailto:@Model.Email">@Model.Email</a> </p>
+    </div>
 
-    <ul class="list-group">
-        @foreach (var project in Model.Projects)
-        {
-            <li class="list-group-item">
-                <a href="~/Project/@project.Id"> @(project.Title) </a>
-                <span class="badge"> @(project.Votes.Select(x => x.Value.IntValue()).Sum()) </span>
-            </li>
-        }
-    </ul>
+    <div class="clearfix">
+        <ul class="list-group">
+            @foreach (var project in Model.Projects)
+            {
+                <li class="list-group-item">
+                    <a href="~/Project/@project.Id" class="link-header"> @(project.Title) </a>
+                    <span class="badge"> @(project.Votes.Select(x => x.Value.IntValue()).Sum()) </span>
+                </li>
+            }
+        </ul>
+    </div>
 </div>

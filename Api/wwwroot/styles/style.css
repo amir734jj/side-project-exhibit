@@ -145,3 +145,11 @@ body {
     border-right: 0;
     border-left: 0;
 }
+
+.readable-text {
+    color: black;
+}
+
+.link-header {
+    color: #047761;
+}

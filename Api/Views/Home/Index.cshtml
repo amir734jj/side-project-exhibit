@@ -69,7 +69,7 @@
             <div class="row">
                 <div class="col-sm-9">
                     <h4>
-                        <a href="/project/{{project.id}}">
+                        <a href="/project/{{project.id}}" class="link-header">
                             <strong>
                                 {{project.title}}
                             </strong>
@@ -120,7 +120,9 @@
                 </div>
             </div>
         </div>
-        <div class="panel-body preserve-linebreak" ng-bind="markdownToTxt(project.description)"></div>
+        <div class="panel-body">
+            <p class="readable-text preserve-linebreak" ng-bind="markdownToTxt(project.description)"></p>
+        </div>
         <div class="panel-footer" ng-show="project.projectCategoryRelationships.length">
             <span class="label label-default" ng-repeat="item in project.projectCategoryRelationships">{{item.category.name}}</span>
         </div>

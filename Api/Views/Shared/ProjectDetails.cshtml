@@ -61,7 +61,9 @@
             </div>
         </div>
         <div ng-class="{ 'col-sm-6': preview, 'hide': !preview }">
-            <div id="parsed-content" ng-bind-html="editor.parsed" class="markdown-preview"></div>
+            <div id="parsed-content">
+                <p class="project markdown-preview" ng-bind-html="editor.parsed"></p>
+            </div>
         </div>
     </div>
 

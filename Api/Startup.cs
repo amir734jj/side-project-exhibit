@@ -307,7 +307,7 @@ namespace Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IConfigLogic configLogic, IEfRepository repository)
         {
-            var dal = repository.For<User, int>().Session();
+            var dal = repository.For<User>().Session();
             
             foreach (var user in dal.GetAll().Result)
             {

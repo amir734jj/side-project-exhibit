@@ -5,15 +5,13 @@ using Models.Entities;
 
 namespace Dal.Profiles
 {
-    public class UserProfile : IEntityProfile<User, int>
+    public class UserProfile : IEntityProfile<User>
     {
-        public User Update(User entity, User dto)
+        public void Update(User entity, User dto)
         {
             entity.LastLoginTime = dto.LastLoginTime;
             entity.UserRole = dto.UserRole;
             entity.UserNotifications = dto.UserNotifications;
-
-            return entity;
         }
 
         public IQueryable<User> Include<TQueryable>(TQueryable queryable) where TQueryable : IQueryable<User>

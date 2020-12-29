@@ -7,7 +7,7 @@ namespace Logic.Crud
 {
     public class UserLogic : BasicLogicAbstract<User>, IUserLogic
     {
-        private readonly IBasicCrudWrapper<User, int> _userDal;
+        private readonly IBasicCrudWrapper<User> _userDal;
 
         /// <summary>
         /// Constructor dependency injection
@@ -15,14 +15,14 @@ namespace Logic.Crud
         /// <param name="repository"></param>
         public UserLogic(IEfRepository repository)
         {
-            _userDal = repository.For<User, int>();
+            _userDal = repository.For<User>();
         }
 
         /// <summary>
         /// Returns DAL
         /// </summary>
         /// <returns></returns>
-        protected override IBasicCrudWrapper<User, int> GetBasicCrudDal()
+        protected override IBasicCrudWrapper<User> GetBasicCrudDal()
         {
             return _userDal;
         }

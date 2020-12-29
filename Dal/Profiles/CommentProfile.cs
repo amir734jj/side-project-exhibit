@@ -5,14 +5,12 @@ using Models.Entities;
 
 namespace Dal.Profiles
 {
-    public class CommentProfile : IEntityProfile<Comment, int>
+    public class CommentProfile : IEntityProfile<Comment>
     {
-        public Comment Update(Comment entity, Comment dto)
+        public void Update(Comment entity, Comment dto)
         {
             entity.Text = dto.Text;
             entity.CreatedOn = dto.CreatedOn;
-            
-            return entity;
         }
 
         public IQueryable<Comment> Include<TQueryable>(TQueryable queryable) where TQueryable : IQueryable<Comment>

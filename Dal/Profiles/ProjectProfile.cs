@@ -5,7 +5,7 @@ using Models.Entities;
 
 namespace Dal.Profiles
 {
-    public class ProjectProfile : IEntityProfile<Project, int>
+    public class ProjectProfile : IEntityProfile<Project>
     {
         private readonly IEntityProfileAuxiliary _entityProfileAuxiliary;
 
@@ -14,7 +14,7 @@ namespace Dal.Profiles
             _entityProfileAuxiliary = entityProfileAuxiliary;
         }
         
-        public Project Update(Project entity, Project dto)
+        public void Update(Project entity, Project dto)
         {
             entity.Title = dto.Title;
             entity.Description = dto.Description;
@@ -22,8 +22,6 @@ namespace Dal.Profiles
             entity.Votes = dto.Votes;
             entity.ProjectCategoryRelationships = _entityProfileAuxiliary.ModifyList(entity.ProjectCategoryRelationships, dto.ProjectCategoryRelationships, x => new { x.ProjectId, x.CategoryId});
             entity.Comments = _entityProfileAuxiliary.ModifyList<Comment, int>(entity.Comments, dto.Comments);
-
-            return entity;
         }
 
         public IQueryable<Project> Include<TQueryable>(TQueryable queryable) where TQueryable : IQueryable<Project>

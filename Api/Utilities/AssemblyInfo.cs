@@ -5,7 +5,7 @@ namespace Api.Utilities
 {
     public static class AssemblyInfo
     {
-        public static string AssemblyVersion;
+        public static readonly string AssemblyVersion;
 
         static AssemblyInfo()
         {

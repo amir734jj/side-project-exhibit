@@ -20,9 +20,9 @@ namespace Logic.Abstracts
     {
         private readonly User _user;
         
-        private readonly IBasicCrudWrapper<T, int> _basicCrudDal;
+        private readonly IBasicCrudWrapper<T> _basicCrudDal;
 
-        public BasicLogicUserBoundImpl(User user, IBasicCrudWrapper<T, int> basicCrudDal)
+        public BasicLogicUserBoundImpl(User user, IBasicCrudWrapper<T> basicCrudDal)
         {
             _user = user;
             _basicCrudDal = basicCrudDal;
@@ -35,19 +35,19 @@ namespace Logic.Abstracts
             return base.Save(instance);
         }
 
-        protected override IBasicCrudWrapper<T, int> GetBasicCrudDal()
+        protected override IBasicCrudWrapper<T> GetBasicCrudDal()
         {
             return _basicCrudDal;
         }
 
         public override async Task<IEnumerable<T>> GetAll()
         {
-            return (await _basicCrudDal.GetAll()).Where(x => x.User?.Id == _user?.Id).ToList();
+            return await _basicCrudDal.GetWhere(x => x.User.Id == _user.Id);
         }
 
         public override async Task<T> Get(int id)
         {
-            return (await _basicCrudDal.GetAll()).Where(x => x.User?.Id == _user?.Id).FirstOrDefault(x => x.Id == id);
+            return (await _basicCrudDal.GetWhere(x => x.User.Id == _user.Id)).FirstOrDefault(x => x.Id == id);
         }
 
         public override async Task<T> Update(int id, T dto)

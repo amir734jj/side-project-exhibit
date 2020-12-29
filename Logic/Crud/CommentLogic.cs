@@ -7,7 +7,7 @@ namespace Logic.Crud
 {
     public class CommentLogic : BasicLogicAbstract<Comment>, ICommentLogic
     {
-        private readonly IBasicCrudWrapper<Comment, int> _commentLogic;
+        private readonly IBasicCrudWrapper<Comment> _commentLogic;
 
         /// <summary>
         /// Constructor dependency injection
@@ -15,14 +15,14 @@ namespace Logic.Crud
         /// <param name="repository"></param>
         public CommentLogic(IEfRepository repository)
         {
-            _commentLogic = repository.For<Comment, int>();
+            _commentLogic = repository.For<Comment>();
         }
 
         /// <summary>
         /// Returns DAL
         /// </summary>
         /// <returns></returns>
-        protected override IBasicCrudWrapper<Comment, int> GetBasicCrudDal()
+        protected override IBasicCrudWrapper<Comment> GetBasicCrudDal()
         {
             return _commentLogic;
         }

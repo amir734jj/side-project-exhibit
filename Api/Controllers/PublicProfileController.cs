@@ -29,9 +29,7 @@ namespace Api.Controllers
         [Route("in/{username}")]
         public async Task<IActionResult> IndexByUsername(string username)
         {
-            var users = await _userLogic.GetAll();
-
-            var user = users.FirstOrDefault(x => x.UserName == username);
+            var user = (await _userLogic.GetWhere(x => x.UserName == username)).FirstOrDefault();
 
             return user != null ? RedirectToAction("Index", "PublicProfile", new {id = user.Id}) : RedirectToAction("Error404", "Error");
         }

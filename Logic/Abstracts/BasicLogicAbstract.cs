@@ -1,5 +1,6 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using EfCoreRepository.Interfaces;
 using Logic.Interfaces;
@@ -7,13 +8,13 @@ using Models.Interfaces;
 
 namespace Logic.Abstracts
 {
-    public abstract class BasicLogicAbstract<T> : IBasicLogic<T> where T: class, IEntity
+    public abstract class BasicLogicAbstract<T> : IBasicLogic<T> where T : class, IEntity
     {
         /// <summary>
         /// Returns instance of basic DAL
         /// </summary>
         /// <returns></returns>
-        protected abstract IBasicCrudWrapper<T, int> GetBasicCrudDal();
+        protected abstract IBasicCrudWrapper<T> GetBasicCrudDal();
 
         /// <summary>
         /// Call forwarding
@@ -32,6 +33,16 @@ namespace Logic.Abstracts
         public virtual Task<T> Get(int id)
         {
             return GetBasicCrudDal().Get(id);
+        }
+
+        /// <summary>
+        /// Call forwarding
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public virtual Task<IEnumerable<T>> GetWhere(Expression<Func<T, bool>> filter)
+        {
+            return GetBasicCrudDal().GetWhere(filter);
         }
 
         /// <summary>
@@ -68,7 +79,7 @@ namespace Logic.Abstracts
         public async Task<T> Update(int id, Action<T> updater)
         {
             await using var session = GetBasicCrudDal().Session();
-            
+
             var entity = await session.Get(id);
 
             updater(entity);

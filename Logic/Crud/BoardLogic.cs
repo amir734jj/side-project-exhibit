@@ -78,12 +78,12 @@ namespace Logic.Crud
         {
             user = await _userLogic.Get(user.Id);
             
-            await _projectLogic.For(user).Update(projectId, project =>
+            await _projectLogic.For(user).Update(projectId, p =>
             {
-                project.Comments.Add(new Comment
+                p.Comments.Add(new Comment
                 {
                     CreatedOn = DateTimeOffset.Now,
-                    Project = project,
+                    Project = p,
                     Text = commentViewModel.Comment,
                     User = user
                 });
